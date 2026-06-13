@@ -55,9 +55,9 @@ export const userLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    const match = bcrypt.compare(password, user.password);
+    const validPassword = bcrypt.compare(password, user.password);
 
-    if (!match) {
+    if (!validPassword) {
       res.status(401).json({ message: "Email ou senha inválidos" });
     }
 
