@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from "express";
-import { userRegister } from "../controllers/userController";
+import { userLogin, userRegister } from "../controllers/userController";
 
 const router = Router();
 
@@ -8,5 +8,6 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.post("/register", userRegister);
+router.post("/login", userLogin);
 
 export default router;
