@@ -2,10 +2,11 @@ import type { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { loginSchema, registerSchema } from "../schemas/auth.schema";
 
 export const userRegister = async (req: Request, res: Response) => {
   try {
-    const data = req.body;
+    const data = registerSchema.parse(req.body);
 
     if (!data.name || !data.email || !data.password) {
       res.status(401).json({ message: "Preencha todos os campos" });
@@ -31,7 +32,7 @@ export const userRegister = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({ message: "Usuário criado com sucesso" });
+    res.status(201).json({ message: "Usuário criado com sucesso" });
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });
   }
@@ -39,7 +40,7 @@ export const userRegister = async (req: Request, res: Response) => {
 
 export const userLogin = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = loginSchema.parse(req.body);
 
     if (!email || !password) {
       res.status(400).json({ message: "Preencha email e senha" });
@@ -66,6 +67,7 @@ export const userLogin = async (req: Request, res: Response) => {
     }
 
     const userInfos = {
+      id: user.id,
       name: user.name,
       email: user.email,
     };
