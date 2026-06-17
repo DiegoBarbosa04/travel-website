@@ -3,11 +3,13 @@ import type { ZodSchema } from "zod";
 
 export const validateSchema = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    try {
-      schema.parse(req.body);
-      next();
-    } catch (error) {
-      res.status(400).json({ message: "Dados inválidos" });
+    const validation = schema.safeParse(req.body);
+
+    if (!validation.success) {
+      res.status(400).json({ errors: validation.error.flatten() });
+      return;
     }
+    req.body = validation.data;
+    next();
   };
 };

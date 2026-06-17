@@ -8,11 +8,6 @@ export const userRegister = async (req: Request, res: Response) => {
   try {
     const data = req.body;
 
-    if (!data.name || !data.email || !data.password) {
-      res.status(401).json({ message: "Preencha todos os campos" });
-      return;
-    }
-
     const user = await prisma.user.findFirst({
       where: { email: data.email },
     });
@@ -41,11 +36,6 @@ export const userRegister = async (req: Request, res: Response) => {
 export const userLogin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      res.status(400).json({ message: "Preencha email e senha" });
-      return;
-    }
 
     const user = await prisma.user.findFirst({
       where: { email },
