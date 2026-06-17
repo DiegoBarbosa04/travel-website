@@ -6,7 +6,7 @@ import { loginSchema, registerSchema } from "../schemas/auth.schema";
 
 export const userRegister = async (req: Request, res: Response) => {
   try {
-    const data = registerSchema.parse(req.body);
+    const data = req.body;
 
     if (!data.name || !data.email || !data.password) {
       res.status(401).json({ message: "Preencha todos os campos" });
@@ -40,7 +40,7 @@ export const userRegister = async (req: Request, res: Response) => {
 
 export const userLogin = async (req: Request, res: Response) => {
   try {
-    const { email, password } = loginSchema.parse(req.body);
+    const { email, password } = req.body;
 
     if (!email || !password) {
       res.status(400).json({ message: "Preencha email e senha" });
@@ -56,7 +56,7 @@ export const userLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    const validPassword = bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
       res.status(401).json({ message: "Email ou senha inválidos" });
