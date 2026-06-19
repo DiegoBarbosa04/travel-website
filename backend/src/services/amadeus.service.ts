@@ -6,12 +6,14 @@ export async function searchFlightsService({
   destination,
   departureDate,
   adults = 1,
+  max = 10,
 }: SearchFlightsDTO) {
   const response = await amadeus.shopping.flightOffersSearch.get({
     originLocationCode: origin,
     destinationLocationCode: destination,
     departureDate: departureDate,
     adults: adults.toString(),
+    max: max.toString(),
   });
 
   return response.data.map((flight: any) => ({

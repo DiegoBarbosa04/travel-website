@@ -8,6 +8,7 @@ export async function searchFlightsController(req: Request, res: Response) {
     origin: String(origin),
     destination: String(destination),
     departureDate: String(departureDate),
+    max: 10,
   });
 
   return res.status(200).json(flights);
