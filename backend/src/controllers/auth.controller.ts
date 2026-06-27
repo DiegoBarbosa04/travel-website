@@ -21,7 +21,8 @@ export const userRegister = async (req: Request, res: Response) => {
 
     const newUser = await prisma.user.create({
       data: {
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         password: hashedPassword,
       },
@@ -58,7 +59,8 @@ export const userLogin = async (req: Request, res: Response) => {
 
     const userInfos = {
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
     };
 
