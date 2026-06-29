@@ -1,24 +1,26 @@
+import type {
+  LoginSchemaType,
+  RegisterSchemaType,
+  User,
+} from "@/schemas/auth.schema";
 import { api } from "./api";
 
-interface RegisterDTO {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface LoginDTO {
-  email: string;
-  password: string;
-}
-
-export const register = async (data: RegisterDTO) => {
-  const response = await api.post("auth/register", data);
+export const registerUser = async (data: RegisterSchemaType) => {
+  const response = await api.post("/auth/register", {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    password: data.password,
+  });
   return response.data;
 };
 
-export const login = async (data: LoginDTO) => {
-  const response = await api.post("auth/login", data);
+export const loginUser = async (data: LoginSchemaType) => {
+  const response = await api.post("/auth/login", data);
   return response.data;
 };
 
-export type { RegisterDTO, LoginDTO };
+export const loggedInUser = async () => {
+  const response = await api.get<User>("/auth/me");
+  return response.data;
+};

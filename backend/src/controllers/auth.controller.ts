@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { loginSchema, registerSchema } from "../schemas/auth.schema";
 
 export const userRegister = async (req: Request, res: Response) => {
   try {
@@ -71,6 +70,25 @@ export const userLogin = async (req: Request, res: Response) => {
     });
 
     res.status(200).json(userInfos);
+  } catch (error) {
+    res.status(500).json({ message: "Erro no servidor" });
+  }
+};
+
+export const userAuth = async (req: Request, res: Response) => {
+  try {
+    const { user } = req;
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Erro no servidor" });
+  }
+};
+
+export const userLogout = async (req: Request, res: Response) => {
+  try {
+    const { user } = req;
+    res.clearCookie("user");
+    res.status(200).json({ message: "Usuário deslogado" });
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });
   }

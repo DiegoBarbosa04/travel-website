@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z.email("Email inválido"),
+  email: z.string().email("Email inválido"),
   password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
@@ -20,5 +20,17 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
-export type loginSchemaType = z.infer<typeof loginSchema>;
-export type registerSchemaType = z.infer<typeof registerSchema>;
+export const userSchema = z.object({
+  id: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+});
+
+export type LoginSchemaType = z.infer<typeof loginSchema>;
+export type RegisterSchemaType = z.infer<typeof registerSchema>;
+export type User = z.infer<typeof userSchema>;
+export type UserContextType = {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+};

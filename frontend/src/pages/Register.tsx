@@ -1,8 +1,12 @@
 import { Input } from "@/components/ui/input";
-import { registerSchema, type registerSchemaType } from "@/schemas/auth.schema";
+import { registerSchema, type RegisterSchemaType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import logo from "../assets/logo.svg";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { loginUser, registerUser } from "@/services/auth.service";
+import { Link, useNavigate } from "react-router";
 
 function Register() {
   const img =
@@ -16,8 +20,21 @@ function Register() {
     resolver: zodResolver(registerSchema),
   });
 
-  const handleRegister = (data: registerSchemaType) => {
-    //api.post("/auth/register", data);
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRegister = async (data: RegisterSchemaType) => {
+    try {
+      setIsLoading(true);
+      await registerUser(data);
+      await loginUser(data);
+      navigate("/home");
+    } catch (error) {
+      console.error("Erro ao registrar:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,6 +64,7 @@ function Register() {
                   </label>
                   <Input
                     type="text"
+                    placeholder="John"
                     className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
                     {...register("firstName")}
                     aria-invalid={errors.firstName ? "true" : "false"}
@@ -60,6 +78,7 @@ function Register() {
                   <label className="font-light text-[#1C1B1F]">Sobrenome</label>
                   <Input
                     type="text"
+                    placeholder="Doe"
                     className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
                     {...register("lastName")}
                     aria-invalid={errors.lastName ? "true" : "false"}
@@ -73,6 +92,7 @@ function Register() {
               <label className="font-light text-[#1C1B1F]">Email</label>
               <Input
                 type="email"
+                placeholder="johndoe@email.com"
                 className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
                 {...register("email")}
                 aria-invalid={errors.email ? "true" : "false"}
@@ -81,6 +101,7 @@ function Register() {
               <label className="font-light text-[#1C1B1F]">Senha</label>
               <Input
                 type="password"
+                placeholder="Deve possuir pelo menos 6 caracteres"
                 className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
                 {...register("password")}
                 aria-invalid={errors.password ? "true" : "false"}
@@ -91,6 +112,7 @@ function Register() {
               </label>
               <Input
                 type="password"
+                placeholder="As senhas precisam ser iguais"
                 className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
                 {...register("confirmPassword")}
                 aria-invalid={errors.confirmPassword ? "true" : "false"}
@@ -109,17 +131,23 @@ function Register() {
             </div>
             <button
               type="submit"
-              className="h-10 rounded-sm bg-[#8DD3BB] text-[#112211] font-semibold w-full hover:bg-[#7BC0A8] cursor-pointer"
+              className="h-10 rounded-sm bg-[#8DD3BB] text-[#112211] font-semibold w-full hover:bg-[#7BC0A8] cursor-pointer flex justify-center items-center"
             >
-              Registrar
+              {isLoading ? (
+                <Spinner className="text-[#112211] size-4" />
+              ) : (
+                "Registrar"
+              )}
             </button>
           </form>
 
           <div className="flex justify-center gap-1">
             <span>Já possui conta? </span>
-            <a href="" className="text-[#FF8682] hover:underline">
-              Entrar
-            </a>
+            <Link to="/login">
+              <p className="text-[#FF8682] hover:text-[#FF5582] cursor-pointer">
+                Entrar
+              </p>
+            </Link>
           </div>
         </div>
       </div>
