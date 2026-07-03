@@ -1,127 +1,67 @@
-import hero from "../assets/hero.webp";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
-import Header from "../components/Header";
+import Hero from "@/components/Hero";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import london from "../assets/london.png";
+import Header from "@/components/Header";
 
 function Home() {
-  const frameworks = [
-    "Russia",
-    "Brasil",
-    "Espanha",
-    "França",
-    "Itália",
-    "Alemanha",
-    "Japão",
-    "China",
-    "Austrália",
-  ];
   return (
-    <div className="h-screen flex flex-col items-center gap-4 bg-[#FAFBFC] px-32">
+    <div className="min-h-screen bg-[#FAFBFC]">
       <Header />
-      <div className="w-full h-150 rounded-b-lg overflow-hidden relative">
-        <img
-          className="w-full h-full object-cover rounded-b-lg brightness-80"
-          src={hero}
-          alt="hero"
-        />
-      </div>
+      <Hero />
 
-      <div className="flex w-5xl shadow-md p-6 rounded-md bg-[#FFFFFF] absolute top-135 z-50 items-end">
-        <div className="flex flex-col gap-4 w-full">
-          <h2 className="text-2xl font-bold mb-4">Para onde você quer ir?</h2>
-          <div className="flex gap-4">
-            <div className="flex">
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  placeholder="Escolha um destino"
-                  className={"h-11 w-45 rounded-md border border-[#CCCCCC]"}
-                />
-                <ComboboxContent className={"mt-2"}>
-                  <ComboboxEmpty>No items found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
+      {/* DESTINOS POPULARES */}
+      <section className="px-32 mt-36">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-3xl font-bold">Destinos mais procurados</h2>
 
-            <div>
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  placeholder="Escolha um destino"
-                  className={"h-11 w-45 rounded-md border border-[#CCCCCC]"}
-                />
-                <ComboboxContent className={"mt-2"}>
-                  <ComboboxEmpty>No items found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
-
-            <div>
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  placeholder="Escolha um destino"
-                  className={"h-11  w-45 rounded-md border border-[#CCCCCC]"}
-                />
-                <ComboboxContent className={"mt-2"}>
-                  <ComboboxEmpty>No items found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
-
-            <div>
-              <Combobox items={frameworks}>
-                <ComboboxInput
-                  placeholder="Escolha um destino"
-                  className={"h-11 w-45 rounded-md border border-[#CCCCCC]"}
-                />
-                <ComboboxContent className={"mt-2"}>
-                  <ComboboxEmpty>No items found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(item) => (
-                      <ComboboxItem key={item} value={item}>
-                        {item}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </div>
+            <p className="text-gray-500 mt-2">
+              Descubra alguns dos destinos favoritos dos nossos viajantes.
+            </p>
           </div>
+
+          <Button variant="outline">Ver todos</Button>
         </div>
-        <Button
-          className={
-            "bg-[#8DD3BB] text-[#112211] font-medium text-md px-6 py-6 hover:bg-[#7BC0A8] rounded-full"
-          }
-        >
-          Buscar voos
-        </Button>
-      </div>
+
+        <div className="grid grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Card
+              key={index}
+              className="py-5 hover:shadow-lg transition cursor-pointer"
+            >
+              <img src={london} className="aspect-video w-full object-cover" />
+              <CardHeader>
+                <CardAction>
+                  <p>aaa</p>
+                </CardAction>
+                <h1>Design systems meetup</h1>
+                <h2>
+                  A practical talk on component APIs, accessibility, and
+                  shipping faster.
+                </h2>
+              </CardHeader>
+              <CardFooter>
+                <Button className="w-full">View Event</Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* OUTRA SECTION */}
+      <section className="px-32 py-24">
+        <h2 className="text-3xl font-bold mb-8">Inspire sua próxima viagem</h2>
+
+        <div className="h-80 rounded-xl bg-gray-200"></div>
+      </section>
     </div>
   );
 }

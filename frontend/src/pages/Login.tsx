@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { loginUser } from "@/services/auth.service";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { UserContext } from "@/contexts/user.context";
+import { UserContext } from "@/contexts/User.context";
 import { Spinner } from "@/components/ui/spinner";
 
 function Login() {
