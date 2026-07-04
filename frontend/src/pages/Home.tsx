@@ -1,13 +1,6 @@
 import Hero from "@/components/Hero";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardAction, CardFooter, CardHeader } from "@/components/ui/card";
 import london from "../assets/london.png";
 import Header from "@/components/Header";
 
@@ -17,7 +10,6 @@ function Home() {
       <Header />
       <Hero />
 
-      {/* DESTINOS POPULARES */}
       <section className="px-32 mt-36">
         <div className="flex justify-between items-center mb-8">
           <div>

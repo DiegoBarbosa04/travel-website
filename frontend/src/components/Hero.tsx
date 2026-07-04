@@ -1,41 +1,45 @@
 import hero from "../assets/hero.webp";
 
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
 import { Button } from "./ui/button";
+
+import { Input } from "./ui/input";
+
+import LocationAutocomplete from "./LocationAutocomplete";
+import DatePickerField from "./DataPickerField";
+
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  searchFlightSchema,
+  type SearchFlightForm,
+} from "@/schemas/flight.schema";
 import { useNavigate } from "react-router";
 
+import { format } from "date-fns";
+
 function Hero() {
-  const frameworks = [
-    "Russia",
-    "Brasil",
-    "Espanha",
-    "França",
-    "Itália",
-    "Alemanha",
-    "Japão",
-    "China",
-    "Austrália",
-  ];
+  const form = useForm<SearchFlightForm>({
+    resolver: zodResolver(searchFlightSchema),
+    defaultValues: {
+      origin: "",
+      destination: "",
+      departureDate: undefined,
+      adults: 1,
+    },
+  });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({});
-
+  const { handleSubmit } = form;
   const navigate = useNavigate();
 
-  const handleSearchFlights = () => {
-    navigate("/flights");
-    //console.log(data);
+  const onSubmit = (data: SearchFlightForm) => {
+    const params = new URLSearchParams({
+      origin: data.origin,
+      destination: data.destination,
+      departureDate: format(data.departureDate, "yyyy-MM-dd"),
+      adults: data.adults.toString(),
+    });
+
+    navigate(`/flights?${params.toString()}`);
   };
 
   return (
@@ -47,42 +51,61 @@ function Hero() {
           className="w-full h-full object-cover rounded-b-2xl brightness-80"
         />
 
-        {/* CARD DE BUSCA */}
         <div className="absolute left-1/2 -bottom-20 -translate-x-1/2 w-5xl rounded-xl bg-white shadow-xl p-8">
           <form
-            className="flex justify-between items-end gap-8"
-            onSubmit={handleSubmit(handleSearchFlights)}
+            className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex-1">
               <h2 className="text-2xl font-bold mb-6">
                 Para onde você quer ir?
               </h2>
 
-              <div className="flex gap-4">
-                {[1, 2, 3, 4].map((item) => (
-                  <Combobox key={item} items={frameworks}>
-                    <ComboboxInput
-                      placeholder="Escolha um destino"
-                      className="h-11 w-45 rounded-md border border-[#CCCCCC]"
-                    />
+              <div className="flex flex-wrap gap-4">
+                <div className="min-w-45 flex-1">
+                  <LocationAutocomplete
+                    control={form.control}
+                    name="origin"
+                    label="Origem"
+                    placeholder="Digite uma cidade"
+                  />
+                </div>
+                <div className="min-w-45 flex-1">
+                  <LocationAutocomplete
+                    control={form.control}
+                    name="destination"
+                    label="Destino"
+                    placeholder="Digite uma cidade"
+                  />
+                </div>
 
-                    <ComboboxContent className="mt-2">
-                      <ComboboxEmpty>Nenhum destino encontrado.</ComboboxEmpty>
+                <div className="min-w-35 flex-1">
+                  <label className="mb-2 block text-sm font-medium text-[#112211]">
+                    Adultos
+                  </label>
+                  <Input
+                    className="h-11 w-full justify-between rounded-md border border-[#CCCCCC] bg-white px-3 text-left font-normal"
+                    type="number"
+                    {...form.register("adults", {
+                      valueAsNumber: true,
+                    })}
+                  />
+                </div>
 
-                      <ComboboxList>
-                        {(item) => (
-                          <ComboboxItem key={item} value={item}>
-                            {item}
-                          </ComboboxItem>
-                        )}
-                      </ComboboxList>
-                    </ComboboxContent>
-                  </Combobox>
-                ))}
+                <div className="min-w-55 flex-1">
+                  <DatePickerField
+                    control={form.control}
+                    name="departureDate"
+                    label="Data"
+                  />
+                </div>
               </div>
             </div>
 
-            <Button className="bg-[#8DD3BB] text-[#112211] font-medium px-8 py-6 rounded-full hover:bg-[#7BC0A8]">
+            <Button
+              type="submit"
+              className="bg-[#8DD3BB] text-[#112211] font-medium px-8 py-6 rounded-full hover:bg-[#7BC0A8]"
+            >
               Buscar voos
             </Button>
           </form>

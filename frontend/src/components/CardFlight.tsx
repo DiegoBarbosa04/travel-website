@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 
 function CardFlight() {
   return (
-    <div className="flex flex-col justify-center items-center bg-white w-2xl h-70 rounded-lg p-6 gap-8">
+    <div className="flex flex-col justify-center items-center bg-white h-70 rounded-lg p-6 gap-8">
       <div className="flex justify-between items-center w-full">
         <p>logo</p>
         <h1 className="text-xl font-bold">Ida(LATAM)</h1>
