@@ -14,9 +14,6 @@ function Flights() {
             <h1>Mostrando 50 voos</h1>
           </div>
           <CardFlight />
-          <CardFlight />
-          <CardFlight />
-          <CardFlight />
         </div>
       </div>
     </div>

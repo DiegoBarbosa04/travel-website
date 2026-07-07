@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router";
 import { UserContext } from "@/contexts/User.context";
+import AvatarIcon from "./avatarIcon";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,6 +48,7 @@ function Header() {
 
         {user ? (
           <div className="flex gap-4 items-center justify-end pr-2">
+            <AvatarIcon initials={`${user.firstName[0]}${user.lastName[0]}`} />
             <span className="text-lg font-semibold">
               {user.firstName} {user.lastName[0]}.
             </span>
