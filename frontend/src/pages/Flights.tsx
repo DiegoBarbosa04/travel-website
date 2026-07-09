@@ -1,7 +1,33 @@
 import CardFlight from "@/components/CardFlight";
 import Header from "@/components/Header";
+import type { FlightCardForm } from "@/schemas/flight.schema";
+import { api } from "@/services/api";
+import { useEffect, useState } from "react";
 
 function Flights() {
+  const searchParams = new URLSearchParams(window.location.search);
+  const [results, setResults] = useState<FlightCardForm[]>([]);
+  useEffect(() => {
+    const fetchFlightData = async () => {
+      try {
+        const response = await api.get("/flights/search", {
+          params: {
+            origin: searchParams.get("origin"),
+            destination: searchParams.get("destination"),
+            departureDate: searchParams.get("departureDate"),
+            adults: parseInt(searchParams.get("adults") || "1", 10),
+          },
+        });
+        setResults(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching flight data:", error);
+      }
+    };
+
+    fetchFlightData();
+    console.log(results);
+  }, []);
   return (
     <div className="min-h-screen bg-[#FAFAFC] px-32">
       <Header />
@@ -13,7 +39,21 @@ function Flights() {
           <div className="flex justify-between items-center w-full">
             <h1>Mostrando 50 voos</h1>
           </div>
-          <CardFlight />
+          {results.map((flight) => (
+            <CardFlight
+              key={flight.id}
+              id={flight.id}
+              airlineCode={flight.airlineCode}
+              carrierName={flight.carrierName}
+              currency={flight.currency}
+              price={flight.price}
+              departureTime={flight.departureTime}
+              arrivalTime={flight.arrivalTime}
+              origin={searchParams.get("origin") || ""}
+              destination={searchParams.get("destination") || ""}
+              duration={flight.duration}
+            />
+          ))}
         </div>
       </div>
     </div>

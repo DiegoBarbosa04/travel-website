@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router";
 import { UserContext } from "@/contexts/User.context";
-import AvatarIcon from "./avatarIcon";
+import AvatarIcon from "./AvatarIcon";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
