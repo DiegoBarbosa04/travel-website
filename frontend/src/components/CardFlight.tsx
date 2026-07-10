@@ -1,7 +1,8 @@
-import { MoveLeft, MoveRight, Star } from "lucide-react";
+import { Clock, MoveLeft, MoveRight, Star } from "lucide-react";
 import PlaneIcon from "../assets/plane.svg";
 import { Button } from "./ui/button";
 import type { FlightCardForm } from "@/schemas/flight.schema";
+import { formatDateTime, formatDuration } from "@/utils/format";
 
 function CardFlight({
   id,
@@ -20,28 +21,29 @@ function CardFlight({
       <div className="flex justify-between items-center w-full">
         <p>{airlineCode}</p>
         <h1 className="text-xl font-bold">{carrierName}</h1>
-        <h2 className="text-2xl font-bold">
-          {currency} € {price}
-        </h2>
+        <h2 className="text-2xl font-bold">€ {price}</h2>
       </div>
-      <div className="flex w-full justify-between items-center gap-2">
-        <p>{arrivalTime}</p>
-        <p>
-          {duration}h {duration % 60}m
-        </p>
+      <div className="flex w-full items-center gap-2">
+        <p>Duração de{formatDuration(duration)}</p>
+        <Clock size={20} />
+        {/* <p>{formatDateTime(arrivalTime)}</p> */}
       </div>
       <div className="flex justify-between items-center gap-2 w-full">
         <div className="flex justify-center items-center gap-2">
-          <h3 className="text-lg font-semibold">{departureTime}</h3>
+          <h3 className="text-lg font-semibold">
+            {formatDateTime(departureTime)}
+          </h3>
           <p>({origin})</p>
         </div>
-        <div className="flex justify-center items-center gap-10">
+        <div className="flex justify-center items-center gap-4">
           <MoveLeft size={30} />
           <img src={PlaneIcon} alt="plane" className="w-10 h-10" />
           <MoveRight size={30} />
         </div>
         <div className="flex justify-center items-center gap-2">
-          <h3 className="text-lg font-semibold">{arrivalTime}</h3>
+          <h3 className="text-lg font-semibold">
+            {formatDateTime(arrivalTime)}
+          </h3>
           <p>({destination})</p>
         </div>
       </div>

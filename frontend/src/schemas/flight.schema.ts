@@ -17,7 +17,7 @@ export const flightCardSchema = z.object({
   arrivalTime: z.string().min(1),
   origin: z.string().min(1),
   destination: z.string().min(1),
-  duration: z.number().min(0),
+  duration: z.string().min(1),
 });
 
 export type SearchFlightForm = z.infer<typeof searchFlightSchema>;
