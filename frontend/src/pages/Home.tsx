@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardFooter, CardHeader } from "@/components/ui/card";
 import london from "../assets/london.png";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 function Home() {
   return (
@@ -35,6 +36,7 @@ function Home() {
                   <p>aaa</p>
                 </CardAction>
                 <h1>Design systems meetup</h1>
+
                 <h2>
                   A practical talk on component APIs, accessibility, and
                   shipping faster.
@@ -54,6 +56,8 @@ function Home() {
 
         <div className="h-80 rounded-xl bg-gray-200"></div>
       </section>
+
+      <Footer />
     </div>
   );
 }
