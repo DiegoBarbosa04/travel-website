@@ -7,6 +7,7 @@ import parisImage from "@/assets/paris.png";
 import londonImage from "../assets/london.png";
 import columbiaImage from "@/assets/columbia.png";
 import { Button } from "@/components/ui/button";
+import PartnerCompanies from "@/components/PartnerCompanies";
 
 function Home() {
   return (
@@ -14,7 +15,7 @@ function Home() {
       <Header />
       <Hero />
 
-      <section className="px-32 mt-36 flex flex-col gap-8 justify-around">
+      <section className="px-32 mt-43 flex flex-col gap-8 justify-around">
         <div className="flex justify-between">
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-bold">Destinos Populares</h1>
@@ -59,7 +60,11 @@ function Home() {
         </div>
       </section>
 
-      {/* OUTRA SECTION */}
+      <section className="px-32 py-24 space-y-4 mt-4">
+        <h2 className="text-3xl font-bold">Nossos parceiros</h2>
+        <PartnerCompanies />
+      </section>
+
       <section className="px-32 py-24">
         <h2 className="text-3xl font-bold mb-8">Inspire sua próxima viagem</h2>
 
