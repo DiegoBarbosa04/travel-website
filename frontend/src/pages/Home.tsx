@@ -2,6 +2,7 @@ import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CardPopularDestination from "@/components/CardPopularDestination";
+import ReviewCards from "@/components/ReviewCards";
 import melborneImage from "@/assets/melbourne.png";
 import parisImage from "@/assets/paris.png";
 import londonImage from "../assets/london.png";
@@ -65,10 +66,10 @@ function Home() {
         <PartnerCompanies />
       </section>
 
-      <section className="px-32 py-24">
-        <h2 className="text-3xl font-bold mb-8">Inspire sua próxima viagem</h2>
+      <section className="px-32 pb-24 mb-18">
+        <h2 className="text-3xl font-bold mb-8">Avaliações</h2>
 
-        <div className="h-80 rounded-xl bg-gray-200"></div>
+        <ReviewCards />
       </section>
 
       <Footer />

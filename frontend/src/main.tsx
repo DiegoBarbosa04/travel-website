@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { UserProvider } from "./contexts/User.context";
 import Flights from "./pages/Flights";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/flights",
     element: <Flights />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
