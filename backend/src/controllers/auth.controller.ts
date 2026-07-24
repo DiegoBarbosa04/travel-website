@@ -86,7 +86,6 @@ export const userAuth = async (req: Request, res: Response) => {
 
 export const userLogout = async (req: Request, res: Response) => {
   try {
-    const { user } = req;
     res.clearCookie("user");
     res.status(200).json({ message: "Usuário deslogado" });
   } catch (error) {

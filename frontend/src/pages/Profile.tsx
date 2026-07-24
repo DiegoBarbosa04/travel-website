@@ -2,20 +2,31 @@ import Header from "@/components/Header";
 import retangleBanner from "@/assets/Rectangle-banner.png";
 import AvatarIcon from "@/components/AvatarIcon";
 import Footer from "@/components/Footer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AccountTab from "@/components/AccountTab";
 import ReviewsTab from "@/components/ReviewsTab";
 import SearchHistoryTab from "@/components/SearchHistoryTab";
+import { UserContext } from "@/contexts/User.context";
 
 function Profile() {
   const [category, setCategory] = useState("Conta");
+  const { user } = useContext(UserContext);
+
+  if (!user) {
+    return <div>Carregando...</div>;
+  }
 
   const categoryComponents: Record<string, React.ReactNode> = {
-    Conta: <AccountTab />,
+    Conta: (
+      <AccountTab
+        name={user?.firstName}
+        lastName={user?.lastName}
+        email={user?.email}
+      />
+    ),
     Avaliações: <ReviewsTab />,
     "Histórico de pesquisas": <SearchHistoryTab />,
   };
-
   const handleChangeCategory = (newCategory: string) => {
     setCategory(newCategory);
   };
@@ -40,8 +51,15 @@ function Profile() {
           <img src={retangleBanner} className="w-full h-87" />
         </div>
         <div className="flex flex-col items-center justify-center gap-2 absolute bottom-0">
-          <AvatarIcon initials="DB" width={120} height={120} fontSize={52} />
-          <span className="text-2xl font-bold">John Doe</span>
+          <AvatarIcon
+            initials={`${user?.firstName[0]}${user?.lastName[0]}`}
+            width={120}
+            height={120}
+            fontSize={52}
+          />
+          <span className="text-2xl font-bold">
+            {`${user?.firstName} ${user?.lastName}`}
+          </span>
         </div>
       </div>
 

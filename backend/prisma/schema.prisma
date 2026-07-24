@@ -12,11 +12,43 @@ datasource db {
   provider = "postgresql"
 }
 
-model User { 
-  id    String  @id @default(uuid()) 
+model User {
+  id        String   @id @default(uuid())
   firstName String
-  lastName String
-  email String  @unique
-  password String
+  lastName  String
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
-} 
+
+  reviews         Review[]
+  searchHistories SearchHistory[]
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  text      String
+  rating Int @default(5)
+
+  userId    String
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SearchHistory {
+  id              String   @id @default(uuid())
+
+  origin          String
+  destination     String
+  departureDate   DateTime
+  adults          Int
+
+  userId          String
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+}

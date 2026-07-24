@@ -1,7 +1,13 @@
 import { SquarePen } from "lucide-react";
 import { Button } from "./ui/button";
 
-function AccountTab() {
+interface AccountTabProps {
+  name: string;
+  lastName: string;
+  email: string;
+}
+
+function AccountTab({ name, lastName, email }: AccountTabProps) {
   return (
     <div className="flex h-full flex-col justify-between gap-6">
       <div className="grid grid-cols-2 gap-6 ">
@@ -9,13 +15,13 @@ function AccountTab() {
           <p className="text-xs uppercase tracking-[0.22em] text-slate-400 mb-2">
             Nome
           </p>
-          <p className="text-base font-medium text-slate-900">John</p>
+          <p className="text-base font-medium text-slate-900">{name}</p>
         </div>
         <div className="rounded-3xl border border-[#E5E7EB] bg-[#F8FBF9] p-5">
           <p className="text-xs uppercase tracking-[0.22em] text-slate-400 mb-2">
             Sobrenome
           </p>
-          <p className="text-base font-medium text-slate-900">Doe</p>
+          <p className="text-base font-medium text-slate-900">{lastName}</p>
         </div>
       </div>
 
@@ -23,9 +29,7 @@ function AccountTab() {
         <p className="text-xs uppercase tracking-[0.22em] text-slate-400 mb-2">
           Email
         </p>
-        <p className="text-base font-medium text-slate-900">
-          john.doe@example.com
-        </p>
+        <p className="text-base font-medium text-slate-900">{email}</p>
       </div>
 
       <div className="rounded-3xl border border-[#E5E7EB] bg-[#F8FBF9] p-5">
