@@ -35,9 +35,9 @@ export const getReviewsService = () => {
   });
 };
 
-export const getReviewByIdService = (id: string) => {
-  return prisma.review.findUnique({
-    where: { id },
+export const getMyReviewsService = (id: string) => {
+  return prisma.review.findMany({
+    where: { userId: id },
   });
 };
 

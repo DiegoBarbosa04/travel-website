@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   createReview,
   deleteReview,
-  getReviewById,
+  getMyReviews,
   getReviews,
   updateReview,
 } from "../controllers/review.controller";
@@ -16,7 +16,7 @@ import {
 const router = Router();
 
 router.get("/", getReviews);
-router.get("/:id", getReviewById);
+router.get("/me", authMiddleware, getMyReviews);
 
 router.post(
   "/",

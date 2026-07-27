@@ -2,31 +2,53 @@ import Header from "@/components/Header";
 import retangleBanner from "@/assets/Rectangle-banner.png";
 import AvatarIcon from "@/components/AvatarIcon";
 import Footer from "@/components/Footer";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AccountTab from "@/components/AccountTab";
 import ReviewsTab from "@/components/ReviewsTab";
+import MyReviewsTab from "@/components/MyReviewsTab";
 import SearchHistoryTab from "@/components/SearchHistoryTab";
 import { UserContext } from "@/contexts/User.context";
+import { getMyreviews } from "@/services/review.service";
+import type { Review } from "@/services/review.service";
 
 function Profile() {
   const [category, setCategory] = useState("Conta");
+  const [reviews, setReviews] = useState<Review[]>([]);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const response = await getMyreviews();
+        setReviews(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadReviews();
+  }, []);
 
   if (!user) {
     return <div>Carregando...</div>;
   }
 
+  const handleAddReview = (newReview: Review) => {
+    setReviews((prev) => [newReview, ...prev]);
+  };
+
   const categoryComponents: Record<string, React.ReactNode> = {
     Conta: (
       <AccountTab
-        name={user?.firstName}
-        lastName={user?.lastName}
-        email={user?.email}
+        name={user.firstName}
+        lastName={user.lastName}
+        email={user.email}
       />
     ),
-    Avaliações: <ReviewsTab />,
+    Avaliações: <MyReviewsTab reviews={reviews} />,
     "Histórico de pesquisas": <SearchHistoryTab />,
   };
+
   const handleChangeCategory = (newCategory: string) => {
     setCategory(newCategory);
   };
@@ -98,8 +120,12 @@ function Profile() {
 
         <div className="mt-12">
           <div className="w-full h-auto rounded-2xl bg-white p-10 shadow-lg">
-            <h2 className="text-2xl font-semibold mb-8">Dados da conta</h2>
             {categoryComponents[category]}
+            {category === "Avaliações" ? (
+              <div className="mt-10">
+                <ReviewsTab onReviewCreated={handleAddReview} />
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

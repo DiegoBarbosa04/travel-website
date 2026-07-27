@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import { UserProvider } from "./contexts/User.context";
 import Flights from "./pages/Flights";
 import Profile from "./pages/Profile";
+import { Toaster } from "./components/ui/sonner";
 
 const router = createBrowserRouter([
   {
@@ -40,5 +41,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <UserProvider>
     <RouterProvider router={router} />
+    <Toaster />
   </UserProvider>,
 );

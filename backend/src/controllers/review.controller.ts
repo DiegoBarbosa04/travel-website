@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import {
   createReviewService,
   deleteReviewService,
-  getReviewByIdService,
+  getMyReviewsService,
   getReviewsService,
   updateReviewService,
 } from "../services/review.service";
@@ -31,10 +31,13 @@ export const getReviews = async (req: Request, res: Response) => {
   }
 };
 
-export const getReviewById = async (req: Request, res: Response) => {
+export const getMyReviews = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params as { id: string };
-    const review = await getReviewByIdService(id);
+    const { user } = req;
+    if (!user) {
+      return;
+    }
+    const review = await getMyReviewsService(user.id);
     res.status(200).json(review);
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });

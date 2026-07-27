@@ -2,22 +2,36 @@ import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reviewSchema, type ReviewForm } from "@/schemas/review.schema";
-import { api } from "@/services/api";
+import { createReview, type Review } from "@/services/review.service";
+import { toast } from "sonner";
 
-function ReviewsTab() {
+interface ReviewsTabProps {
+  onReviewCreated: (review: Review) => void;
+}
+
+function ReviewsTab({ onReviewCreated }: ReviewsTabProps) {
   const form = useForm<ReviewForm>({
     resolver: zodResolver(reviewSchema),
   });
 
-  const handleReview = async (data: ReviewForm) => {
-    api.post("/reviews/", data);
+  const handleCreateReview = async (data: ReviewForm) => {
+    try {
+      const createdReview = await createReview(data);
+      form.reset();
+      onReviewCreated(createdReview);
+      toast.success("Avaliação criada com sucesso");
+    } catch (error) {
+      toast.error("Erro ao criar avaliação");
+    }
   };
 
   return (
     <form
-      onSubmit={form.handleSubmit(handleReview)}
+      onSubmit={form.handleSubmit(handleCreateReview)}
       className="flex h-full flex-col justify-between gap-6"
     >
+      <h2 className="text-2xl font-semibold">Faça um comentário</h2>
+
       <div className="rounded-3xl border border-[#E5E7EB] bg-[#F8FBF9] p-5">
         <label className="text-xs uppercase tracking-[0.22em] text-slate-400 mb-2 block">
           Comentário
