@@ -45,7 +45,7 @@ function Profile() {
         email={user.email}
       />
     ),
-    Avaliações: <MyReviewsTab reviews={reviews} />,
+    Avaliações: <MyReviewsTab reviews={reviews} setReviews={setReviews} />,
     "Histórico de pesquisas": <SearchHistoryTab />,
   };
 
