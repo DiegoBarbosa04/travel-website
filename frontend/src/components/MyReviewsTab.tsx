@@ -70,6 +70,16 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
     }
   };
 
+  const handleDeleteReview = async (id: Review["id"]) => {
+    try {
+      await api.delete(`/reviews/${id}`);
+      setReviews(reviews.filter((prev) => prev.id !== id));
+      toast.success("Avaliação removida com sucesso");
+    } catch (error) {
+      toast.error("Erro ao apagar avaliação");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <h2 className="text-2xl font-semibold">Minhas avaliações</h2>
@@ -195,12 +205,39 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
                       </form>
                     </DialogContent>
                   </Dialog>
-                  <Button
-                    variant={"destructive"}
-                    className=" rounded-md p-2  cursor-pointer"
-                  >
-                    <Trash2 size={20} />
-                  </Button>
+
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button
+                        variant={"destructive"}
+                        className=" rounded-md p-2  cursor-pointer"
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Deseja apagar esta avaliação?</DialogTitle>
+                      </DialogHeader>
+
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Cancelar</Button>
+                        </DialogClose>
+
+                        <DialogClose asChild>
+                          <Button
+                            variant="destructive"
+                            type="submit"
+                            onClick={() => handleDeleteReview(review.id)}
+                          >
+                            Apagar
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </div>
