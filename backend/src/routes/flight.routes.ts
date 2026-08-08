@@ -1,7 +1,13 @@
 import { Router } from "express";
-import { searchFlightsController } from "../controllers/flight.controller";
+import { searchFlights } from "../controllers/flight.controller";
+import { searchFlightsSchema } from "../schemas/flight.schema";
+import { validateSchema } from "../middlewares/validate.middleware";
 
 const router = Router();
-router.get("/search", searchFlightsController);
+router.get(
+  "/search",
+  validateSchema(searchFlightsSchema, "query"),
+  searchFlights,
+);
 
 export default router;

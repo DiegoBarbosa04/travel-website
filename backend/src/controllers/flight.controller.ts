@@ -1,15 +1,14 @@
 import type { Request, Response } from "express";
-import { searchFlightsService } from "../services/amadeus.service";
+import { searchFlightsService } from "../services/flight.service";
+import type { SearchFlightsDTO } from "../schemas/flight.schema";
 
-export async function searchFlightsController(req: Request, res: Response) {
-  const { origin, destination, departureDate } = req.query;
-
-  const flights = await searchFlightsService({
-    origin: String(origin),
-    destination: String(destination),
-    departureDate: String(departureDate),
-    max: 10,
-  });
-
-  return res.status(200).json(flights);
-}
+export const searchFlights = async (req: Request, res: Response) => {
+  try {
+    const flights = await searchFlightsService(
+      req.query as unknown as SearchFlightsDTO,
+    );
+    res.json(flights);
+  } catch (error) {
+    res.status(500).json({ error: "Erro no servidor" });
+  }
+};
