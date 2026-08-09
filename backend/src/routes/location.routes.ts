@@ -1,8 +1,14 @@
-// import { Router } from "express";
-// import { searchLocations } from "../controllers/location.controller";
+import { Router } from "express";
+import { validateSchema } from "../middlewares/validate.middleware";
+import { searchLocations } from "../controllers/location.controller";
+import { searchLocationSchema } from "../schemas/location.schema";
 
-// const router = Router();
+const router = Router();
 
-// router.get("/search", searchLocations);
+router.get(
+  "/search",
+  validateSchema(searchLocationSchema, "query"),
+  searchLocations,
+);
 
-// export default router;
+export default router;

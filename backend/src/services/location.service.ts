@@ -1,14 +1,15 @@
-// import { amadeus } from "../lib/duffel";
-// import type { AmadeusLocation } from "../types/location.type";
+import { searchLocationsProvider } from "../providers/location.provider";
+import type { SearchLocationDTO } from "../schemas/location.schema";
 
-// export async function searchLocationsService(keyword: string) {
-//   const response = await amadeus.referenceData.locations.get({
-//     keyword,
-//     subType: "CITY,AIRPORT",
-//   });
+export const searchLocationsService = async (data: SearchLocationDTO) => {
+  const response = await searchLocationsProvider(data.keyword);
 
-//   return (response.data as AmadeusLocation[]).map((location) => ({
-//     label: `${location.address.cityName} (${location.iataCode})`,
-//     value: location.iataCode,
-//   }));
-// }
+  return response.data.map((location) => ({
+    id: location.id,
+    name: location.name,
+    type: location.type,
+    iataCode: location.iata_code,
+    cityName: location.city_name,
+    countryCode: location.iata_country_code,
+  }));
+};
