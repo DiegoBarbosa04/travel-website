@@ -1,16 +1,20 @@
-import { api } from "@/services/api";
+import { api } from "./api";
 
 export interface Location {
-  label: string;
-  value: string;
+  id: string;
+  name: string;
+  type: "airport" | "city";
+  iataCode: string;
+  cityName: string | null;
+  countryCode: string;
 }
 
-export const searchLocations = async (keyword: string): Promise<Location[]> => {
+export const searchLocations = async (keyword: string) => {
   const response = await api.get("/locations/search", {
     params: {
       keyword,
     },
   });
 
-  return response.data;
+  return response.data as Location[];
 };

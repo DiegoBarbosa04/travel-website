@@ -110,12 +110,12 @@ export default function LocationAutocomplete<T extends FieldValues>({
                       <CommandGroup>
                         {options.map((location) => (
                           <CommandItem
-                            key={location.value}
-                            value={location.label}
+                            key={location.id}
+                            value={location.iataCode}
                             onSelect={() => {
-                              field.onChange(location.value);
+                              field.onChange(location.iataCode);
 
-                              setSelectedLabel(location.label);
+                              setSelectedLabel(location.name);
 
                               setSearch("");
 
@@ -125,13 +125,13 @@ export default function LocationAutocomplete<T extends FieldValues>({
                             <Check
                               className={cn(
                                 "mr-2",
-                                field.value === location.value
+                                field.value === location.iataCode
                                   ? "opacity-100"
                                   : "opacity-0",
                               )}
                             />
 
-                            {location.label}
+                            {location.name}
                           </CommandItem>
                         ))}
                       </CommandGroup>
