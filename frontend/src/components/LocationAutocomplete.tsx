@@ -16,6 +16,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
+import ReactCountryFlag from "react-country-flag";
+
 import {
   Popover,
   PopoverContent,
@@ -122,6 +124,10 @@ export default function LocationAutocomplete<T extends FieldValues>({
                               setOpen(false);
                             }}
                           >
+                            <ReactCountryFlag
+                              countryCode={location.countryCode}
+                              svg
+                            />
                             <Check
                               className={cn(
                                 "mr-2",
@@ -130,7 +136,6 @@ export default function LocationAutocomplete<T extends FieldValues>({
                                   : "opacity-0",
                               )}
                             />
-
                             {location.name}
                           </CommandItem>
                         ))}

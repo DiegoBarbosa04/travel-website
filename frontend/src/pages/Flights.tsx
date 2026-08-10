@@ -21,7 +21,7 @@ function Flights() {
         setResults(response.data);
         console.log(response.data);
       } catch (error) {
-        console.error("Error fetching flight data:", error);
+        console.error("Erro ao buscar voos:", error);
       }
     };
 
@@ -43,8 +43,11 @@ function Flights() {
             <CardFlight
               key={flight.id}
               id={flight.id}
-              airlineCode={flight.airlineCode}
-              carrierName={flight.carrierName}
+              carrierCode={flight.carrierCode}
+              airline={flight.airline}
+              departureCity={flight.departureCity}
+              arrivalCity={flight.arrivalCity}
+              logo={flight.logo}
               currency={flight.currency}
               price={flight.price}
               departureTime={flight.departureTime}

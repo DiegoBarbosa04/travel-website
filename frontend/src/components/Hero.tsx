@@ -70,6 +70,7 @@ function Hero() {
                     placeholder="Digite uma cidade"
                   />
                 </div>
+
                 <div className="min-w-45 flex-1">
                   <LocationAutocomplete
                     control={form.control}
@@ -79,12 +80,12 @@ function Hero() {
                   />
                 </div>
 
-                <div className="min-w-35 flex-1">
+                <div>
                   <label className="mb-2 block text-sm font-medium text-[#112211]">
                     Adultos
                   </label>
                   <Input
-                    className="h-11 w-full justify-between rounded-md border border-[#CCCCCC] bg-white px-3 text-left font-normal"
+                    className="h-11 w-14 justify-between rounded-md border border-[#CCCCCC] bg-white px-3 text-left font-normal"
                     type="number"
                     {...form.register("adults", {
                       valueAsNumber: true,
@@ -92,7 +93,7 @@ function Hero() {
                   />
                 </div>
 
-                <div className="min-w-55 flex-1">
+                <div>
                   <DatePickerField
                     control={form.control}
                     name="departureDate"
