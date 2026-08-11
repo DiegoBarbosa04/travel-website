@@ -47,7 +47,7 @@ function CardFlight({
           </div>
 
           <div className="flex items-center justify-center">
-            <img src={planeIcon} alt="Plane" className="w-28" />
+            <img src={planeIcon} alt="Plane" className="w-32" />
           </div>
 
           <div className="flex flex-col items-center gap-1">
