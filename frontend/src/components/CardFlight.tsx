@@ -1,8 +1,9 @@
 import { Clock, Heart } from "lucide-react";
 import { Button } from "./ui/button";
 import type { FlightCardForm } from "@/schemas/flight.schema";
-import { formatDateTime, formatDuration } from "@/utils/format";
+import { formatDateTime, formatDuration } from "@/utils/formatTime";
 import planeIcon from "../assets/planeforflights.svg";
+import { formatoBrl } from "@/utils/formatCurrency";
 
 function CardFlight({
   id,
@@ -64,7 +65,9 @@ function CardFlight({
       <div className="h-full border border-dashed"></div>
 
       <div className="flex flex-col items-center justify-between p-6 gap-4 min-w-max">
-        <h2 className="text-3xl font-bold text-[#8DD3BB]">R$ {price}</h2>
+        <h2 className="text-3xl font-bold text-[#8DD3BB]">
+          {formatoBrl(price)}
+        </h2>
 
         <div className="flex items-center gap-3">
           <Button className="bg-[#8DD3BB] text-[#112211] hover:bg-[#7BB8A8] font-semibold px-6 py-5">
