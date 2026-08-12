@@ -11,10 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 function Flights() {
   const searchParams = new URLSearchParams(window.location.search);
   const [results, setResults] = useState<FlightCardForm[]>([]);
+  const [visibleCount, setVisibleCount] = useState<number>(10);
   const [sortBy, setSortBy] = useState("menor-preco");
   useEffect(() => {
     const fetchFlightData = async () => {
@@ -66,7 +68,7 @@ function Flights() {
               </Select>
             </div>
           </div>
-          {results.map((flight) => (
+          {results.slice(0, visibleCount).map((flight) => (
             <CardFlight
               key={flight.id}
               id={flight.id}
@@ -84,6 +86,14 @@ function Flights() {
               duration={flight.duration}
             />
           ))}
+          {visibleCount < results.length && (
+            <Button
+              className=" w-full py-5 text-md"
+              onClick={() => setVisibleCount((prev) => prev + 10)}
+            >
+              Carregar mais voos
+            </Button>
+          )}
         </div>
       </div>
     </div>
