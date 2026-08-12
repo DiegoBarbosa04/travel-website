@@ -21,7 +21,7 @@ function CardFlight({
   duration,
 }: FlightCardForm) {
   return (
-    <div className="flex bg-white rounded-lg overflow-hidden w-full">
+    <div className="flex bg-white rounded-lg overflow-hidden w-full shadow-md">
       <div className="flex flex-col bg-white p-6 gap-5 flex-1">
         <div className="flex justify-between items-center gap-3 w-full">
           <div className="flex items-center gap-3">
@@ -65,7 +65,7 @@ function CardFlight({
       <div className="h-full border border-dashed"></div>
 
       <div className="flex flex-col items-center justify-between p-6 gap-4 min-w-max">
-        <h2 className="text-3xl font-bold text-[#8DD3BB]">
+        <h2 className="text-3xl font-bold text-[#FF8682]">
           {formatoBrl(price)}
         </h2>
 
