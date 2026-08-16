@@ -64,7 +64,7 @@ function CardFlight({
 
       <div className="h-full border border-dashed"></div>
 
-      <div className="flex flex-col items-center justify-between p-6 gap-4 min-w-max">
+      <div className="flex flex-col items-center justify-between p-6 gap-4 min-w-55">
         <h2 className="text-3xl font-bold text-[#FF8682]">
           {formatoBrl(price)}
         </h2>

@@ -32,7 +32,7 @@ export const searchFlightsService = async (
   const convertedValues = (await convertCurrency()) as ConvertedValues;
   const { rate } = convertedValues!.data;
 
-  return response.data.offers.flatMap((offer) => {
+  return response.data.offers.slice(0, 30).flatMap((offer) => {
     const slice = offer.slices[0];
 
     if (!slice) {
@@ -50,7 +50,7 @@ export const searchFlightsService = async (
     const logo = segment.marketing_carrier.logo_symbol_url;
     const departureCity = segment.origin.city_name;
     const arrivalCity = segment.destination.city_name;
-    const price = parseInt(offer.total_amount) * rate;
+    const price = parseFloat(offer.total_amount) * rate;
 
     if (!airline || !carrierCode || !logo || !departureCity || !arrivalCity) {
       return [];

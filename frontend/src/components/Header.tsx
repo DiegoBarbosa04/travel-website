@@ -1,16 +1,28 @@
 import { useContext, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import logo from "../assets/logo.svg";
 import { Link } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import AvatarIcon from "./AvatarIcon";
+import { logoutUser } from "@/services/auth.service";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useContext(UserContext);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { user, setUser } = useContext(UserContext);
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    try {
+      logoutUser();
+    } catch (error) {
+      console.error("Error ao sair da conta:");
+    }
+    setIsUserMenuOpen(false);
+    setUser(null);
   };
 
   return (
@@ -34,6 +46,26 @@ function Header() {
           </div>
         )}
 
+        {isUserMenuOpen && (
+          <div className="absolute top-18 right-0 w-45 bg-white shadow-md rounded-xl z-10">
+            <ul className="flex flex-col gap-4 p-4">
+              <Link to="/profile">
+                <li className="cursor-pointer hover:bg-[#F0F0F0] py-2 px-4">
+                  Meu perfil
+                </li>
+              </Link>
+
+              <li
+                onClick={handleLogout}
+                className="flex gap-2 items-center cursor-pointer hover:bg-[#F0F0F0] py-2 px-4"
+              >
+                Sair
+                <LogOut size={18} />
+              </li>
+            </ul>
+          </div>
+        )}
+
         <div
           className="flex items-center cursor-pointer gap-2"
           onClick={handleMenuClick}
@@ -48,10 +80,17 @@ function Header() {
 
         {user ? (
           <div className="flex gap-4 items-center justify-end pr-2">
-            <AvatarIcon initials={`${user.firstName[0]}${user.lastName[0]}`} />
-            <span className="text-lg font-semibold">
-              {user.firstName} {user.lastName[0]}.
-            </span>
+            <div
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="flex items-center gap-2 hover:bg-gray-100 py-2 px-3 rounded-full cursor-pointer"
+            >
+              <AvatarIcon
+                initials={`${user.firstName[0]}${user.lastName[0]}`}
+              />
+              <span className="text-lg font-semibold">
+                {user.firstName} {user.lastName[0]}.
+              </span>
+            </div>
           </div>
         ) : (
           <div className="flex justify-end gap-2">

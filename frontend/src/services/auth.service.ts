@@ -24,3 +24,8 @@ export const loggedInUser = async () => {
   const response = await api.get<User>("/auth/me");
   return response.data;
 };
+
+export const logoutUser = async () => {
+  const response = await api.post("/auth/logout");
+  return response.data;
+};
