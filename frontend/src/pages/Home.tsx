@@ -1,6 +1,4 @@
 import Hero from "@/components/Hero";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import CardPopularDestination from "@/components/CardPopularDestination";
 import ReviewCards from "@/components/ReviewCards";
 import melborneImage from "@/assets/melbourne.png";
@@ -13,7 +11,6 @@ import PartnerCompanies from "@/components/PartnerCompanies";
 function Home() {
   return (
     <div className="min-h-screen bg-[#FAFBFC]">
-      <Header />
       <Hero />
 
       <section className="px-32 mt-43 flex flex-col gap-8 justify-around">
@@ -71,8 +68,6 @@ function Home() {
 
         <ReviewCards />
       </section>
-
-      <Footer />
     </div>
   );
 }

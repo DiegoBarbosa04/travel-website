@@ -1,5 +1,4 @@
 import CardFlight from "@/components/CardFlight";
-import Header from "@/components/Header";
 import FilterPanel from "@/components/FilterPanel";
 import type { FlightCardForm } from "@/schemas/flight.schema";
 import { api } from "@/services/api";
@@ -70,7 +69,6 @@ function Flights() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFC] px-32">
-      <Header />
       <div className="flex w-full h-full gap-4 py-40">
         <div className="flex-1">
           <FilterPanel

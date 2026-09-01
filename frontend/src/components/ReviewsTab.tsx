@@ -64,7 +64,7 @@ function ReviewsTab({ onReviewCreated }: ReviewsTabProps) {
           </div>
         </div>
       </div>
-      <Button type="submit" className="px-6 py-4">
+      <Button type="submit" className="px-3 py-5">
         Enviar avaliação
       </Button>
     </form>

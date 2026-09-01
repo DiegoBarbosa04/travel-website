@@ -74,9 +74,11 @@ function Header() {
           <span className="text-[#112211] select-none">Menu</span>
         </div>
 
-        <div className="flex justify-center items-center">
-          <img className="w-20 h-20" src={logo} alt="logo" />
-        </div>
+        <Link to="/">
+          <div className="flex justify-center items-center">
+            <img className="w-20 h-20" src={logo} alt="logo" />
+          </div>
+        </Link>
 
         {user ? (
           <div className="flex gap-4 items-center justify-end pr-2">

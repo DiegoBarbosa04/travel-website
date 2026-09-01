@@ -1,7 +1,5 @@
-import Header from "@/components/Header";
 import retangleBanner from "@/assets/Rectangle-banner.png";
 import AvatarIcon from "@/components/AvatarIcon";
-import Footer from "@/components/Footer";
 import { useContext, useEffect, useState } from "react";
 import AccountTab from "@/components/AccountTab";
 import ReviewsTab from "@/components/ReviewsTab";
@@ -66,8 +64,6 @@ function Profile() {
 
   return (
     <div className="min-h-screen bg-[#FAFBFC] pt-2 px-32">
-      <Header />
-
       <div className="h-110 flex justify-center items-start relative">
         <div className="h-87 w-full rounded-md">
           <img src={retangleBanner} className="w-full h-87" />
@@ -129,8 +125,6 @@ function Profile() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

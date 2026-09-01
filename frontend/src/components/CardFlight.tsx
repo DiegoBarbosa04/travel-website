@@ -1,4 +1,4 @@
-import { Clock, Heart } from "lucide-react";
+import { Clock } from "lucide-react";
 import { Button } from "./ui/button";
 import type { FlightCardForm } from "@/schemas/flight.schema";
 import { formatDateTime, formatDuration } from "@/utils/formatTime";
@@ -6,7 +6,6 @@ import planeIcon from "../assets/planeforflights.svg";
 import { formatoBrl } from "@/utils/formatCurrency";
 
 function CardFlight({
-  id,
   price,
   airline,
   departureCity,
@@ -17,7 +16,6 @@ function CardFlight({
   arrivalTime,
   origin,
   destination,
-  currency,
   duration,
 }: FlightCardForm) {
   return (
