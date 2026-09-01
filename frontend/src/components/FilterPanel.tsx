@@ -1,20 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 
-function FilterPanel() {
-  const [priceRange, setPriceRange] = useState(500);
-  const [airlines, setAirlines] = useState({
-    iberia: false,
-    tap: false,
-    american: false,
-  });
-  const [time, setTime] = useState<string>("");
+interface FilterPanelProps {
+  setFilters: React.Dispatch<
+    React.SetStateAction<{
+      priceRange: [number, number];
+      airlines: string[];
+      time: {
+        madrugada: boolean;
+        manha: boolean;
+        tarde: boolean;
+        noite: boolean;
+      };
+    }>
+  >;
+  airlinesResults: string[];
+}
 
-  const handleAirlineChange = (airline: keyof typeof airlines) => {
-    setAirlines((prev) => ({
-      ...prev,
-      [airline]: !prev[airline],
-    }));
+function FilterPanel({ setFilters, airlinesResults }: FilterPanelProps) {
+  const [priceRange, setPriceRange] = useState(5000);
+  const [airlines, setAirlines] = useState<string[]>([]);
+  const [time, setTime] = useState({
+    madrugada: false,
+    manha: false,
+    tarde: false,
+    noite: false,
+  });
+
+  useEffect(() => {
+    setFilters({
+      priceRange: [0, priceRange],
+      airlines,
+      time: time,
+    });
+  }, [priceRange, airlines, time, setFilters]);
+
+  const handleAirlineChange = (airline: string) => {
+    setAirlines((prev) =>
+      prev.includes(airline)
+        ? prev.filter((selectedAirline) => selectedAirline !== airline)
+        : [...prev, airline],
+    );
   };
 
   return (
@@ -25,12 +51,12 @@ function FilterPanel() {
 
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Preço</h3>
-        <p>A partir de</p>
+        <p>Passagens até</p>
         <div className="flex items-center gap-4">
           <input
             type="range"
             min="0"
-            max="1000"
+            max="5000"
             value={priceRange}
             onChange={(e) => setPriceRange(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#8DD3BB]"
@@ -44,35 +70,19 @@ function FilterPanel() {
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Companhias</h3>
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <Checkbox
-              id="iberia"
-              checked={airlines.iberia}
-              onCheckedChange={() => handleAirlineChange("iberia")}
-            />
-            <label htmlFor="iberia" className="cursor-pointer text-sm">
-              Iberia
-            </label>
-          </div>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              id="tap"
-              checked={airlines.tap}
-              onCheckedChange={() => handleAirlineChange("tap")}
-            />
-            <label htmlFor="tap" className="cursor-pointer text-sm">
-              TAP
-            </label>
-          </div>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              id="american"
-              checked={airlines.american}
-              onCheckedChange={() => handleAirlineChange("american")}
-            />
-            <label htmlFor="american" className="cursor-pointer text-sm">
-              American Airlines
-            </label>
+          <div className="space-y-3">
+            {Array.from(new Set(airlinesResults)).map((airline) => (
+              <div key={airline} className="flex items-center gap-3">
+                <Checkbox
+                  id={airline}
+                  checked={airlines.includes(airline)}
+                  onCheckedChange={() => handleAirlineChange(airline)}
+                />
+                <label htmlFor={airline} className="cursor-pointer text-sm">
+                  {airline}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -80,19 +90,25 @@ function FilterPanel() {
       <div>
         <h3 className="text-lg font-semibold mb-4">Horário</h3>
         <div className="space-y-3">
-          {["Madrugada", "Manhã", "Tarde", "Noite"].map((timeOption) => (
-            <div key={timeOption} className="flex items-center gap-3">
-              <input
-                type="radio"
-                id={timeOption}
-                name="time"
-                value={timeOption}
-                checked={time === timeOption}
-                onChange={(e) => setTime(e.target.value)}
-                className="w-4 h-4 accent-[#8DD3BB] cursor-pointer"
+          {[
+            ["Madrugada", "madrugada"],
+            ["Manhã", "manha"],
+            ["Tarde", "tarde"],
+            ["Noite", "noite"],
+          ].map(([label, key]) => (
+            <div key={key} className="flex items-center gap-3">
+              <Checkbox
+                id={key}
+                checked={time[key as keyof typeof time]}
+                onCheckedChange={(checked) =>
+                  setTime((prev) => ({
+                    ...prev,
+                    [key]: checked === true,
+                  }))
+                }
               />
-              <label htmlFor={timeOption} className="cursor-pointer text-sm">
-                {timeOption}
+              <label htmlFor={key} className="cursor-pointer text-sm">
+                {label}
               </label>
             </div>
           ))}

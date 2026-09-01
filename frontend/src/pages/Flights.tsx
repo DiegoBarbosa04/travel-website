@@ -12,12 +12,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { filterFlights } from "@/utils/filterFlights";
 
 function Flights() {
   const searchParams = new URLSearchParams(window.location.search);
   const [results, setResults] = useState<FlightCardForm[]>([]);
+  const [airlinesResults, setAirlinesResults] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(10);
   const [sortBy, setSortBy] = useState("menor-preco");
+
+  const [filters, setFilters] = useState({
+    priceRange: [0, 5000] as [number, number],
+    airlines: [] as string[],
+    time: {
+      madrugada: false,
+      manha: false,
+      tarde: false,
+      noite: false,
+    },
+  });
+
+  const resultsFilteredFlights = filterFlights(results, filters);
+
   useEffect(() => {
     const fetchFlightData = async () => {
       try {
@@ -30,7 +46,15 @@ function Flights() {
           },
         });
         setResults(response.data);
-        console.log(response.data);
+        setAirlinesResults(
+          Array.from(
+            new Set(
+              response.data.map(
+                (flight: { airline: string }) => flight.airline,
+              ),
+            ),
+          ),
+        );
       } catch (error) {
         console.error("Erro ao buscar voos:", error);
       }
@@ -39,17 +63,27 @@ function Flights() {
     fetchFlightData();
     console.log(results);
   }, []);
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [filters]);
+
   return (
     <div className="min-h-screen bg-[#FAFAFC] px-32">
       <Header />
       <div className="flex w-full h-full gap-4 py-40">
         <div className="flex-1">
-          <FilterPanel />
+          <FilterPanel
+            setFilters={setFilters}
+            airlinesResults={airlinesResults}
+          />
         </div>
         <div className="flex flex-col flex-2 px-4 gap-4 items-center">
           <div className="flex justify-between items-center w-full">
             <h1 className="flex gap-1 text-lg font-semibold text-[#112211]">
-              <span className="font-bold text-[#FF8682]">{results.length}</span>
+              <span className="font-bold text-[#FF8682]">
+                {resultsFilteredFlights.length}
+              </span>
               voos encontrados
             </h1>
             <div className="flex items-center gap-2">
@@ -68,7 +102,7 @@ function Flights() {
               </Select>
             </div>
           </div>
-          {results.slice(0, visibleCount).map((flight) => (
+          {resultsFilteredFlights.slice(0, visibleCount).map((flight) => (
             <CardFlight
               key={flight.id}
               id={flight.id}
@@ -86,7 +120,7 @@ function Flights() {
               duration={flight.duration}
             />
           ))}
-          {visibleCount < results.length && (
+          {visibleCount < resultsFilteredFlights.length && (
             <Button
               className=" w-full py-5 text-md"
               onClick={() => setVisibleCount((prev) => prev + 10)}
