@@ -29,7 +29,7 @@ function Register() {
       setIsLoading(true);
       await registerUser(data);
       await loginUser(data);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao registrar:", error);
     } finally {

@@ -31,7 +31,7 @@ function Login() {
       setIsLoading(true);
       const user = await loginUser(data);
       setUser(user);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
     } finally {

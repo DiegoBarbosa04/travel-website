@@ -10,6 +10,7 @@ import Flights from "./pages/Flights";
 import Profile from "./pages/Profile";
 import { Toaster } from "./components/ui/sonner";
 import AppLayout from "./components/AppLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -25,17 +26,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: <ProtectedRoute requireAuth redirectTo="/login" />,
+        children: [{ index: true, element: <Profile /> }],
       },
     ],
   },
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
+    element: <ProtectedRoute requireAuth={false} redirectTo="/" />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ],
   },
 ]);
 
