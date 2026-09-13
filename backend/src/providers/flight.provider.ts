@@ -1,4 +1,4 @@
-import { duffel } from "../lib/duffel";
+import { duffel } from "../lib/duffel.js";
 
 interface SearchFlightsProviderParams {
   origin: string;

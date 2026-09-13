@@ -1,5 +1,5 @@
-import { searchLocationsProvider } from "../providers/location.provider";
-import type { SearchLocationDTO } from "../schemas/location.schema";
+import { searchLocationsProvider } from "../providers/location.provider.js";
+import type { SearchLocationDTO } from "../schemas/location.schema.js";
 
 export const searchLocationsService = async (data: SearchLocationDTO) => {
   const response = await searchLocationsProvider(data.keyword);

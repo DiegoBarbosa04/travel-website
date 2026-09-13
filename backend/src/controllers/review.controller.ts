@@ -5,7 +5,7 @@ import {
   getMyReviewsService,
   getReviewsService,
   updateReviewService,
-} from "../services/review.service";
+} from "../services/review.service.js";
 
 export const createReview = async (req: Request, res: Response) => {
   try {

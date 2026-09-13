@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { searchLocationsService } from "../services/location.service";
+import { searchLocationsService } from "../services/location.service.js";
 
 export const searchLocations = async (req: Request, res: Response) => {
   try {

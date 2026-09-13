@@ -1,8 +1,8 @@
 import { Router } from "express";
-import flightRoutes from "./flight.routes";
-import authRoutes from "./auth.routes";
-import locationRoutes from "./location.routes";
-import reviewRoutes from "./review.routes";
+import flightRoutes from "./flight.routes.js";
+import authRoutes from "./auth.routes.js";
+import locationRoutes from "./location.routes.js";
+import reviewRoutes from "./review.routes.js";
 
 const router = Router();
 

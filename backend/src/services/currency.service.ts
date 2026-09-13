@@ -1,4 +1,4 @@
-import { getExchangeRate } from "../providers/currency.provider";
+import { getExchangeRate } from "../providers/currency.provider.js";
 
 export function convertCurrency() {
   try {

@@ -3,10 +3,11 @@ import { registerSchema, type RegisterSchemaType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import logo from "../assets/logo.svg";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { loginUser, registerUser } from "@/services/auth.service";
 import { Link, useNavigate } from "react-router";
+import { UserContext } from "@/contexts/User.context";
 
 function Register() {
   const img =
@@ -20,6 +21,8 @@ function Register() {
     resolver: zodResolver(registerSchema),
   });
 
+  const { setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +31,8 @@ function Register() {
     try {
       setIsLoading(true);
       await registerUser(data);
-      await loginUser(data);
+      const user = await loginUser(data);
+      setUser(user);
       navigate("/");
     } catch (error) {
       console.error("Erro ao registrar:", error);

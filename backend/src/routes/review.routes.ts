@@ -5,13 +5,13 @@ import {
   getMyReviews,
   getReviews,
   updateReview,
-} from "../controllers/review.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { validateSchema } from "../middlewares/validate.middleware";
+} from "../controllers/review.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { validateSchema } from "../middlewares/validate.middleware.js";
 import {
   createReviewSchema,
   updateReviewSchema,
-} from "../schemas/review.schema";
+} from "../schemas/review.schema.js";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
-import { searchFlightsProvider } from "../providers/flight.provider";
-import type { SearchFlightsDTO } from "../schemas/flight.schema";
-import { convertCurrency } from "./currency.service";
+import { searchFlightsProvider } from "../providers/flight.provider.js";
+import type { SearchFlightsDTO } from "../schemas/flight.schema.js";
+import { convertCurrency } from "./currency.service.js";
 
 export interface FlightResponse {
   id: string;

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { validateSchema } from "../middlewares/validate.middleware";
-import { searchLocations } from "../controllers/location.controller";
-import { searchLocationSchema } from "../schemas/location.schema";
+import { validateSchema } from "../middlewares/validate.middleware.js";
+import { searchLocations } from "../controllers/location.controller.js";
+import { searchLocationSchema } from "../schemas/location.schema.js";
 
 const router = Router();
 

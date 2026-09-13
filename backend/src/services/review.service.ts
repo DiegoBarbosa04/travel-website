@@ -1,9 +1,9 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import type {
   CreateReviewDTO,
   DeleteReviewDTO,
   UpdateReviewDTO,
-} from "../types/review.type";
+} from "../types/review.type.js";
 
 export const createReviewService = ({
   text,

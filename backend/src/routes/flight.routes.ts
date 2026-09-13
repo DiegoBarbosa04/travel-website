@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { searchFlights } from "../controllers/flight.controller";
-import { searchFlightsSchema } from "../schemas/flight.schema";
-import { validateSchema } from "../middlewares/validate.middleware";
+import { searchFlights } from "../controllers/flight.controller.js";
+import { searchFlightsSchema } from "../schemas/flight.schema.js";
+import { validateSchema } from "../middlewares/validate.middleware.js";
 
 const router = Router();
 router.get(

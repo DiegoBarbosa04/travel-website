@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { searchFlightsService } from "../services/flight.service";
-import type { SearchFlightsDTO } from "../schemas/flight.schema";
+import { searchFlightsService } from "../services/flight.service.js";
+import type { SearchFlightsDTO } from "../schemas/flight.schema.js";
 
 export const searchFlights = async (req: Request, res: Response) => {
   try {
