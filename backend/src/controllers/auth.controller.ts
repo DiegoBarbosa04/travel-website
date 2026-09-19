@@ -50,6 +50,7 @@ export const userLogin = async (req: Request, res: Response) => {
 
     if (!validPassword) {
       res.status(401).json({ message: "Email ou senha inválidos" });
+      return;
     }
 
     if (!process.env.JWT_SECRET) {
@@ -63,7 +64,9 @@ export const userLogin = async (req: Request, res: Response) => {
       email: user.email,
     };
 
-    const token = jwt.sign(userInfos, process.env.JWT_SECRET);
+    const token = jwt.sign(userInfos, process.env.JWT_SECRET, {
+      expiresIn: "5h",
+    });
 
     res.cookie("user", token, {
       maxAge: 18000000,
