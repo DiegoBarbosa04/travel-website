@@ -42,14 +42,14 @@ export const userLogin = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      res.status(404).json({ message: "Usuário não encontrado" });
+      res.status(401).json({ message: "Usuário ou senha inválido" });
       return;
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      res.status(401).json({ message: "Email ou senha inválidos" });
+      res.status(401).json({ message: "Usuário ou senha inválido" });
       return;
     }
 

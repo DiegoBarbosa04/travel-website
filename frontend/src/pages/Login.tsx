@@ -11,6 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const { setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -28,12 +29,16 @@ function Login() {
 
   const handleLogin = async (data: LoginSchemaType) => {
     try {
+      setLoginError(null);
       setIsLoading(true);
       const user = await loginUser(data);
       setUser(user);
       navigate("/");
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
+      const message = (
+        error as { response?: { data?: { message?: string } } }
+      )?.response?.data?.message;
+      setLoginError(message || "Usuário ou senha inválido");
     } finally {
       setIsLoading(false);
     }
@@ -58,7 +63,7 @@ function Login() {
               type="email"
               placeholder="johndoe@email.com"
               className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-              aria-invalid={errors.email ? "true" : "false"}
+              aria-invalid={errors.email || loginError ? "true" : "false"}
               {...register("email")}
             />
 
@@ -69,12 +74,16 @@ function Login() {
               placeholder="Digite sua senha"
               type="password"
               className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-              aria-invalid={errors.password ? "true" : "false"}
+              aria-invalid={errors.password || loginError ? "true" : "false"}
               {...register("password")}
             />
 
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
+
+          {loginError && (
+            <p className="text-red-500 text-sm mt-2">{loginError}</p>
+          )}
 
           <div className="flex justify-between my-4">
             <p>Lembrar de mim</p>
