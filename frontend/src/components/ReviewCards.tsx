@@ -1,41 +1,8 @@
 import { Star } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getReviews, type PublicReview } from "@/services/review.service";
 
-type Review = {
-  firstName: string;
-  lastName: string;
-  stars: number;
-  comment: string;
-};
-
-const reviews: Review[] = [
-  {
-    firstName: "Ana",
-    lastName: "Souza",
-    stars: 5,
-    comment: "Experiência incrível! Atendimento rápido e destino maravilhoso.",
-  },
-  {
-    firstName: "Carlos",
-    lastName: "Menezes",
-    stars: 4,
-    comment:
-      "Ótimo custo-benefício e suporte atencioso durante toda a reserva.",
-  },
-  {
-    firstName: "Beatriz",
-    lastName: "Almeida",
-    stars: 5,
-    comment: "Viagem perfeita com excelente orientação em cada etapa.",
-  },
-  {
-    firstName: "Eduardo",
-    lastName: "Pereira",
-    stars: 4,
-    comment: "O passeio superou as expectativas e o serviço foi muito gentil.",
-  },
-];
-
-function ReviewCard({ review }: { review: Review }) {
+function ReviewCard({ review }: { review: PublicReview }) {
   return (
     <div className="min-w-[20rem] rounded-[1.5rem] border border-[#E5E7EB] bg-white px-5 py-6 shadow-sm">
       <div className="mb-4 flex items-start justify-between gap-3">
@@ -44,7 +11,7 @@ function ReviewCard({ review }: { review: Review }) {
             Avaliação de
           </p>
           <p className="text-base font-semibold text-slate-950">
-            {review.firstName} {review.lastName}
+            {review.user.firstName} {review.user.lastName}
           </p>
         </div>
         <div className="flex items-center gap-1">
@@ -53,7 +20,7 @@ function ReviewCard({ review }: { review: Review }) {
               key={index}
               size={16}
               className={
-                index < review.stars
+                index < review.rating
                   ? "text-yellow-500 fill-current"
                   : "text-slate-300"
               }
@@ -61,12 +28,39 @@ function ReviewCard({ review }: { review: Review }) {
           ))}
         </div>
       </div>
-      <p className="text-sm leading-6 text-slate-600">{review.comment}</p>
+      <p className="text-sm leading-6 text-slate-600">{review.text}</p>
     </div>
   );
 }
 
 function ReviewCards() {
+  const [reviews, setReviews] = useState<PublicReview[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const response = await getReviews();
+
+        setReviews(response);
+      } catch (error) {
+        console.error("Erro ao buscar avaliações:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReviews();
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
+  if (reviews.length === 0) {
+    return <p className="text-sm text-slate-500">Nenhuma avaliação ainda.</p>;
+  }
+
   return (
     <div className="w-full overflow-hidden rounded-[2rem] border border-[#E5E7EB] bg-[#F8FBF9] p-5 shadow-sm">
       <div className="flex flex-col gap-5">

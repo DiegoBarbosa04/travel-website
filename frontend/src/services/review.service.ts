@@ -8,6 +8,13 @@ export type Review = {
   createdAt: string;
 };
 
+export type PublicReview = Review & {
+  user: {
+    firstName: string;
+    lastName: string;
+  };
+};
+
 export const createReview = async (data: ReviewForm) => {
   const response = await api.post("/reviews/", data);
   return response.data as Review;
@@ -16,4 +23,9 @@ export const createReview = async (data: ReviewForm) => {
 export const getMyreviews = async () => {
   const response = await api.get("/reviews/me");
   return response.data as Review[];
+};
+
+export const getReviews = async () => {
+  const response = await api.get("/reviews");
+  return response.data as PublicReview[];
 };
