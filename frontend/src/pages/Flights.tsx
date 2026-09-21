@@ -1,8 +1,11 @@
 import CardFlight from "@/components/CardFlight";
 import FilterPanel from "@/components/FilterPanel";
+import SearchFlightCard from "@/components/SearchFlightForm";
 import type { FlightCardForm } from "@/schemas/flight.schema";
 import { api } from "@/services/api";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import { parse } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -14,11 +17,16 @@ import { Button } from "@/components/ui/button";
 import { filterFlights } from "@/utils/filterFlights";
 
 function Flights() {
-  const searchParams = new URLSearchParams(window.location.search);
+  const [searchParams] = useSearchParams();
   const [results, setResults] = useState<FlightCardForm[]>([]);
   const [airlinesResults, setAirlinesResults] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(10);
   const [sortBy, setSortBy] = useState("menor-preco");
+
+  const origin = searchParams.get("origin") || "";
+  const destination = searchParams.get("destination") || "";
+  const departureDateParam = searchParams.get("departureDate") || "";
+  const adultsParam = parseInt(searchParams.get("adults") || "1", 10);
 
   const [filters, setFilters] = useState({
     priceRange: [0, 5000] as [number, number],
@@ -38,10 +46,10 @@ function Flights() {
       try {
         const response = await api.get("/flights/search", {
           params: {
-            origin: searchParams.get("origin"),
-            destination: searchParams.get("destination"),
-            departureDate: searchParams.get("departureDate"),
-            adults: parseInt(searchParams.get("adults") || "1", 10),
+            origin,
+            destination,
+            departureDate: departureDateParam,
+            adults: adultsParam,
           },
         });
         setResults(response.data);
@@ -60,8 +68,7 @@ function Flights() {
     };
 
     fetchFlightData();
-    console.log(results);
-  }, []);
+  }, [origin, destination, departureDateParam, adultsParam]);
 
   useEffect(() => {
     setVisibleCount(10);
@@ -69,7 +76,20 @@ function Flights() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFC] px-32">
-      <div className="flex w-full h-full gap-4 py-40">
+      <div className="pt-32">
+        <SearchFlightCard
+          defaultValues={{
+            origin,
+            destination,
+            departureDate: departureDateParam
+              ? parse(departureDateParam, "yyyy-MM-dd", new Date())
+              : undefined,
+            adults: adultsParam,
+          }}
+        />
+      </div>
+
+      <div className="flex w-full h-full gap-4 mt-10 pb-20">
         <div className="flex-1">
           <FilterPanel
             setFilters={setFilters}
@@ -113,8 +133,8 @@ function Flights() {
               price={flight.price}
               departureTime={flight.departureTime}
               arrivalTime={flight.arrivalTime}
-              origin={searchParams.get("origin") || ""}
-              destination={searchParams.get("destination") || ""}
+              origin={origin}
+              destination={destination}
               duration={flight.duration}
             />
           ))}

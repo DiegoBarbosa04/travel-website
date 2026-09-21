@@ -34,6 +34,7 @@ interface Props<T extends FieldValues> {
   name: Path<T>;
   label: string;
   placeholder: string;
+  initialLabel?: string;
 }
 
 export default function LocationAutocomplete<T extends FieldValues>({
@@ -41,12 +42,13 @@ export default function LocationAutocomplete<T extends FieldValues>({
   name,
   label,
   placeholder,
+  initialLabel,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<Location[]>([]);
-  const [selectedLabel, setSelectedLabel] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState(initialLabel ?? "");
 
   useEffect(() => {
     if (search.length < 2) {
