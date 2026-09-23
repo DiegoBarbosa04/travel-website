@@ -35,6 +35,7 @@ interface Props<T extends FieldValues> {
   label: string;
   placeholder: string;
   initialLabel?: string;
+  onSelectLabel?: (label: string) => void;
 }
 
 export default function LocationAutocomplete<T extends FieldValues>({
@@ -43,6 +44,7 @@ export default function LocationAutocomplete<T extends FieldValues>({
   label,
   placeholder,
   initialLabel,
+  onSelectLabel,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -120,6 +122,8 @@ export default function LocationAutocomplete<T extends FieldValues>({
                               field.onChange(location.iataCode);
 
                               setSelectedLabel(location.name);
+
+                              onSelectLabel?.(location.name);
 
                               setSearch("");
 

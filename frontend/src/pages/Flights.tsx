@@ -1,4 +1,5 @@
 import CardFlight from "@/components/CardFlight";
+import CardFlightSkeleton from "@/components/CardFlightSkeleton";
 import FilterPanel from "@/components/FilterPanel";
 import SearchFlightCard from "@/components/SearchFlightForm";
 import type { FlightCardForm } from "@/schemas/flight.schema";
@@ -22,9 +23,12 @@ function Flights() {
   const [airlinesResults, setAirlinesResults] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(10);
   const [sortBy, setSortBy] = useState("menor-preco");
+  const [isLoading, setIsLoading] = useState(false);
 
   const origin = searchParams.get("origin") || "";
   const destination = searchParams.get("destination") || "";
+  const originName = searchParams.get("originName") || "";
+  const destinationName = searchParams.get("destinationName") || "";
   const departureDateParam = searchParams.get("departureDate") || "";
   const adultsParam = parseInt(searchParams.get("adults") || "1", 10);
 
@@ -42,7 +46,12 @@ function Flights() {
   const resultsFilteredFlights = filterFlights(results, filters);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchFlightData = async () => {
+      setIsLoading(true);
+      setResults([]);
+      setAirlinesResults([]);
       try {
         const response = await api.get("/flights/search", {
           params: {
@@ -52,6 +61,11 @@ function Flights() {
             adults: adultsParam,
           },
         });
+
+        if (!isMounted) {
+          return;
+        }
+
         setResults(response.data);
         setAirlinesResults(
           Array.from(
@@ -63,11 +77,21 @@ function Flights() {
           ),
         );
       } catch (error) {
-        console.error("Erro ao buscar voos:", error);
+        if (isMounted) {
+          console.error("Erro ao buscar voos:", error);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchFlightData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [origin, destination, departureDateParam, adultsParam]);
 
   useEffect(() => {
@@ -86,6 +110,10 @@ function Flights() {
               : undefined,
             adults: adultsParam,
           }}
+          originLabel={originName}
+          destinationLabel={destinationName}
+          isLoading={isLoading}
+          onSearchStart={() => setIsLoading(true)}
         />
       </div>
 
@@ -97,54 +125,62 @@ function Flights() {
           />
         </div>
         <div className="flex flex-col flex-2 px-4 gap-4 items-center">
-          <div className="flex justify-between items-center w-full">
-            <h1 className="flex gap-1 text-lg font-semibold text-[#112211]">
-              <span className="font-bold text-[#FF8682]">
-                {resultsFilteredFlights.length}
-              </span>
-              voos encontrados
-            </h1>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-[#112211]">
-                Ordenar:
-              </span>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-40">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="menor-preco">Menor preço</SelectItem>
-                  <SelectItem value="maior-preco">Maior preço</SelectItem>
-                  <SelectItem value="duracao">Menor duração</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          {resultsFilteredFlights.slice(0, visibleCount).map((flight) => (
-            <CardFlight
-              key={flight.id}
-              id={flight.id}
-              carrierCode={flight.carrierCode}
-              airline={flight.airline}
-              departureCity={flight.departureCity}
-              arrivalCity={flight.arrivalCity}
-              logo={flight.logo}
-              currency={flight.currency}
-              price={flight.price}
-              departureTime={flight.departureTime}
-              arrivalTime={flight.arrivalTime}
-              origin={origin}
-              destination={destination}
-              duration={flight.duration}
-            />
-          ))}
-          {visibleCount < resultsFilteredFlights.length && (
-            <Button
-              className=" w-full py-5 text-md"
-              onClick={() => setVisibleCount((prev) => prev + 10)}
-            >
-              Carregar mais voos
-            </Button>
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <CardFlightSkeleton key={index} />
+            ))
+          ) : (
+            <>
+              <div className="flex justify-between items-center w-full">
+                <h1 className="flex gap-1 text-lg font-semibold text-[#112211]">
+                  <span className="font-bold text-[#FF8682]">
+                    {resultsFilteredFlights.length}
+                  </span>
+                  voos encontrados
+                </h1>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-[#112211]">
+                    Ordenar:
+                  </span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="menor-preco">Menor preço</SelectItem>
+                      <SelectItem value="maior-preco">Maior preço</SelectItem>
+                      <SelectItem value="duracao">Menor duração</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {resultsFilteredFlights.slice(0, visibleCount).map((flight) => (
+                <CardFlight
+                  key={flight.id}
+                  id={flight.id}
+                  carrierCode={flight.carrierCode}
+                  airline={flight.airline}
+                  departureCity={flight.departureCity}
+                  arrivalCity={flight.arrivalCity}
+                  logo={flight.logo}
+                  currency={flight.currency}
+                  price={flight.price}
+                  departureTime={flight.departureTime}
+                  arrivalTime={flight.arrivalTime}
+                  origin={origin}
+                  destination={destination}
+                  duration={flight.duration}
+                />
+              ))}
+              {visibleCount < resultsFilteredFlights.length && (
+                <Button
+                  className=" w-full py-5 text-md"
+                  onClick={() => setVisibleCount((prev) => prev + 10)}
+                >
+                  Carregar mais voos
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>

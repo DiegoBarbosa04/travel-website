@@ -6,16 +6,28 @@ import {
 } from "@/schemas/flight.schema";
 import { useNavigate } from "react-router";
 import { format } from "date-fns";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import LocationAutocomplete from "./LocationAutocomplete";
 import DatePickerField from "./DataPickerField";
+import { Spinner } from "./ui/spinner";
 
 type SearchFlightCardProps = {
   defaultValues?: Partial<SearchFlightForm>;
+  originLabel?: string;
+  destinationLabel?: string;
+  isLoading?: boolean;
+  onSearchStart?: () => void;
 };
 
-function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
+function SearchFlightCard({
+  defaultValues,
+  originLabel,
+  destinationLabel,
+  isLoading = false,
+  onSearchStart,
+}: SearchFlightCardProps) {
   const form = useForm<SearchFlightForm>({
     resolver: zodResolver(searchFlightSchema),
     defaultValues: {
@@ -25,6 +37,11 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
       adults: 1,
       ...defaultValues,
     },
+  });
+
+  const [labels, setLabels] = useState({
+    origin: originLabel ?? defaultValues?.origin ?? "",
+    destination: destinationLabel ?? defaultValues?.destination ?? "",
   });
 
   const { handleSubmit } = form;
@@ -38,7 +55,23 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
       adults: data.adults.toString(),
     });
 
-    navigate(`/flights?${params.toString()}`);
+    if (labels.origin) {
+      params.set("originName", labels.origin);
+    }
+
+    if (labels.destination) {
+      params.set("destinationName", labels.destination);
+    }
+
+    const nextSearch = `?${params.toString()}`;
+
+    if (nextSearch === window.location.search) {
+      return;
+    }
+
+    onSearchStart?.();
+
+    navigate(`/flights${nextSearch}`);
   };
 
   return (
@@ -48,9 +81,7 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-6">
-            Para onde você quer ir?
-          </h2>
+          <h2 className="text-2xl font-bold mb-6">Para onde você quer ir?</h2>
 
           <div className="flex flex-wrap gap-4">
             <div className="min-w-45 flex-1">
@@ -59,7 +90,10 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
                 name="origin"
                 label="Origem"
                 placeholder="Digite uma cidade"
-                initialLabel={defaultValues?.origin}
+                initialLabel={labels.origin}
+                onSelectLabel={(label) =>
+                  setLabels((prev) => ({ ...prev, origin: label }))
+                }
               />
             </div>
 
@@ -69,7 +103,10 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
                 name="destination"
                 label="Destino"
                 placeholder="Digite uma cidade"
-                initialLabel={defaultValues?.destination}
+                initialLabel={labels.destination}
+                onSelectLabel={(label) =>
+                  setLabels((prev) => ({ ...prev, destination: label }))
+                }
               />
             </div>
 
@@ -98,9 +135,10 @@ function SearchFlightCard({ defaultValues }: SearchFlightCardProps) {
 
         <Button
           type="submit"
+          disabled={isLoading}
           className="bg-[#8DD3BB] text-[#112211] font-medium px-8 py-6 rounded-full hover:bg-[#7BC0A8]"
         >
-          Buscar voos
+          {isLoading ? <Spinner /> : "Pesquisar"}
         </Button>
       </form>
     </div>
