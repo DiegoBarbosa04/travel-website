@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { LogOut, Menu, X } from "lucide-react";
-import logo from "../assets/logo.svg";
+import logo from "../assets/Logos/Logo completa versão preta.svg";
 import { Link } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import AvatarIcon from "./AvatarIcon";
@@ -27,8 +27,8 @@ function Header() {
 
   return (
     <header className="fixed top-4 left-0 w-full flex justify-center z-50">
-      <div className="relative grid grid-cols-3 grid-rows-1 justify-between items-center h-16 w-160 px-4 rounded-full bg-white shadow-md">
-        {isMenuOpen && (
+      <div className="relative grid grid-cols-3 grid-rows-1 justify-between items-center h-[69px] w-4xl px-4 rounded-2xl bg-white shadow-md">
+        {/*         {isMenuOpen && (
           <div className="absolute top-18 left-0 w-160 bg-white shadow-md rounded-xl z-10">
             <ul className="flex flex-col gap-4 p-4">
               <li className="cursor-pointer hover:bg-[#F0F0F0] py-2 px-4">
@@ -44,9 +44,9 @@ function Header() {
               </li>
             </ul>
           </div>
-        )}
+        )} */}
 
-        {isUserMenuOpen && (
+        {/* {isUserMenuOpen && (
           <div className="absolute top-18 right-0 w-45 bg-white shadow-md rounded-xl z-10">
             <ul className="flex flex-col gap-4 p-4">
               <Link to="/profile">
@@ -64,21 +64,25 @@ function Header() {
               </li>
             </ul>
           </div>
-        )}
+        )} */}
+
+        <Link to="/">
+          <div className="flex justify-start items-center">
+            <img className="w-36" src={logo} alt="logo" />
+          </div>
+        </Link>
 
         <div
           className="flex items-center cursor-pointer gap-2"
           onClick={handleMenuClick}
         >
-          {isMenuOpen ? <X /> : <Menu />}
-          <span className="text-[#112211] select-none">Menu</span>
+          {/* {isMenuOpen ? <X /> : <Menu />} */}
+          <ul className="flex gap-6 text-[#112211] font-light text-[16px]">
+            <li>Início</li>
+            <li>Avaliações</li>
+            <li>Contato</li>
+          </ul>
         </div>
-
-        <Link to="/">
-          <div className="flex justify-center items-center">
-            <img className="w-20 h-20" src={logo} alt="logo" />
-          </div>
-        </Link>
 
         {user ? (
           <div className="flex gap-4 items-center justify-end pr-2">
@@ -89,7 +93,7 @@ function Header() {
               <AvatarIcon
                 initials={`${user.firstName[0]}${user.lastName[0]}`}
               />
-              <span className="text-lg font-semibold">
+              <span className="text-[16px] font-semibold">
                 {user.firstName} {user.lastName[0]}.
               </span>
             </div>
@@ -97,13 +101,13 @@ function Header() {
         ) : (
           <div className="flex justify-end gap-2">
             <Link to="/login">
-              <button className="text-[#112211] font-medium hover:bg-[#F0F0F0] py-3 px-4 rounded-full cursor-pointer">
+              <button className="text-[#112211] font-medium hover:bg-[#EAEFF3] border border-[#EAEFF3] h-11 w-25 px-4 rounded-2xl cursor-pointer animate-in fade-in duration-400">
                 Entrar
               </button>
             </Link>
 
             <Link to="/register">
-              <button className="text-[#112211] bg-[#8DD3BB] font-medium hover:bg-[#7BC0A8] py-3 px-4 rounded-full cursor-pointer">
+              <button className="text-white bg-[#0D2EFC] font-medium hover:bg-[#081B96] h-11 w-25 rounded-2xl cursor-pointer animate-in fade-in duration-400">
                 Registrar
               </button>
             </Link>

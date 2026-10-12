@@ -13,10 +13,10 @@ function AvatarIcon({
 }: AvatarIconProps) {
   return (
     <div
-      className="rounded-full bg-gray-300 flex items-center justify-center"
+      className="rounded-full bg-[#0D2EFC] flex items-center justify-center"
       style={{ width, height }}
     >
-      <span className="text-gray-600 font-bold" style={{ fontSize }}>
+      <span className="text-black font-bold" style={{ fontSize }}>
         {initials}
       </span>
     </div>

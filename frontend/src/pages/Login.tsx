@@ -35,9 +35,8 @@ function Login() {
       setUser(user);
       navigate("/");
     } catch (error) {
-      const message = (
-        error as { response?: { data?: { message?: string } } }
-      )?.response?.data?.message;
+      const message = (error as { response?: { data?: { message?: string } } })
+        ?.response?.data?.message;
       setLoginError(message || "Usuário ou senha inválido");
     } finally {
       setIsLoading(false);
