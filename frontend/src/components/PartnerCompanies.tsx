@@ -16,19 +16,20 @@ const logos = [
 
 function PartnerCompanies() {
   return (
-    <div className="w-full h-32 relative flex items-center overflow-hidden">
-      <div className="bg-linear-to-r from-[#FAFBFC] to-transparent w-25 h-32 absolute left-0 z-10"></div>
+    <div className="relative flex h-32 w-full items-center overflow-hidden">
+      <div className="absolute left-0 z-10 h-full w-24 bg-linear-to-r from-[#FAFBFC] to-transparent" />
 
       <div className="flex animate-scroll">
         <div className="flex items-center gap-16 shrink-0 px-8">
           {logos.map((logo, i) => (
             <div
               key={`a-${i}`}
-              className="w-42 h-14 flex items-center justify-center shrink-0"
+              className="flex h-14 w-42 shrink-0 items-center justify-center"
             >
               <img
                 src={logo}
-                className="max-w-full max-h-full object-contain"
+                alt="Empresa aérea parceira"
+                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300 hover:grayscale-0 hover:opacity-100"
               />
             </div>
           ))}
@@ -40,18 +41,19 @@ function PartnerCompanies() {
           {logos.map((logo, i) => (
             <div
               key={`b-${i}`}
-              className="w-42 h-14 flex items-center justify-center shrink-0"
+              className="flex h-14 w-42 shrink-0 items-center justify-center"
             >
               <img
                 src={logo}
-                className="max-w-full max-h-full object-contain"
+                alt=""
+                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300 hover:grayscale-0 hover:opacity-100"
               />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-linear-to-l from-[#FAFBFC] to-transparent w-25 h-32 absolute right-0 z-10"></div>
+      <div className="absolute right-0 z-10 h-full w-24 bg-linear-to-l from-[#FAFBFC] to-transparent" />
     </div>
   );
 }
