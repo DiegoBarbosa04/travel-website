@@ -1,57 +1,68 @@
-import logoFooter from "../assets/logoFooter.svg";
+import logoFooter from "../assets/LogoFooter.svg";
 import Newsletter from "./Newsletter";
 
 function Footer() {
   return (
-    <div className="relative h-143 flex flex-col justify-end items-center bg-[#FAFBFC]">
-      <Newsletter />
-      <div className="w-full h-105 bg-[#8DD3BB] flex gap-16 justify-around items-center px-32 pt-24">
-        <div>
-          <img src={logoFooter} alt="Logo Footer" />
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold  text-[#112211] mb-2">
-            Outros destinos
-          </h3>
-          <ul className="text-[#112211] opacity-70">
-            <li>Lisboa</li>
-            <li>Porto</li>
-            <li>Madrid</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold text-[#112211] mb-2">
-            Outras atividades
-          </h3>
-          <ul className="text-[#112211] opacity-70">
-            <li>Acampar</li>
-            <li>Praticar esportes</li>
-            <li>Trilhas</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold text-[#112211] mb-2">
-            Blog de viagens
-          </h3>
-          <ul className="text-[#112211] opacity-70">
-            <li>Destinos</li>
-            <li>Dicas de viagem</li>
-            <li>Histórias de viagem</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold text-[#112211] mb-2">Sobre nós</h3>
-          <ul className="text-[#112211] opacity-70">
-            <li>Nossa história</li>
-            <li>Equipe</li>
-            <li>Careers</li>
-          </ul>
+    <footer className="mt-(--respiro-vertical) text-white">
+      {/* Metade superior clara e metade inferior escura: a newsletter fica exatamente sobre a divisa. */}
+      <div
+        className="relative"
+        style={{
+          background: "linear-gradient(to bottom, #FAFBFC 50%, #020B3D 50%)",
+        }}
+      >
+        <div className="conteudo">
+          <Newsletter />
         </div>
       </div>
+
+      <div className="bg-[#020B3D]">
+        <div className="conteudo pb-7 pt-16">
+          <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr] lg:gap-20">
+            <div className="max-w-72">
+              <img className="h-auto w-28 brightness-0 invert" src={logoFooter} alt="Decolando" />
+              <p className="fs-corpo mt-5 text-white/70">
+                Tecnologia para encontrar voos, destinos e experiências que fazem sua próxima viagem decolar.
+              </p>
+              <div className="fs-legenda mt-6 space-y-1 text-white/60">
+                <p>Decolando Viagens e Turismo Ltda.</p>
+                <p>Rua das Nuvens, 2026, São Paulo - SP</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
+              <FooterColumn title="Institucional" links={["Sobre o Decolando", "Nossos parceiros", "Blog de viagens"]} />
+              <FooterColumn title="Planeje sua viagem" links={["Destinos populares", "Buscar voos", "Dicas de viagem"]} />
+              <FooterColumn title="Atendimento" links={["Central de ajuda", "Contato", "Perguntas frequentes"]} />
+              <div>
+                <h3 className="fs-subtitulo mb-4">Contato</h3>
+                <div className="fs-corpo space-y-3 text-white/70">
+                  <p><strong className="fs-subtitulo block text-white">0800 000 2026</strong>Capitais e regiões metropolitanas</p>
+                  <p>contato@decolando.com.br</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="fs-legenda mt-12 flex flex-col gap-4 border-t border-white/15 pt-5 text-white/60 sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 Decolando. Todos os direitos reservados.</p>
+            <div className="flex gap-5">
+              <a href="#">Política de privacidade</a>
+              <a href="#">Termos de uso</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FooterColumn({ title, links }: { title: string; links: string[] }) {
+  return (
+    <div>
+      <h3 className="fs-subtitulo mb-4">{title}</h3>
+      <nav className="fs-corpo flex flex-col gap-3 text-white/70">
+        {links.map((link) => <a key={link} href="#">{link}</a>)}
+      </nav>
     </div>
   );
 }
