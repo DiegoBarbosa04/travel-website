@@ -53,6 +53,12 @@ body {
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@theme {
+  --color-blue-primary: #0d2efc;
+  --color-blue-secondary: #081b96;
+  --color-gray-primary: #eaeff3;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -132,6 +138,92 @@ body {
   html {
     @apply font-sans;
   }
+}
+
+:root {
+  --largura-site: 1920px;
+  --respiro-lateral: clamp(60px, 60px + (100vw - 1000px) * 0.1364, 120px);
+  --respiro-vertical: 90px;
+}
+
+@media screen and (width <= 1000px) {
+  :root {
+    --respiro-lateral: 20px;
+    --respiro-vertical: 60px;
+  }
+}
+
+/* Escala tipográfica baseada no site de referência (desktop / mobile <= 1000px). */
+:root {
+  --f1: 12px;
+  --f2: 14px;
+  --f3: 16px;
+  --f4: 18px;
+  --f5: 20px;
+  --f6: 22px;
+  --f7: 24px;
+  --f10: 30px;
+  --f11: 40px;
+  --f13: 62px;
+}
+
+@media screen and (width <= 1000px) {
+  :root {
+    --f1: 11px;
+    --f2: 13px;
+    --f3: 15px;
+    --f7: 24px;
+    --f10: 24px;
+    --f11: 34px;
+    --f13: 42px;
+  }
+}
+
+.fs-hero {
+  font-size: clamp(42px, 3.6vw, 60px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.fs-titulo {
+  font-size: var(--f11);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fs-titulo-sm {
+  font-size: var(--f10);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fs-subtitulo {
+  font-size: var(--f4);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.fs-descricao {
+  font-size: var(--f4);
+  line-height: 1.6;
+}
+
+.fs-corpo {
+  font-size: var(--f2);
+  line-height: 1.6;
+}
+
+.fs-legenda {
+  font-size: var(--f1);
+  line-height: 1.5;
+}
+
+/* Container padrão das seções: mesma margem lateral do site de referência. */
+.conteudo {
+  width: 100%;
+  max-width: var(--largura-site);
+  margin-inline: auto;
+  padding-inline: var(--respiro-lateral);
 }
 
 @keyframes scroll {
