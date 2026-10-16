@@ -1,18 +1,16 @@
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { registerSchema, type RegisterSchemaType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import logo from "../assets/logo.svg";
 import { useContext, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { loginUser, registerUser } from "@/services/auth.service";
 import { Link, useNavigate } from "react-router";
 import { UserContext } from "@/contexts/User.context";
+import AuthLayout from "@/components/AuthLayout";
 
 function Register() {
-  const img =
-    "https://plus.unsplash.com/premium_photo-1679830513886-e09cd6dc3137?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dm9vfGVufDB8fDB8fHww";
-
   const {
     register,
     handleSubmit,
@@ -42,120 +40,158 @@ function Register() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-around ">
-      <img
-        className="w-134 h-185 bg-no-repeat bg-cover rounded-3xl"
-        src={img}
-        alt="flight.png"
-      />
-
-      <div>
-        <div className="flex flex-col gap-4 w-126 ">
-          <img className="w-25 h-25" src={logo} alt="logo" />
-          <div className="flex flex-col gap-1 my-4">
-            <h1 className="text-4xl font-bold">Registrar</h1>
-            <h2 className="font-light text-md text-[#112211]">
-              Crie sua conta para desfrutar de todos os recursos do nosso site.
-            </h2>
+    <AuthLayout
+      compact
+      title="Crie sua conta"
+      description="Cadastre-se para encontrar voos e preparar sua próxima aventura."
+      footer={
+        <>
+          Já possui conta?{" "}
+          <Link
+            to="/login"
+            className="font-semibold text-[#0D2EFC] transition-colors hover:text-[#081B96]"
+          >
+            Entrar
+          </Link>
+        </>
+      }
+    >
+      <form className="mt-5 space-y-3" onSubmit={handleSubmit(handleRegister)}>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <label
+              htmlFor="register-first-name"
+              className="block text-sm font-semibold text-[#020B3D]"
+            >
+              Primeiro nome
+            </label>
+            <Input
+              id="register-first-name"
+              type="text"
+              autoComplete="given-name"
+              placeholder="Seu nome"
+              className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+              {...register("firstName")}
+              aria-invalid={Boolean(errors.firstName)}
+            />
+            {errors.firstName?.message && (
+              <p className="text-sm text-red-600" role="alert">
+                {errors.firstName.message}
+              </p>
+            )}
           </div>
 
-          <form onSubmit={handleSubmit(handleRegister)}>
-            <div className="flex flex-col gap-1">
-              <div className="flex gap-4">
-                <div>
-                  <label className="font-light text-[#1C1B1F]">
-                    Primeiro nome
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="John"
-                    className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-                    {...register("firstName")}
-                    aria-invalid={errors.firstName ? "true" : "false"}
-                  />
-                  <p className="text-red-500 text-sm">
-                    {errors.firstName?.message}
-                  </p>
-                </div>
-
-                <div>
-                  <label className="font-light text-[#1C1B1F]">Sobrenome</label>
-                  <Input
-                    type="text"
-                    placeholder="Doe"
-                    className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-                    {...register("lastName")}
-                    aria-invalid={errors.lastName ? "true" : "false"}
-                  />
-                  <p className="text-red-500 text-sm">
-                    {errors.lastName?.message}
-                  </p>
-                </div>
-              </div>
-
-              <label className="font-light text-[#1C1B1F]">Email</label>
-              <Input
-                type="email"
-                placeholder="johndoe@email.com"
-                className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-                {...register("email")}
-                aria-invalid={errors.email ? "true" : "false"}
-              />
-              <p className="text-red-500 text-sm">{errors.email?.message}</p>
-              <label className="font-light text-[#1C1B1F]">Senha</label>
-              <Input
-                type="password"
-                placeholder="Deve possuir pelo menos 6 caracteres"
-                className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-                {...register("password")}
-                aria-invalid={errors.password ? "true" : "false"}
-              />
-              <p className="text-red-500 text-sm">{errors.password?.message}</p>
-              <label className="font-light text-[#1C1B1F]">
-                Confirmar senha
-              </label>
-              <Input
-                type="password"
-                placeholder="As senhas precisam ser iguais"
-                className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-                {...register("confirmPassword")}
-                aria-invalid={errors.confirmPassword ? "true" : "false"}
-              />
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword?.message}
-              </p>
-            </div>
-
-            <div className="my-4">
-              <span className="text-[#1C1B1F] text-sm">
-                Eu concordo com todos os
-                <a className="text-[#FF8682]"> Termos </a>e
-                <a className="text-[#FF8682]"> Politicas de Privacidade</a>
-              </span>
-            </div>
-            <button
-              type="submit"
-              className="h-10 rounded-sm bg-[#8DD3BB] text-[#112211] font-semibold w-full hover:bg-[#7BC0A8] cursor-pointer flex justify-center items-center"
+          <div className="space-y-1.5">
+            <label
+              htmlFor="register-last-name"
+              className="block text-sm font-semibold text-[#020B3D]"
             >
-              {isLoading ? (
-                <Spinner className="text-[#112211] size-4" />
-              ) : (
-                "Registrar"
-              )}
-            </button>
-          </form>
-
-          <div className="flex justify-center gap-1">
-            <span>Já possui conta? </span>
-            <Link to="/login">
-              <p className="text-[#FF8682] hover:text-[#FF5582] cursor-pointer">
-                Entrar
+              Sobrenome
+            </label>
+            <Input
+              id="register-last-name"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Seu sobrenome"
+              className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+              {...register("lastName")}
+              aria-invalid={Boolean(errors.lastName)}
+            />
+            {errors.lastName?.message && (
+              <p className="text-sm text-red-600" role="alert">
+                {errors.lastName.message}
               </p>
-            </Link>
+            )}
           </div>
         </div>
-      </div>
-    </div>
+
+        <div className="space-y-1.5">
+          <label
+            htmlFor="register-email"
+            className="block text-sm font-semibold text-[#020B3D]"
+          >
+            Email
+          </label>
+          <Input
+            id="register-email"
+            type="email"
+            autoComplete="email"
+            placeholder="seuemail@exemplo.com"
+            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+            {...register("email")}
+            aria-invalid={Boolean(errors.email)}
+          />
+          {errors.email?.message && (
+            <p className="text-sm text-red-600" role="alert">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <label
+            htmlFor="register-password"
+            className="block text-sm font-semibold text-[#020B3D]"
+          >
+            Senha
+          </label>
+          <Input
+            id="register-password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Pelo menos 6 caracteres"
+            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+            {...register("password")}
+            aria-invalid={Boolean(errors.password)}
+          />
+          {errors.password?.message && (
+            <p className="text-sm text-red-600" role="alert">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label
+            htmlFor="register-confirm-password"
+            className="block text-sm font-semibold text-[#020B3D]"
+          >
+            Confirmar senha
+          </label>
+          <Input
+            id="register-confirm-password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Digite a senha novamente"
+            className="h-12 rounded-xl border-[#D8E1F0] bg-white px-4 text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+            {...register("confirmPassword")}
+            aria-invalid={Boolean(errors.confirmPassword)}
+          />
+          {errors.confirmPassword?.message && (
+            <p className="text-sm text-red-600" role="alert">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
+        <p className="text-xs leading-5 text-[#526078]">
+          Ao continuar, você concorda com nossos{" "}
+          <span className="font-semibold text-[#0D2EFC]">Termos</span> e com a{" "}
+          <span className="font-semibold text-[#0D2EFC]">
+            Política de Privacidade
+          </span>
+          .
+        </p>
+
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="h-10 w-full rounded-xl bg-blue-primary text-sm font-semibold text-white hover:bg-blue-secondary"
+        >
+          {isLoading ? <Spinner className="size-5 text-white" /> : "Criar conta"}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
 

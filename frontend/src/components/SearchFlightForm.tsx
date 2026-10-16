@@ -75,7 +75,7 @@ function SearchFlightCard({
   };
 
   return (
-    <div className="w-full rounded-xl bg-white p-8 shadow-xl">
+    <div className="w-full rounded-2xl bg-white p-8 shadow-xl">
       <form
         className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
         onSubmit={handleSubmit(onSubmit)}
@@ -136,7 +136,7 @@ function SearchFlightCard({
         <Button
           type="submit"
           disabled={isLoading}
-          className="bg-[#8DD3BB] text-[#112211] font-medium px-8 py-6 rounded-full hover:bg-[#7BC0A8]"
+          className="bg-blue-primary text-white font-medium px-8 py-6 rounded-2xl hover:bg-blue-secondary"
         >
           {isLoading ? <Spinner /> : "Pesquisar"}
         </Button>

@@ -1,4 +1,4 @@
-import logoFooter from "../assets/LogoFooter.svg";
+import logoFooter from "../assets/Logos/logo-totalmente-branca.svg";
 import Newsletter from "./Newsletter";
 
 function Footer() {
@@ -20,9 +20,14 @@ function Footer() {
         <div className="conteudo pb-7 pt-16">
           <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr] lg:gap-20">
             <div className="max-w-72">
-              <img className="h-auto w-28 brightness-0 invert" src={logoFooter} alt="Decolando" />
+              <img
+                className="h-auto w-38 brightness-0 invert"
+                src={logoFooter}
+                alt="Decolando"
+              />
               <p className="fs-corpo mt-5 text-white/70">
-                Tecnologia para encontrar voos, destinos e experiências que fazem sua próxima viagem decolar.
+                Tecnologia para encontrar voos, destinos e experiências que
+                fazem sua próxima viagem decolar.
               </p>
               <div className="fs-legenda mt-6 space-y-1 text-white/60">
                 <p>Decolando Viagens e Turismo Ltda.</p>
@@ -31,13 +36,31 @@ function Footer() {
             </div>
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
-              <FooterColumn title="Institucional" links={["Sobre o Decolando", "Nossos parceiros", "Blog de viagens"]} />
-              <FooterColumn title="Planeje sua viagem" links={["Destinos populares", "Buscar voos", "Dicas de viagem"]} />
-              <FooterColumn title="Atendimento" links={["Central de ajuda", "Contato", "Perguntas frequentes"]} />
+              <FooterColumn
+                title="Institucional"
+                links={[
+                  "Sobre o Decolando",
+                  "Nossos parceiros",
+                  "Blog de viagens",
+                ]}
+              />
+              <FooterColumn
+                title="Planeje sua viagem"
+                links={["Destinos populares", "Buscar voos", "Dicas de viagem"]}
+              />
+              <FooterColumn
+                title="Atendimento"
+                links={["Central de ajuda", "Contato", "Perguntas frequentes"]}
+              />
               <div>
                 <h3 className="fs-subtitulo mb-4">Contato</h3>
                 <div className="fs-corpo space-y-3 text-white/70">
-                  <p><strong className="fs-subtitulo block text-white">0800 000 2026</strong>Capitais e regiões metropolitanas</p>
+                  <p>
+                    <strong className="fs-subtitulo block text-white">
+                      0800 000 2026
+                    </strong>
+                    Capitais e regiões metropolitanas
+                  </p>
                   <p>contato@decolando.com.br</p>
                 </div>
               </div>
@@ -61,7 +84,11 @@ function FooterColumn({ title, links }: { title: string; links: string[] }) {
     <div>
       <h3 className="fs-subtitulo mb-4">{title}</h3>
       <nav className="fs-corpo flex flex-col gap-3 text-white/70">
-        {links.map((link) => <a key={link} href="#">{link}</a>)}
+        {links.map((link) => (
+          <a key={link} href="#">
+            {link}
+          </a>
+        ))}
       </nav>
     </div>
   );

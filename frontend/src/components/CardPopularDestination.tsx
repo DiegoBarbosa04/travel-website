@@ -14,24 +14,25 @@ function CardPopularDestination({
   imageUrl,
 }: CardPopularDestinationProps) {
   return (
-    <div
-      className="w-74 h-105 rounded-2xl bg-cover bg-center flex flex-col justify-end px-4 py-6 gap-2"
-      style={{ backgroundImage: `url(${imageUrl})` }}
-    >
+    <div className="w-74 h-105 rounded-2xl bg-white border border-gray-primary flex flex-col justify-between px-4 py-6 gap-2 shadow-xl">
+      <div className="w-full h-40 rounded-2xl flex items-center">
+        <div
+          style={{ backgroundImage: `url(${imageUrl})` }}
+          className="w-full h-full bg-cover bg-center rounded-2xl"
+        />
+      </div>
+
       <div className="flex items-end justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white">{title}</h2>
-          <p className="text-white font-light text-sm opacity-80">
-            {description}
-          </p>
-        </div>
-        <div>
-          <span className="font-bold text-2xl text-white">R$ {price}</span>
+        <div className="flex flex-col w-full gap-1">
+          <div>
+            <h2 className="text-3xl font-bold text-black">{title}</h2>
+            <p className="text-black font-light text-sm">{description}</p>
+          </div>
+          <Button className="w-full text-white bg-blue-primary h-12 hover:bg-blue-secondary font-semibold font-lg cursor-pointer">
+            Reservar voo
+          </Button>
         </div>
       </div>
-      <Button className="text-[#112211] bg-[#8DD3BB] h-12 hover:bg-[#7BC0A8] font-semibold font-lg cursor-pointer">
-        Reservar voo
-      </Button>
     </div>
   );
 }

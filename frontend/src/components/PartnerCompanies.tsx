@@ -29,7 +29,7 @@ function PartnerCompanies() {
               <img
                 src={logo}
                 alt="Empresa aérea parceira"
-                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300 hover:grayscale-0 hover:opacity-100"
+                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300"
               />
             </div>
           ))}
@@ -46,7 +46,7 @@ function PartnerCompanies() {
               <img
                 src={logo}
                 alt=""
-                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300 hover:grayscale-0 hover:opacity-100"
+                className="max-h-full max-w-full object-contain grayscale opacity-25 transition duration-300"
               />
             </div>
           ))}

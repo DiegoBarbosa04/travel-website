@@ -16,7 +16,7 @@ function AvatarIcon({
       className="rounded-full bg-[#0D2EFC] flex items-center justify-center"
       style={{ width, height }}
     >
-      <span className="text-black font-bold" style={{ fontSize }}>
+      <span className="text-white font-bold" style={{ fontSize }}>
         {initials}
       </span>
     </div>

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { LogOut, Menu, X } from "lucide-react";
-import logo from "../assets/Logos/Logo completa versão preta.svg";
+import logo from "../assets/Logos/Logo-preta.webp";
 import { Link } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import AvatarIcon from "./AvatarIcon";

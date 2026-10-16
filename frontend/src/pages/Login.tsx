@@ -1,13 +1,14 @@
 import { loginSchema, type LoginSchemaType } from "@/schemas/auth.schema";
-import logo from "../assets/logo.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { loginUser } from "@/services/auth.service";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import { Spinner } from "@/components/ui/spinner";
+import AuthLayout from "@/components/AuthLayout";
 
 function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,9 +16,6 @@ function Login() {
   const { setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
-
-  const img =
-    "https://plus.unsplash.com/premium_photo-1679830513886-e09cd6dc3137?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dm9vfGVufDB8fDB8fHww";
 
   const {
     register,
@@ -43,79 +41,91 @@ function Login() {
     }
   };
   return (
-    <div className="h-screen flex items-center justify-around ">
-      <div className="flex flex-col gap-4 w-126 ">
-        <img className="w-25 h-25" src={logo} alt="logo" />
-
-        <div className="flex flex-col gap-1 mb-4">
-          <h1 className="text-4xl font-bold mt-4 mb-2">Entrar</h1>
-          <h2 className="font-light text-md text-[#112211]">
-            Entre na sua conta para desfrutar de todos os recursos do nosso
-            site.
-          </h2>
-        </div>
-
-        <form onSubmit={handleSubmit(handleLogin)}>
-          <div className="flex flex-col gap-1">
-            <label className="font-light text-[#1C1B1F]">Email</label>
-            <Input
-              type="email"
-              placeholder="johndoe@email.com"
-              className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-              aria-invalid={errors.email || loginError ? "true" : "false"}
-              {...register("email")}
-            />
-
-            <p className="text-red-500 text-sm">{errors.email?.message}</p>
-
-            <label className="font-light text-[#1C1B1F]">Senha</label>
-            <Input
-              placeholder="Digite sua senha"
-              type="password"
-              className="border border-[#79747E] rounded-sm h-10 w-full px-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#8DD3BB]"
-              aria-invalid={errors.password || loginError ? "true" : "false"}
-              {...register("password")}
-            />
-
-            <p className="text-red-500 text-sm">{errors.password?.message}</p>
-          </div>
-
-          {loginError && (
-            <p className="text-red-500 text-sm mt-2">{loginError}</p>
-          )}
-
-          <div className="flex justify-between my-4">
-            <p>Lembrar de mim</p>
-            <a className="text-[#8DD3BB]">Esqueceu a senha?</a>
-          </div>
-
-          <button className="h-10 rounded-sm bg-[#8DD3BB] hover:bg-[#7BC0A8] cursor-pointer text-[#112211] font-semibold w-full  flex justify-center items-center">
-            {isLoading ? (
-              <Spinner className="text-[#112211] size-4" />
-            ) : (
-              "Entrar"
-            )}
-          </button>
-        </form>
-
-        <div className="flex justify-center gap-1">
-          <span>Não possui conta? </span>
-          <Link to="/register">
-            <p className="text-[#FF8682] hover:text-[#FF5582] cursor-pointer">
-              Registrar-se
-            </p>
+    <AuthLayout
+      compact
+      title="Que bom ter você de volta"
+      description="Entre na sua conta para encontrar voos e continuar planejando sua próxima viagem."
+      footer={
+        <>
+          Não possui conta?{" "}
+          <Link
+            to="/register"
+            className="font-semibold text-[#0D2EFC] transition-colors hover:text-[#081B96]"
+          >
+            Criar conta
           </Link>
+        </>
+      }
+    >
+      <form className="mt-5 space-y-3" onSubmit={handleSubmit(handleLogin)}>
+        <div className="space-y-1.5">
+          <label
+            htmlFor="login-email"
+            className="block text-sm font-semibold text-[#020B3D]"
+          >
+            Email
+          </label>
+          <Input
+            id="login-email"
+            type="email"
+            autoComplete="email"
+            placeholder="seuemail@exemplo.com"
+            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+            aria-invalid={Boolean(errors.email || loginError)}
+            {...register("email")}
+          />
+          {errors.email?.message && (
+            <p className="text-sm text-red-600" role="alert">
+              {errors.email.message}
+            </p>
+          )}
         </div>
-      </div>
 
-      <div>
-        <img
-          className="w-134 h-185 bg-no-repeat bg-cover rounded-3xl"
-          src={img}
-          alt="flight.png"
-        />
-      </div>
-    </div>
+        <div className="space-y-1.5">
+          <label
+            htmlFor="login-password"
+            className="block text-sm font-semibold text-[#020B3D]"
+          >
+            Senha
+          </label>
+          <Input
+            id="login-password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Digite sua senha"
+            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
+            aria-invalid={Boolean(errors.password || loginError)}
+            {...register("password")}
+          />
+          {errors.password?.message && (
+            <p className="text-sm text-red-600" role="alert">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between text-sm text-[#526078]">
+          <span>Lembrar de mim</span>
+          <span className="font-semibold text-[#0D2EFC]">
+            Esqueceu a senha?
+          </span>
+        </div>
+
+        {loginError && (
+          <p className="text-sm text-red-600" role="alert">
+            {loginError}
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="h-10 w-full rounded-xl bg-blue-primary text-sm font-semibold text-white hover:bg-blue-secondary"
+        >
+          {isLoading ? <Spinner className="size-5 text-white" /> : "Entrar"}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
 
