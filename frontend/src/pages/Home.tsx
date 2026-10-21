@@ -159,10 +159,6 @@ function Home() {
 
         <div className="flex flex-col gap-5 xl:w-155 xl:shrink-0 xl:justify-between xl:gap-0 xl:pt-6 xl:pb-2">
           <div className="flex flex-col gap-5 xl:gap-8">
-            <p className="flex items-center gap-2 xl:gap-2.5">
-              <span className="size-[7px] shrink-0 rounded-full bg-[#E8480C] xl:size-2" />
-              <span className={eyebrowClassName}>Passagens aéreas · 2026</span>
-            </p>
             <h1 className="flex flex-col gap-0.5 text-[54px] leading-[54px] font-extrabold tracking-[-0.055em] md:text-[80px] md:leading-[80px] xl:gap-1 xl:text-8xl xl:leading-[94px]">
               <span className="flex items-center gap-2.5 xl:gap-[18px]">
                 Voe
