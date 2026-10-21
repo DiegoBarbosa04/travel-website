@@ -1,14 +1,40 @@
 import { loginSchema, type LoginSchemaType } from "@/schemas/auth.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { loginUser } from "@/services/auth.service";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
+import { ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
+import { AuthInput, PasswordInput } from "@/components/AuthInput";
+import paris from "@/assets/auth/paris.webp";
+import planeWindow from "@/assets/auth/plane-window.webp";
+import parisRooftops from "@/assets/auth/paris-rooftops.webp";
+import planeWing from "@/assets/auth/plane-wing.webp";
+
+const collage = {
+  desktop: {
+    polaroids: [
+      { image: paris, caption: "Paris", date: "12 MAI", left: 72, top: 110, rotate: -21, width: 290, imageHeight: 300 },
+      { image: planeWindow, caption: "Assento 14A", date: "10 MAI", left: 370, top: 48, rotate: 13, width: 310, imageHeight: 350 },
+      { image: parisRooftops, caption: "Telhados de Paris", date: "14 MAI", left: 104, top: 450, rotate: 11, width: 280, imageHeight: 300 },
+      { image: planeWing, caption: "Quase lá", date: "11 MAI", left: 404, top: 420, rotate: -14, width: 290, imageHeight: 290 },
+    ],
+    boardingPass: { from: "GRU", to: "CDG", gate: "B12", boarding: "21:40", seat: "14A", left: 264, top: 356, rotate: -11 },
+  },
+  mobile: {
+    polaroids: [
+      { image: paris, caption: "Paris", left: 22, top: 34, rotate: -12, width: 140, imageHeight: 132 },
+      { image: planeWindow, caption: "Assento 14A", left: 196, top: 14, rotate: 9, width: 150, imageHeight: 150 },
+    ],
+    boardingPass: { from: "GRU", to: "CDG", left: 86, top: 136, rotate: -7 },
+  },
+};
 
 function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -42,88 +68,138 @@ function Login() {
   };
   return (
     <AuthLayout
-      compact
-      title="Que bom ter você de volta"
-      description="Entre na sua conta para encontrar voos e continuar planejando sua próxima viagem."
+      eyebrow="Entrar na conta"
+      title="Que bom ter você de volta."
+      description="Entre na sua conta para ver seus voos salvos e continuar de onde parou."
+      collage={collage}
       footer={
         <>
-          Não possui conta?{" "}
+          Ainda não tem conta?
           <Link
             to="/register"
-            className="font-semibold text-[#0D2EFC] transition-colors hover:text-[#081B96]"
+            className="font-bold text-[#1A1A1A] underline decoration-[#E8480C] decoration-2 underline-offset-4 transition-colors hover:text-[#E8480C]"
           >
             Criar conta
           </Link>
         </>
       }
     >
-      <form className="mt-5 space-y-3" onSubmit={handleSubmit(handleLogin)}>
-        <div className="space-y-1.5">
-          <label
-            htmlFor="login-email"
-            className="block text-sm font-semibold text-[#020B3D]"
-          >
-            Email
-          </label>
-          <Input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            placeholder="seuemail@exemplo.com"
-            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
-            aria-invalid={Boolean(errors.email || loginError)}
-            {...register("email")}
-          />
-          {errors.email?.message && (
+      <form
+        className="flex flex-col gap-7 lg:gap-9"
+        onSubmit={handleSubmit(handleLogin)}
+      >
+        <div className="flex flex-col gap-[18px]">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="login-email"
+              className="text-sm leading-5 font-semibold text-[#1A1A1A]"
+            >
+              Email
+            </label>
+            <AuthInput
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              placeholder="seuemail@exemplo.com"
+              aria-invalid={Boolean(errors.email || loginError)}
+              {...register("email")}
+            />
+            {errors.email?.message && (
+              <p className="text-sm text-red-600" role="alert">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="login-password"
+              className="text-sm leading-5 font-semibold text-[#1A1A1A]"
+            >
+              Senha
+            </label>
+            <PasswordInput
+              id="login-password"
+              autoComplete="current-password"
+              placeholder="Digite sua senha"
+              aria-invalid={Boolean(errors.password || loginError)}
+              {...register("password")}
+            />
+            {errors.password?.message && (
+              <p className="text-sm text-red-600" role="alert">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <label className="flex cursor-pointer items-center gap-2.5 text-sm leading-5 text-[#5C5C58]">
+              <Checkbox className="size-[18px] rounded-[5px] border-[#D6D6D1] bg-white data-[state=checked]:border-[#1A1A1A] data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white [&_svg]:size-3" />
+              Lembrar de mim
+            </label>
+            <span className="text-sm leading-5 font-semibold text-[#B8360A]">
+              Esqueceu a senha?
+            </span>
+          </div>
+
+          {loginError && (
             <p className="text-sm text-red-600" role="alert">
-              {errors.email.message}
+              {loginError}
             </p>
           )}
-        </div>
 
-        <div className="space-y-1.5">
-          <label
-            htmlFor="login-password"
-            className="block text-sm font-semibold text-[#020B3D]"
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="h-14 w-full gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A]"
           >
-            Senha
-          </label>
-          <Input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Digite sua senha"
-            className="h-10 rounded-xl border-[#D8E1F0] bg-white px-4 text-sm text-[#020B3D] placeholder:text-[#8A94A6] focus-visible:border-[#0D2EFC] focus-visible:ring-[#0D2EFC]/20"
-            aria-invalid={Boolean(errors.password || loginError)}
-            {...register("password")}
-          />
-          {errors.password?.message && (
-            <p className="text-sm text-red-600" role="alert">
-              {errors.password.message}
-            </p>
-          )}
+            {isLoading ? (
+              <Spinner className="size-5 text-white" />
+            ) : (
+              <>
+                Entrar
+                <ArrowRight className="size-[18px]" strokeWidth={2.4} />
+              </>
+            )}
+          </Button>
+
+          <div className="flex items-center gap-3.5">
+            <span className="h-px flex-1 bg-[#D6D6D1]" />
+            <span className="text-xs leading-4 font-semibold tracking-[0.08em] text-[#8F8F8A]">
+              OU
+            </span>
+            <span className="h-px flex-1 bg-[#D6D6D1]" />
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => toast.info("Login com Google em breve.")}
+            className="h-[52px] w-full gap-2.5 rounded-[14px] border-[#D6D6D1] bg-white text-[15px] font-semibold text-[#1A1A1A] hover:bg-[#FAFAF8]"
+          >
+            <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            Entrar com Google
+          </Button>
         </div>
-
-        <div className="flex items-center justify-between text-sm text-[#526078]">
-          <span>Lembrar de mim</span>
-          <span className="font-semibold text-[#0D2EFC]">
-            Esqueceu a senha?
-          </span>
-        </div>
-
-        {loginError && (
-          <p className="text-sm text-red-600" role="alert">
-            {loginError}
-          </p>
-        )}
-
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="h-10 w-full rounded-xl bg-blue-primary text-sm font-semibold text-white hover:bg-blue-secondary"
-        >
-          {isLoading ? <Spinner className="size-5 text-white" /> : "Entrar"}
-        </Button>
       </form>
     </AuthLayout>
   );
