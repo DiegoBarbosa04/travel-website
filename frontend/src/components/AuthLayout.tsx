@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import AuthCollage, { type BoardingPass, type Polaroid } from "@/components/AuthCollage";
+import Logo from "@/components/Logo";
 
 type Collage = {
   polaroids: Polaroid[];
@@ -36,25 +37,13 @@ function AuthLayout({
           <Link
             to="/"
             aria-label="Decolando — página inicial"
-            className="flex w-fit items-center gap-[7px] rounded-lg focus-visible:ring-4 focus-visible:ring-[#E8480C]/20 focus-visible:outline-none lg:gap-2"
+            className="block w-fit rounded-lg focus-visible:ring-4 focus-visible:ring-[#E8480C]/20 focus-visible:outline-none"
           >
-            <svg
-              viewBox="0 0 64 57"
-              className="h-[23px] w-[26px] shrink-0 lg:h-[27px] lg:w-[30px]"
-              aria-hidden="true"
-            >
-              <path
-                d="M49.921 35.967L12 52.967C19.5 37.555 18.715 36.067 36.043 36.012L49.921 35.967Z"
-                fill="#E8480C"
-              />
-              <path
-                d="M0 0L8.077 0.046C14.107 0.079 16.607 0.216 21.216 4.505L28.941 12.806L35.525 19.386L44.406 27.099L48.493 30.102C53.342 33.361 58.607 35.704 64 37.952L39.812 37.905C35.544 37.897 29.269 38.391 25.093 37.201C22.039 36.332 19.375 34.66 17.269 32.355C13.714 28.465 10.832 21.859 8.46 17.073L0 0Z"
-                fill="#E8480C"
-              />
-            </svg>
-            <span className="text-[22px] leading-6 font-bold tracking-[-0.04em] text-[#1A1A1A] lg:text-2xl lg:leading-7 lg:font-extrabold lg:tracking-[-0.03em]">
-              Decolando
-            </span>
+            <Logo
+              className="gap-[7px] lg:gap-2"
+              markClassName="h-[23px] w-[26px] lg:h-[27px] lg:w-[30px]"
+              textClassName="text-[22px] leading-6 lg:text-2xl lg:leading-7 lg:font-extrabold lg:tracking-[-0.03em]"
+            />
           </Link>
         </header>
 

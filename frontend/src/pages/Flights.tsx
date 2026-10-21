@@ -100,7 +100,7 @@ function Flights() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFC] px-32">
-      <div className="pt-32">
+      <div className="pt-8">
         <SearchFlightCard
           defaultValues={{
             origin,

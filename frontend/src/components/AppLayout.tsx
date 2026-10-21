@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 function AppLayout() {
   return (
-    <div className="min-h-screen bg-[#FAFBFC]">
+    <div className="min-h-screen bg-white">
       <Header />
       <Outlet />
       <Footer />

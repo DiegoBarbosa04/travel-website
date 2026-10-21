@@ -1,96 +1,69 @@
-import logoFooter from "../assets/Logos/logo-totalmente-branca.svg";
-import Newsletter from "./Newsletter";
+import Logo from "@/components/Logo";
+
+const columns = [
+  { title: "Outros destinos", links: ["Lisboa", "Porto", "Madrid"] },
+  {
+    title: "Outras atividades",
+    links: ["Acampar", "Praticar esportes", "Trilhas"],
+  },
+  {
+    title: "Blog de viagens",
+    links: ["Destinos", "Dicas de viagem", "Histórias de viagem"],
+  },
+  { title: "Sobre nós", links: ["Nossa história", "Equipe", "Carreiras"] },
+];
 
 function Footer() {
   return (
-    <footer className="mt-(--respiro-vertical) text-white">
-      {/* Metade superior clara e metade inferior escura: a newsletter fica exatamente sobre a divisa. */}
-      <div
-        className="relative"
-        style={{
-          background: "linear-gradient(to bottom, #FAFBFC 50%, #020B3D 50%)",
-        }}
-      >
-        <div className="conteudo">
-          <Newsletter />
+    <footer
+      id="sobre"
+      className="flex scroll-mt-6 flex-col gap-8 px-5 pt-16 pb-10 lg:gap-12 lg:px-16 lg:pt-24"
+    >
+      <div className="flex flex-col gap-7 border-t border-[#1A1A1A] pt-8 lg:flex-row lg:gap-12 lg:pt-10">
+        <div className="flex flex-col gap-3 lg:w-60 lg:shrink-0 lg:gap-4">
+          <Logo
+            className="gap-[7px] lg:gap-2"
+            markClassName="h-[23px] w-[26px] lg:h-7 lg:w-[31px]"
+            textClassName="text-[22px] leading-6 lg:text-[28px] lg:leading-7"
+          />
+          <p className="text-sm leading-[22px] text-[#5C5C58] lg:text-[15px] lg:leading-6">
+            Compare preços de companhias aéreas em um só lugar.
+          </p>
+        </div>
+
+        <div className="grid flex-1 grid-cols-2 gap-y-7 md:grid-cols-4 xl:flex xl:justify-between">
+          {columns.map((column) => (
+            <div key={column.title} className="flex flex-col gap-3 lg:gap-3.5 xl:w-45">
+              <h3 className="text-[11px] leading-4 font-semibold tracking-[0.18em] text-[#1A1A1A] uppercase lg:text-xs">
+                {column.title}
+              </h3>
+              {column.links.map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  className="w-fit text-[15px] leading-5 text-[#1A1A1A] transition-colors hover:text-[#E8480C] lg:text-base"
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="bg-[#020B3D]">
-        <div className="conteudo pb-7 pt-16">
-          <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr] lg:gap-20">
-            <div className="max-w-72">
-              <img
-                className="h-auto w-38 brightness-0 invert"
-                src={logoFooter}
-                alt="Decolando"
-              />
-              <p className="fs-corpo mt-5 text-white/70">
-                Tecnologia para encontrar voos, destinos e experiências que
-                fazem sua próxima viagem decolar.
-              </p>
-              <div className="fs-legenda mt-6 space-y-1 text-white/60">
-                <p>Decolando Viagens e Turismo Ltda.</p>
-                <p>Rua das Nuvens, 2026, São Paulo - SP</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
-              <FooterColumn
-                title="Institucional"
-                links={[
-                  "Sobre o Decolando",
-                  "Nossos parceiros",
-                  "Blog de viagens",
-                ]}
-              />
-              <FooterColumn
-                title="Planeje sua viagem"
-                links={["Destinos populares", "Buscar voos", "Dicas de viagem"]}
-              />
-              <FooterColumn
-                title="Atendimento"
-                links={["Central de ajuda", "Contato", "Perguntas frequentes"]}
-              />
-              <div>
-                <h3 className="fs-subtitulo mb-4">Contato</h3>
-                <div className="fs-corpo space-y-3 text-white/70">
-                  <p>
-                    <strong className="fs-subtitulo block text-white">
-                      0800 000 2026
-                    </strong>
-                    Capitais e regiões metropolitanas
-                  </p>
-                  <p>contato@decolando.com.br</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="fs-legenda mt-12 flex flex-col gap-4 border-t border-white/15 pt-5 text-white/60 sm:flex-row sm:items-center sm:justify-between">
-            <p>© 2026 Decolando. Todos os direitos reservados.</p>
-            <div className="flex gap-5">
-              <a href="#">Política de privacidade</a>
-              <a href="#">Termos de uso</a>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col gap-1.5 border-t border-[#EAEAE6] pt-5 text-[13px] leading-4 text-[#5C5C58] lg:flex-row lg:justify-between lg:pt-6">
+        <p>© 2026 Decolando. Todos os direitos reservados.</p>
+        <p>
+          <a href="#" className="transition-colors hover:text-[#1A1A1A]">
+            Privacidade
+          </a>
+          {" · "}
+          <a href="#" className="transition-colors hover:text-[#1A1A1A]">
+            Termos de uso
+          </a>
+        </p>
       </div>
     </footer>
-  );
-}
-
-function FooterColumn({ title, links }: { title: string; links: string[] }) {
-  return (
-    <div>
-      <h3 className="fs-subtitulo mb-4">{title}</h3>
-      <nav className="fs-corpo flex flex-col gap-3 text-white/70">
-        {links.map((link) => (
-          <a key={link} href="#">
-            {link}
-          </a>
-        ))}
-      </nav>
-    </div>
   );
 }
 
