@@ -7,7 +7,7 @@ function AuthInput({ className, ...props }: ComponentProps<"input">) {
   return (
     <Input
       className={cn(
-        "h-[52px] rounded-[14px] border border-[#D6D6D1] bg-white px-4 text-[15px] leading-5 text-[#1A1A1A] placeholder:text-[#8F8F8A] focus-visible:border-[1.5px] focus-visible:border-[#E8480C] focus-visible:ring-4 focus-visible:ring-[#FFEDE4] md:text-[15px]",
+        "h-[52px] rounded-[14px] lg:short:h-11 lg:shorter:h-10 border border-[#D6D6D1] bg-white px-4 text-[15px] leading-5 text-[#1A1A1A] placeholder:text-[#8F8F8A] focus-visible:border-[1.5px] focus-visible:border-[#E8480C] focus-visible:ring-4 focus-visible:ring-[#FFEDE4] md:text-[15px]",
         className,
       )}
       {...props}

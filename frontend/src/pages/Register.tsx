@@ -93,12 +93,12 @@ function Register() {
       }
     >
       <form
-        className="flex flex-col gap-7 lg:gap-6"
+        className="flex flex-col gap-7 lg:gap-6 lg:short:gap-4"
         onSubmit={handleSubmit(handleRegister)}
       >
-        <div className="flex flex-col gap-3.5">
+        <div className="flex flex-col gap-3.5 lg:short:gap-2">
           <div className="flex gap-3">
-            <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-1 flex-col gap-1.5 lg:short:gap-1">
               <label htmlFor="register-first-name" className={labelClassName}>
                 Nome
               </label>
@@ -107,7 +107,7 @@ function Register() {
                 type="text"
                 autoComplete="given-name"
                 placeholder="Seu nome"
-                className="h-12"
+                className="h-12 lg:short:h-11 lg:shorter:h-10"
                 {...register("firstName")}
                 aria-invalid={Boolean(errors.firstName)}
               />
@@ -118,7 +118,7 @@ function Register() {
               )}
             </div>
 
-            <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-1 flex-col gap-1.5 lg:short:gap-1">
               <label htmlFor="register-last-name" className={labelClassName}>
                 Sobrenome
               </label>
@@ -127,7 +127,7 @@ function Register() {
                 type="text"
                 autoComplete="family-name"
                 placeholder="Seu sobrenome"
-                className="h-12"
+                className="h-12 lg:short:h-11 lg:shorter:h-10"
                 {...register("lastName")}
                 aria-invalid={Boolean(errors.lastName)}
               />
@@ -139,7 +139,7 @@ function Register() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 lg:short:gap-1">
             <label htmlFor="register-email" className={labelClassName}>
               Email
             </label>
@@ -148,7 +148,7 @@ function Register() {
               type="email"
               autoComplete="email"
               placeholder="seuemail@exemplo.com"
-              className="h-12"
+              className="h-12 lg:short:h-11 lg:shorter:h-10"
               {...register("email")}
               aria-invalid={Boolean(errors.email)}
             />
@@ -159,7 +159,7 @@ function Register() {
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 lg:short:gap-1">
             <label htmlFor="register-password" className={labelClassName}>
               Senha
             </label>
@@ -167,7 +167,7 @@ function Register() {
               id="register-password"
               autoComplete="new-password"
               placeholder="Pelo menos 6 caracteres"
-              className="h-12"
+              className="h-12 lg:short:h-11 lg:shorter:h-10"
               {...register("password")}
               aria-invalid={Boolean(errors.password)}
             />
@@ -178,7 +178,7 @@ function Register() {
             )}
           </div>
 
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 lg:short:gap-1">
             <label
               htmlFor="register-confirm-password"
               className={labelClassName}
@@ -189,7 +189,7 @@ function Register() {
               id="register-confirm-password"
               autoComplete="new-password"
               placeholder="Digite a senha novamente"
-              className="h-12"
+              className="h-12 lg:short:h-11 lg:shorter:h-10"
               {...register("confirmPassword")}
               aria-invalid={Boolean(errors.confirmPassword)}
             />
@@ -201,8 +201,8 @@ function Register() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-5 lg:short:gap-3.5">
+          <div className="flex flex-col gap-1.5 lg:short:gap-1">
             <label className="flex cursor-pointer items-start gap-2.5 text-sm leading-5 text-[#5C5C58]">
               <Checkbox
                 checked={acceptedTerms}
@@ -225,7 +225,7 @@ function Register() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-[52px] w-full gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A]"
+            className="h-[52px] w-full lg:short:h-12 lg:shorter:h-11 gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A]"
           >
             {isLoading ? (
               <Spinner className="size-5 text-white" />

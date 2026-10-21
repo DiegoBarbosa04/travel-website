@@ -85,11 +85,11 @@ function Login() {
       }
     >
       <form
-        className="flex flex-col gap-7 lg:gap-9"
+        className="flex flex-col gap-7 lg:gap-9 lg:short:gap-5"
         onSubmit={handleSubmit(handleLogin)}
       >
-        <div className="flex flex-col gap-[18px]">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-[18px] lg:short:gap-3">
+          <div className="flex flex-col gap-2 lg:short:gap-1.5">
             <label
               htmlFor="login-email"
               className="text-sm leading-5 font-semibold text-[#1A1A1A]"
@@ -111,7 +111,7 @@ function Login() {
             )}
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 lg:short:gap-1.5">
             <label
               htmlFor="login-password"
               className="text-sm leading-5 font-semibold text-[#1A1A1A]"
@@ -133,7 +133,7 @@ function Login() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 lg:short:gap-3.5">
           <div className="flex items-center justify-between">
             <label className="flex cursor-pointer items-center gap-2.5 text-sm leading-5 text-[#5C5C58]">
               <Checkbox className="size-[18px] rounded-[5px] border-[#D6D6D1] bg-white data-[state=checked]:border-[#1A1A1A] data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white [&_svg]:size-3" />
@@ -153,7 +153,7 @@ function Login() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-14 w-full gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A]"
+            className="h-14 w-full lg:short:h-12 lg:shorter:h-11 gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A]"
           >
             {isLoading ? (
               <Spinner className="size-5 text-white" />
@@ -177,7 +177,7 @@ function Login() {
             type="button"
             variant="outline"
             onClick={() => toast.info("Login com Google em breve.")}
-            className="h-[52px] w-full gap-2.5 rounded-[14px] border-[#D6D6D1] bg-white text-[15px] font-semibold text-[#1A1A1A] hover:bg-[#FAFAF8]"
+            className="h-[52px] w-full lg:short:h-11 lg:shorter:h-10 gap-2.5 rounded-[14px] border-[#D6D6D1] bg-white text-[15px] font-semibold text-[#1A1A1A] hover:bg-[#FAFAF8]"
           >
             <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
               <path

@@ -5,6 +5,9 @@
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
+/* Telas baixas (notebooks): compacta layouts que foram desenhados para 900px de altura. */
+@custom-variant short (@media (height < 900px));
+@custom-variant shorter (@media (height < 740px));
 
 body {
   font-family: "Figtree", sans-serif;
