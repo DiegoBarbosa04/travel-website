@@ -181,7 +181,7 @@ function Home() {
             </h1>
             <p className="text-base leading-[25px] text-[#5C5C58] md:max-w-115 xl:text-lg xl:leading-[29px]">
               Compare preços de companhias aéreas em um só lugar e compre com
-              segurança — tudo em reais, sem surpresa no final.
+              segurança, tudo em reais, sem surpresa no final.
             </p>
           </div>
 
