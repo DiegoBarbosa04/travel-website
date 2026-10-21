@@ -36,6 +36,8 @@ interface Props<T extends FieldValues> {
   placeholder: string;
   initialLabel?: string;
   onSelectLabel?: (label: string) => void;
+  variant?: "default" | "field";
+  className?: string;
 }
 
 export default function LocationAutocomplete<T extends FieldValues>({
@@ -45,6 +47,8 @@ export default function LocationAutocomplete<T extends FieldValues>({
   placeholder,
   initialLabel,
   onSelectLabel,
+  variant = "default",
+  className,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -78,11 +82,33 @@ export default function LocationAutocomplete<T extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="min-w-45 flex-1">
-          <label className="mb-2 block text-sm font-medium">{label}</label>
+        <div className={cn(variant === "default" && "min-w-45 flex-1", className)}>
+          {variant === "default" && (
+            <label className="mb-2 block text-sm font-medium">{label}</label>
+          )}
 
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
+              {variant === "field" ? (
+                <button
+                  type="button"
+                  className="flex w-full cursor-pointer flex-col gap-1 rounded-[14px] px-[18px] py-3.5 text-left outline-none focus-visible:ring-4 focus-visible:ring-[#FFEDE4] lg:px-5 lg:py-4"
+                >
+                  <span className="text-[13px] leading-4 font-semibold text-[#5C5C58]">
+                    {label}
+                  </span>
+                  <span
+                    className={cn(
+                      "truncate text-base leading-5",
+                      selectedLabel
+                        ? "font-semibold text-[#1A1A1A]"
+                        : "text-[#8F8F8A]",
+                    )}
+                  >
+                    {selectedLabel || placeholder}
+                  </span>
+                </button>
+              ) : (
               <Button
                 type="button"
                 variant="outline"
@@ -92,9 +118,10 @@ export default function LocationAutocomplete<T extends FieldValues>({
 
                 <ChevronsUpDown className="opacity-50" />
               </Button>
+              )}
             </PopoverTrigger>
 
-            <PopoverContent className="w-87 p-0">
+            <PopoverContent className="w-87 p-0" align="start">
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder={placeholder}

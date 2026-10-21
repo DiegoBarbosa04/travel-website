@@ -19,6 +19,7 @@ type SearchFlightCardProps = {
   destinationLabel?: string;
   isLoading?: boolean;
   onSearchStart?: () => void;
+  variant?: "card" | "hero";
 };
 
 function SearchFlightCard({
@@ -27,6 +28,7 @@ function SearchFlightCard({
   destinationLabel,
   isLoading = false,
   onSearchStart,
+  variant = "card",
 }: SearchFlightCardProps) {
   const form = useForm<SearchFlightForm>({
     resolver: zodResolver(searchFlightSchema),
@@ -43,6 +45,9 @@ function SearchFlightCard({
     origin: originLabel ?? defaultValues?.origin ?? "",
     destination: destinationLabel ?? defaultValues?.destination ?? "",
   });
+
+  // Remonta os autocompletes ao inverter origem/destino para refletir os novos rótulos.
+  const [swapCount, setSwapCount] = useState(0);
 
   const { handleSubmit } = form;
   const navigate = useNavigate();
@@ -73,6 +78,127 @@ function SearchFlightCard({
 
     navigate(`/flights${nextSearch}`);
   };
+
+  const swapLocations = () => {
+    const { origin, destination } = form.getValues();
+    form.setValue("origin", destination);
+    form.setValue("destination", origin);
+    setLabels((prev) => ({
+      origin: prev.destination,
+      destination: prev.origin,
+    }));
+    setSwapCount((count) => count + 1);
+  };
+
+  if (variant === "hero") {
+    return (
+      <form
+        className="flex flex-col gap-2.5 pt-2 lg:gap-3 lg:pt-0"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h2 className="text-[11px] leading-4 font-semibold tracking-[0.18em] text-[#5C5C58] uppercase lg:text-xs">
+          Para onde você quer ir?
+        </h2>
+
+        <div className="relative flex flex-col rounded-[14px] border border-[#D6D6D1] md:flex-row">
+          <LocationAutocomplete
+            key={`origin-${swapCount}`}
+            control={form.control}
+            name="origin"
+            label="Origem"
+            placeholder="Digite uma cidade"
+            variant="field"
+            className="min-w-0 border-b border-[#D6D6D1] pr-14 md:flex-1 md:border-r md:border-b-0 md:pr-0"
+            initialLabel={labels.origin}
+            onSelectLabel={(label) =>
+              setLabels((prev) => ({ ...prev, origin: label }))
+            }
+          />
+          <LocationAutocomplete
+            key={`destination-${swapCount}`}
+            control={form.control}
+            name="destination"
+            label="Destino"
+            placeholder="Digite uma cidade"
+            variant="field"
+            className="min-w-0 pr-14 md:flex-1 md:pr-0 md:pl-3"
+            initialLabel={labels.destination}
+            onSelectLabel={(label) =>
+              setLabels((prev) => ({ ...prev, destination: label }))
+            }
+          />
+          <button
+            type="button"
+            onClick={swapLocations}
+            aria-label="Inverter origem e destino"
+            className="absolute top-[52px] right-4 flex size-9 cursor-pointer items-center justify-center rounded-full border border-[#D6D6D1] bg-white transition-colors hover:border-[#E8480C] md:top-4 md:right-auto md:left-1/2 md:-translate-x-1/2"
+          >
+            <svg viewBox="0 0 24 24" className="size-4 md:rotate-90" aria-hidden="true">
+              <path
+                d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"
+                fill="none"
+                stroke="#E8480C"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex flex-wrap gap-2.5 lg:flex-nowrap lg:gap-3">
+          <DatePickerField
+            control={form.control}
+            name="departureDate"
+            label="Data"
+            variant="field"
+            className="min-w-0 flex-1"
+          />
+          <label className="flex w-29 shrink-0 cursor-text flex-col gap-1 rounded-[14px] border border-[#D6D6D1] px-[18px] py-3.5 transition-colors focus-within:border-[#E8480C] focus-within:ring-4 focus-within:ring-[#FFEDE4] lg:w-30 lg:px-5 lg:py-4">
+            <span className="text-[13px] leading-4 font-semibold text-[#5C5C58]">
+              Adultos
+            </span>
+            <input
+              type="number"
+              min={1}
+              className="w-full bg-transparent text-base leading-5 font-semibold text-[#1A1A1A] outline-none"
+              {...form.register("adults", { valueAsNumber: true })}
+            />
+          </label>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="h-14 w-full gap-2.5 rounded-[14px] bg-[#E8480C] text-base font-bold text-white hover:bg-[#B8360A] lg:h-auto lg:w-50 lg:shrink-0"
+          >
+            {isLoading ? (
+              <Spinner className="size-5 text-white" />
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" className="size-[18px]" aria-hidden="true">
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="7"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  />
+                  <path
+                    d="M20 20l-3.5-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                Pesquisar voos
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    );
+  }
 
   return (
     <div className="w-full rounded-2xl bg-white p-8 shadow-xl">
