@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { UserProvider } from "./contexts/User.context";
 import Flights from "./pages/Flights";
+import FlightDetails from "./pages/FlightDetails";
 import Profile from "./pages/Profile";
 import { Toaster } from "./components/ui/sonner";
 import AppLayout from "./components/AppLayout";
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
       {
         path: "/flights",
         element: <Flights />,
+      },
+      {
+        path: "/flights/:id",
+        element: <FlightDetails />,
+        handle: { hideHeaderOnMobile: true },
       },
       {
         path: "/profile",
