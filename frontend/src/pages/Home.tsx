@@ -134,7 +134,7 @@ function Home() {
   return (
     <main className="text-[#1A1A1A]">
       <section className="flex flex-col gap-5 px-5 pt-5 lg:px-16 xl:flex-row xl:gap-12 xl:pt-10">
-        <div className="order-last mt-3 flex h-100 shrink-0 items-end overflow-hidden rounded-[28px] bg-cover bg-center p-3.5 md:h-140 xl:order-first xl:mt-0 xl:h-180 xl:flex-1 xl:rounded-[32px] xl:p-7"
+        <div className="order-last mt-3 flex h-100 shrink-0 items-end overflow-hidden rounded-[28px] bg-cover bg-center p-3.5 md:h-140 xl:mt-0 xl:h-180 xl:flex-1 xl:rounded-[32px] xl:p-7"
           style={{ backgroundImage: `url(${heroPlane})` }}
           role="img"
           aria-label="Avião pousando em uma pista com prédios ao fundo"
