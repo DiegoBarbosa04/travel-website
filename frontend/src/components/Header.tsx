@@ -14,12 +14,18 @@ const navItems = [
 ];
 
 const accountItems = [
-  { label: "Minha conta", mobileLabel: "Dados da conta", icon: User },
-  { label: "Minhas avaliações", mobileLabel: "Minhas avaliações", icon: Star },
+  { label: "Minha conta", mobileLabel: "Dados da conta", icon: User, tab: "conta" },
+  {
+    label: "Minhas avaliações",
+    mobileLabel: "Minhas avaliações",
+    icon: Star,
+    tab: "avaliacoes",
+  },
   {
     label: "Histórico de pesquisas",
     mobileLabel: "Histórico de pesquisas",
     icon: Clock,
+    tab: "historico",
   },
 ];
 
@@ -174,10 +180,10 @@ function Header() {
                   </div>
                 </div>
                 <div className="flex flex-col border-t border-[#EAEAE6] px-2 py-1.5">
-                  {accountItems.map(({ label, icon: Icon }) => (
+                  {accountItems.map(({ label, icon: Icon, tab }) => (
                     <Link
                       key={label}
-                      to="/profile"
+                      to={`/profile?tab=${tab}`}
                       role="menuitem"
                       onClick={closeMenus}
                       className="group flex items-center gap-3 rounded-xl px-3 py-[11px] text-[15px] leading-[19px] font-medium text-[#1A1A1A] transition-colors hover:bg-[#F4F4F2]"
@@ -319,10 +325,10 @@ function Header() {
                 <span className="pb-1 text-[11px] leading-4 font-semibold tracking-[0.18em] text-[#5C5C58] uppercase">
                   Minha conta
                 </span>
-                {accountItems.map(({ mobileLabel, icon: Icon }, index) => (
+                {accountItems.map(({ mobileLabel, icon: Icon, tab }, index) => (
                   <Link
                     key={mobileLabel}
-                    to="/profile"
+                    to={`/profile?tab=${tab}`}
                     onClick={closeMenus}
                     className={`flex items-center gap-3 py-3 text-base leading-5 font-medium text-[#1A1A1A] ${
                       index < accountItems.length - 1 ? "border-b border-[#EAEAE6]" : ""
