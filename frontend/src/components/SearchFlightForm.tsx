@@ -8,10 +8,10 @@ import { useNavigate } from "react-router";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import LocationAutocomplete from "./LocationAutocomplete";
 import DatePickerField from "./DataPickerField";
 import { Spinner } from "./ui/spinner";
+import { cn } from "@/lib/utils";
 
 type SearchFlightCardProps = {
   defaultValues?: Partial<SearchFlightForm>;
@@ -19,7 +19,9 @@ type SearchFlightCardProps = {
   destinationLabel?: string;
   isLoading?: boolean;
   onSearchStart?: () => void;
-  variant?: "card" | "hero";
+  // hero: busca da Home · bar: barra única nos resultados · sheet: folha mobile, sempre empilhada e com o botão fora (via formId)
+  variant?: "hero" | "bar" | "sheet";
+  formId?: string;
 };
 
 function SearchFlightCard({
@@ -28,7 +30,8 @@ function SearchFlightCard({
   destinationLabel,
   isLoading = false,
   onSearchStart,
-  variant = "card",
+  variant = "hero",
+  formId,
 }: SearchFlightCardProps) {
   const form = useForm<SearchFlightForm>({
     resolver: zodResolver(searchFlightSchema),
@@ -90,81 +93,113 @@ function SearchFlightCard({
     setSwapCount((count) => count + 1);
   };
 
-  if (variant === "hero") {
-    return (
-      <form
-        className="flex flex-col gap-2.5 pt-2 lg:gap-3 lg:pt-0"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+  const isBar = variant === "bar";
+  const isSheet = variant === "sheet";
+
+  return (
+    <form
+      id={formId}
+      className={cn(
+        "flex flex-col gap-2.5 lg:gap-3",
+        variant === "hero" && "pt-2 lg:pt-0",
+        isBar && "lg:flex-row",
+      )}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {variant === "hero" && (
         <h2 className="text-[11px] leading-4 font-semibold tracking-[0.18em] text-[#5C5C58] uppercase lg:text-xs">
           Para onde você quer ir?
         </h2>
+      )}
 
-        <div className="relative flex flex-col rounded-[14px] border border-[#D6D6D1] md:flex-row">
-          <LocationAutocomplete
-            key={`origin-${swapCount}`}
-            control={form.control}
-            name="origin"
-            label="Origem"
-            placeholder="Digite uma cidade"
-            variant="field"
-            className="min-w-0 border-b border-[#D6D6D1] pr-14 md:flex-1 md:border-r md:border-b-0 md:pr-0"
-            initialLabel={labels.origin}
-            onSelectLabel={(label) =>
-              setLabels((prev) => ({ ...prev, origin: label }))
-            }
-          />
-          <LocationAutocomplete
-            key={`destination-${swapCount}`}
-            control={form.control}
-            name="destination"
-            label="Destino"
-            placeholder="Digite uma cidade"
-            variant="field"
-            className="min-w-0 pr-14 md:flex-1 md:pr-0 md:pl-3"
-            initialLabel={labels.destination}
-            onSelectLabel={(label) =>
-              setLabels((prev) => ({ ...prev, destination: label }))
-            }
-          />
-          <button
-            type="button"
-            onClick={swapLocations}
-            aria-label="Inverter origem e destino"
-            className="absolute top-[52px] right-4 flex size-9 cursor-pointer items-center justify-center rounded-full border border-[#D6D6D1] bg-white transition-colors hover:border-[#E8480C] md:top-4 md:right-auto md:left-1/2 md:-translate-x-1/2"
+      <div
+        className={cn(
+          "relative flex flex-col rounded-[14px] border border-[#D6D6D1]",
+          !isSheet && "md:flex-row",
+          isBar && "lg:flex-1",
+        )}
+      >
+        <LocationAutocomplete
+          key={`origin-${swapCount}`}
+          control={form.control}
+          name="origin"
+          label="Origem"
+          placeholder="Digite uma cidade"
+          variant="field"
+          className={cn(
+            "min-w-0 border-b border-[#D6D6D1] pr-14",
+            !isSheet && "md:flex-1 md:border-r md:border-b-0 md:pr-0",
+          )}
+          initialLabel={labels.origin}
+          onSelectLabel={(label) =>
+            setLabels((prev) => ({ ...prev, origin: label }))
+          }
+        />
+        <LocationAutocomplete
+          key={`destination-${swapCount}`}
+          control={form.control}
+          name="destination"
+          label="Destino"
+          placeholder="Digite uma cidade"
+          variant="field"
+          className={cn("min-w-0 pr-14", !isSheet && "md:flex-1 md:pr-0 md:pl-3")}
+          initialLabel={labels.destination}
+          onSelectLabel={(label) =>
+            setLabels((prev) => ({ ...prev, destination: label }))
+          }
+        />
+        <button
+          type="button"
+          onClick={swapLocations}
+          aria-label="Inverter origem e destino"
+          className={cn(
+            "absolute top-[52px] right-4 flex size-9 cursor-pointer items-center justify-center rounded-full border border-[#D6D6D1] bg-white transition-colors hover:border-[#E8480C]",
+            !isSheet && "md:top-4 md:right-auto md:left-1/2 md:-translate-x-1/2",
+            isBar && "lg:top-3.5",
+          )}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className={cn("size-4", !isSheet && "md:rotate-90")}
+            aria-hidden="true"
           >
-            <svg viewBox="0 0 24 24" className="size-4 md:rotate-90" aria-hidden="true">
-              <path
-                d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"
-                fill="none"
-                stroke="#E8480C"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2.5 lg:flex-nowrap lg:gap-3">
-          <DatePickerField
-            control={form.control}
-            name="departureDate"
-            label="Data"
-            variant="field"
-            className="min-w-0 flex-1"
-          />
-          <label className="flex w-29 shrink-0 cursor-text flex-col gap-1 rounded-[14px] border border-[#D6D6D1] px-[18px] py-3.5 transition-colors focus-within:border-[#E8480C] focus-within:ring-4 focus-within:ring-[#FFEDE4] lg:w-30 lg:px-5 lg:py-4">
-            <span className="text-[13px] leading-4 font-semibold text-[#5C5C58]">
-              Adultos
-            </span>
-            <input
-              type="number"
-              min={1}
-              className="w-full bg-transparent text-base leading-5 font-semibold text-[#1A1A1A] outline-none"
-              {...form.register("adults", { valueAsNumber: true })}
+            <path
+              d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"
+              fill="none"
+              stroke="#E8480C"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
-          </label>
+          </svg>
+        </button>
+      </div>
+
+      <div
+        className={cn(
+          "flex flex-wrap gap-2.5 lg:flex-nowrap lg:gap-3",
+          isBar && "lg:contents",
+        )}
+      >
+        <DatePickerField
+          control={form.control}
+          name="departureDate"
+          label="Data"
+          variant="field"
+          className={cn("min-w-0 flex-1", isBar && "lg:w-50 lg:flex-none lg:shrink-0")}
+        />
+        <label className="flex w-29 shrink-0 cursor-text flex-col gap-1 rounded-[14px] border border-[#D6D6D1] px-[18px] py-3.5 transition-colors focus-within:border-[#E8480C] focus-within:ring-4 focus-within:ring-[#FFEDE4] lg:w-30 lg:px-5 lg:py-4">
+          <span className="text-[13px] leading-4 font-semibold text-[#5C5C58]">
+            Adultos
+          </span>
+          <input
+            type="number"
+            min={1}
+            className="w-full bg-transparent text-base leading-5 font-semibold text-[#1A1A1A] outline-none"
+            {...form.register("adults", { valueAsNumber: true })}
+          />
+        </label>
+        {!isSheet && (
           <Button
             type="submit"
             disabled={isLoading}
@@ -191,83 +226,13 @@ function SearchFlightCard({
                     strokeLinecap="round"
                   />
                 </svg>
-                Pesquisar voos
+                {isBar ? "Atualizar busca" : "Pesquisar voos"}
               </>
             )}
           </Button>
-        </div>
-      </form>
-    );
-  }
-
-  return (
-    <div className="w-full rounded-2xl bg-white p-8 shadow-xl">
-      <form
-        className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-6">Para onde você quer ir?</h2>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="min-w-45 flex-1">
-              <LocationAutocomplete
-                control={form.control}
-                name="origin"
-                label="Origem"
-                placeholder="Digite uma cidade"
-                initialLabel={labels.origin}
-                onSelectLabel={(label) =>
-                  setLabels((prev) => ({ ...prev, origin: label }))
-                }
-              />
-            </div>
-
-            <div className="min-w-45 flex-1">
-              <LocationAutocomplete
-                control={form.control}
-                name="destination"
-                label="Destino"
-                placeholder="Digite uma cidade"
-                initialLabel={labels.destination}
-                onSelectLabel={(label) =>
-                  setLabels((prev) => ({ ...prev, destination: label }))
-                }
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-[#112211]">
-                Adultos
-              </label>
-              <Input
-                className="h-11 w-14 justify-between rounded-md border border-[#CCCCCC] bg-white px-3 text-left font-normal"
-                type="number"
-                {...form.register("adults", {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-
-            <div>
-              <DatePickerField
-                control={form.control}
-                name="departureDate"
-                label="Data"
-              />
-            </div>
-          </div>
-        </div>
-
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="bg-blue-primary text-white font-medium px-8 py-6 rounded-2xl hover:bg-blue-secondary"
-        >
-          {isLoading ? <Spinner /> : "Pesquisar"}
-        </Button>
-      </form>
-    </div>
+        )}
+      </div>
+    </form>
   );
 }
 

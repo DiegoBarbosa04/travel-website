@@ -1,117 +1,150 @@
-import { useEffect, useState } from "react";
-import { Checkbox } from "./ui/checkbox";
+import {
+  MAX_PRICE,
+  timeRanges,
+  type FlightFilters,
+  type TimeRangeKey,
+} from "@/utils/filterFlights";
+import { formatoBrlInteiro } from "@/utils/formatCurrency";
 
 interface FilterPanelProps {
-  setFilters: React.Dispatch<
-    React.SetStateAction<{
-      priceRange: [number, number];
-      airlines: string[];
-      time: {
-        madrugada: boolean;
-        manha: boolean;
-        tarde: boolean;
-        noite: boolean;
-      };
-    }>
-  >;
-  airlinesResults: string[];
+  filters: FlightFilters;
+  onChange: (filters: FlightFilters) => void;
+  airlineCounts: [string, number][];
 }
 
-function FilterPanel({ setFilters, airlinesResults }: FilterPanelProps) {
-  const [priceRange, setPriceRange] = useState(5000);
-  const [airlines, setAirlines] = useState<string[]>([]);
-  const [time, setTime] = useState({
-    madrugada: false,
-    manha: false,
-    tarde: false,
-    noite: false,
-  });
+const sectionTitleClassName =
+  "text-lg leading-6 font-bold text-[#1A1A1A]";
 
-  useEffect(() => {
-    setFilters({
-      priceRange: [0, priceRange],
-      airlines,
-      time: time,
+function FilterPanel({ filters, onChange, airlineCounts }: FilterPanelProps) {
+  const toggleAirline = (airline: string) => {
+    onChange({
+      ...filters,
+      airlines: filters.airlines.includes(airline)
+        ? filters.airlines.filter((selected) => selected !== airline)
+        : [...filters.airlines, airline],
     });
-  }, [priceRange, airlines, time, setFilters]);
-
-  const handleAirlineChange = (airline: string) => {
-    setAirlines((prev) =>
-      prev.includes(airline)
-        ? prev.filter((selectedAirline) => selectedAirline !== airline)
-        : [...prev, airline],
-    );
   };
 
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 w-full">
-      <h2 className="text-xl font-bold mb-6 pb-4 border-b border-gray-200">
-        Filtros
-      </h2>
+  const toggleTime = (key: TimeRangeKey) => {
+    onChange({
+      ...filters,
+      times: filters.times.includes(key)
+        ? filters.times.filter((selected) => selected !== key)
+        : [...filters.times, key],
+    });
+  };
 
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Preço</h3>
-        <p>Passagens até</p>
-        <div className="flex items-center gap-4">
-          <input
-            type="range"
-            min="0"
-            max="5000"
-            value={priceRange}
-            onChange={(e) => setPriceRange(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#8DD3BB]"
-          />
-          <span className="text-lg font-semibold text-[#FF8682] min-w-fit">
-            R$ {priceRange}
+  const pricePercent = (filters.maxPrice / MAX_PRICE) * 100;
+
+  return (
+    <div className="flex flex-col gap-6 lg:gap-9">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-baseline justify-between">
+          <span className={sectionTitleClassName}>Preço máximo</span>
+          <span className="text-lg leading-6 font-extrabold tracking-[-0.02em] text-[#E8480C]">
+            {filters.maxPrice >= MAX_PRICE
+              ? "Sem limite"
+              : formatoBrlInteiro(filters.maxPrice)}
           </span>
         </div>
-      </div>
-
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Companhias</h3>
-        <div className="space-y-3">
-          <div className="space-y-3">
-            {Array.from(new Set(airlinesResults)).map((airline) => (
-              <div key={airline} className="flex items-center gap-3">
-                <Checkbox
-                  id={airline}
-                  checked={airlines.includes(airline)}
-                  onCheckedChange={() => handleAirlineChange(airline)}
-                />
-                <label htmlFor={airline} className="cursor-pointer text-sm">
-                  {airline}
-                </label>
-              </div>
-            ))}
-          </div>
+        <input
+          type="range"
+          min={0}
+          max={MAX_PRICE}
+          step={100}
+          value={filters.maxPrice}
+          aria-label="Preço máximo"
+          onChange={(event) =>
+            onChange({ ...filters, maxPrice: Number(event.target.value) })
+          }
+          className="price-range h-5 w-full cursor-pointer appearance-none bg-transparent"
+          style={{ "--range-progress": `${pricePercent}%` } as React.CSSProperties}
+        />
+        <div className="flex justify-between text-[13px] leading-4 text-[#5C5C58]">
+          <span>R$ 0</span>
+          <span>{formatoBrlInteiro(MAX_PRICE)}</span>
         </div>
       </div>
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Horário</h3>
-        <div className="space-y-3">
-          {[
-            ["Madrugada", "madrugada"],
-            ["Manhã", "manha"],
-            ["Tarde", "tarde"],
-            ["Noite", "noite"],
-          ].map(([label, key]) => (
-            <div key={key} className="flex items-center gap-3">
-              <Checkbox
-                id={key}
-                checked={time[key as keyof typeof time]}
-                onCheckedChange={(checked) =>
-                  setTime((prev) => ({
-                    ...prev,
-                    [key]: checked === true,
-                  }))
-                }
-              />
-              <label htmlFor={key} className="cursor-pointer text-sm">
-                {label}
+      {airlineCounts.length > 0 && (
+        <div className="flex flex-col gap-3.5 border-t border-[#EAEAE6] pt-7">
+          <span className={`${sectionTitleClassName} pb-0.5`}>Companhias</span>
+          {airlineCounts.map(([airline, count]) => {
+            const checked = filters.airlines.includes(airline);
+            return (
+              <label
+                key={airline}
+                className="flex cursor-pointer items-center gap-3"
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleAirline(airline)}
+                  className="peer sr-only"
+                />
+                <span
+                  aria-hidden="true"
+                  className={`flex size-5 shrink-0 items-center justify-center rounded-[5px] peer-focus-visible:ring-2 peer-focus-visible:ring-[#E8480C]/40 ${
+                    checked
+                      ? "bg-[#1A1A1A]"
+                      : "border-[1.5px] border-[#D6D6D1] bg-white"
+                  }`}
+                >
+                  {checked && (
+                    <svg viewBox="0 0 24 24" className="size-3">
+                      <path
+                        d="M5 12.5l4.5 4.5L19 7.5"
+                        fill="none"
+                        stroke="#FFFFFF"
+                        strokeWidth="3.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </span>
+                <span className="flex-1 text-[15px] leading-5 font-medium text-[#1A1A1A]">
+                  {airline}
+                </span>
+                <span className="text-[13px] leading-4 text-[#5C5C58]">
+                  {count}
+                </span>
               </label>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4 border-t border-[#EAEAE6] pt-7">
+        <span className={sectionTitleClassName}>Horário de partida</span>
+        <div className="grid grid-cols-2 gap-2">
+          {(Object.keys(timeRanges) as TimeRangeKey[]).map((key) => {
+            const selected = filters.times.includes(key);
+            return (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => toggleTime(key)}
+                className={`flex cursor-pointer flex-col gap-0.5 rounded-xl border px-3.5 py-3 text-left transition-colors ${
+                  selected
+                    ? "border-[#1A1A1A] bg-[#1A1A1A]"
+                    : "border-[#D6D6D1] hover:border-[#1A1A1A]"
+                }`}
+              >
+                <span
+                  className={`text-[15px] leading-5 font-semibold ${selected ? "text-white" : "text-[#1A1A1A]"}`}
+                >
+                  {timeRanges[key].label}
+                </span>
+                <span
+                  className={`text-[13px] leading-4 ${selected ? "text-[#BDBDB8]" : "text-[#5C5C58]"}`}
+                >
+                  {timeRanges[key].hint}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

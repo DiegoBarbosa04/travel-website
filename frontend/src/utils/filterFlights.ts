@@ -1,66 +1,77 @@
 import type { FlightCardForm } from "@/schemas/flight.schema";
 import { isTimeInRange } from "./timeRange";
+import { durationInMinutes } from "./formatTime";
 
-interface FlightFilters {
-  priceRange: [number, number];
+export const MAX_PRICE = 5000;
+
+export const timeRanges = {
+  madrugada: { label: "Madrugada", hint: "00h – 06h", range: ["00:00", "05:59"] },
+  manha: { label: "Manhã", hint: "06h – 12h", range: ["06:00", "11:59"] },
+  tarde: { label: "Tarde", hint: "12h – 18h", range: ["12:00", "17:59"] },
+  noite: { label: "Noite", hint: "18h – 24h", range: ["18:00", "23:59"] },
+} as const;
+
+export type TimeRangeKey = keyof typeof timeRanges;
+
+export interface FlightFilters {
+  maxPrice: number;
   airlines: string[];
-  time: {
-    madrugada: boolean;
-    manha: boolean;
-    tarde: boolean;
-    noite: boolean;
-  };
+  times: TimeRangeKey[];
 }
 
-const timeRanges = {
-  madrugada: ["23:59", "06:00"],
-  manha: ["06:00", "12:00"],
-  tarde: ["12:00", "18:00"],
-  noite: ["18:00", "23:59"],
+export const defaultFilters: FlightFilters = {
+  maxPrice: MAX_PRICE,
+  airlines: [],
+  times: [],
 };
+
+export type SortOption = "menor-preco" | "maior-preco" | "duracao";
+
+export const sortOptions: { value: SortOption; label: string }[] = [
+  { value: "menor-preco", label: "Menor preço" },
+  { value: "maior-preco", label: "Maior preço" },
+  { value: "duracao", label: "Menor duração" },
+];
+
+export function countActiveFilters(filters: FlightFilters) {
+  return (
+    (filters.maxPrice < MAX_PRICE ? 1 : 0) +
+    filters.airlines.length +
+    filters.times.length
+  );
+}
 
 export function filterFlights(
   results: FlightCardForm[],
   filters: FlightFilters,
 ) {
-  const filteredResults = results.filter((flight) => {
+  return results.filter((flight) => {
     const matchesAirline =
       filters.airlines.length === 0 ||
       filters.airlines.includes(flight.airline);
 
-    const departureTime = flight.departureTime.slice(11, 16);
-
+    // O preço máximo no limite do slider significa "sem limite".
     const matchesPrice =
-      flight.price >= filters.priceRange[0] &&
-      flight.price <= filters.priceRange[1];
+      filters.maxPrice >= MAX_PRICE || flight.price <= filters.maxPrice;
 
+    const departureTime = flight.departureTime.slice(11, 16);
     const matchesDepartureTime =
-      (!filters.time.madrugada &&
-        !filters.time.manha &&
-        !filters.time.tarde &&
-        !filters.time.noite) ||
-      (filters.time.madrugada &&
-        isTimeInRange(
-          departureTime,
-          timeRanges.madrugada[0],
-          timeRanges.madrugada[1],
-        )) ||
-      (filters.time.manha &&
-        isTimeInRange(
-          departureTime,
-          timeRanges.manha[0],
-          timeRanges.manha[1],
-        )) ||
-      (filters.time.tarde &&
-        isTimeInRange(
-          departureTime,
-          timeRanges.tarde[0],
-          timeRanges.tarde[1],
-        )) ||
-      (filters.time.noite &&
-        isTimeInRange(departureTime, timeRanges.noite[0], timeRanges.noite[1]));
+      filters.times.length === 0 ||
+      filters.times.some((key) => {
+        const [start, end] = timeRanges[key].range;
+        return isTimeInRange(departureTime, start, end);
+      });
 
     return matchesAirline && matchesPrice && matchesDepartureTime;
   });
-  return filteredResults;
+}
+
+export function sortFlights(results: FlightCardForm[], sortBy: SortOption) {
+  return [...results].sort((a, b) => {
+    if (sortBy === "maior-preco") return b.price - a.price;
+    if (sortBy === "duracao") {
+      return durationInMinutes(a.duration) - durationInMinutes(b.duration);
+    }
+    return a.price - b.price;
+  });
 }

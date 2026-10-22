@@ -254,3 +254,52 @@ body {
 .animate-scroll-reverse {
   animation: scroll-reverse 30s linear infinite;
 }
+
+/* Slider de preço dos filtros: trilho cinza com o trecho selecionado em preto. */
+.price-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #1a1a1a var(--range-progress),
+    #eaeae6 var(--range-progress)
+  );
+}
+
+.price-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #1a1a1a var(--range-progress),
+    #eaeae6 var(--range-progress)
+  );
+}
+
+.price-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  border: 2px solid #1a1a1a;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px #020b3d1f;
+}
+
+.price-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1a1a1a;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px #020b3d1f;
+}
+
+.price-range:focus-visible {
+  outline: none;
+}
+
+.price-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px #ffede4;
+}
