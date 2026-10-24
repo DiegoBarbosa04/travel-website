@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   searchFlightSchema,
@@ -12,6 +12,13 @@ import LocationAutocomplete from "./LocationAutocomplete";
 import DatePickerField from "./DataPickerField";
 import { Spinner } from "./ui/spinner";
 import { cn } from "@/lib/utils";
+
+// A Duffel aceita no máximo 9 passageiros por busca.
+const MIN_ADULTS = 1;
+const MAX_ADULTS = 9;
+
+const stepperButtonClass =
+  "flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#D6D6D1] bg-white text-[#E8480C] transition-colors hover:border-[#E8480C] disabled:cursor-not-allowed disabled:text-[#D6D6D1] disabled:hover:border-[#D6D6D1]";
 
 type SearchFlightCardProps = {
   defaultValues?: Partial<SearchFlightForm>;
@@ -188,17 +195,54 @@ function SearchFlightCard({
           variant="field"
           className={cn("min-w-0 flex-1", isBar && "lg:w-50 lg:flex-none lg:shrink-0")}
         />
-        <label className="flex w-29 shrink-0 cursor-text flex-col gap-1 rounded-[14px] border border-[#D6D6D1] px-[18px] py-3.5 transition-colors focus-within:border-[#E8480C] focus-within:ring-4 focus-within:ring-[#FFEDE4] lg:w-30 lg:px-5 lg:py-4">
-          <span className="text-[13px] leading-4 font-semibold text-[#5C5C58]">
-            Adultos
-          </span>
-          <input
-            type="number"
-            min={1}
-            className="w-full bg-transparent text-base leading-5 font-semibold text-[#1A1A1A] outline-none"
-            {...form.register("adults", { valueAsNumber: true })}
-          />
-        </label>
+        <Controller
+          control={form.control}
+          name="adults"
+          render={({ field }) => (
+            <div
+              role="group"
+              aria-labelledby="adults-label"
+              className="flex w-36 shrink-0 flex-col gap-1 rounded-[14px] border border-[#D6D6D1] px-[18px] py-3.5 transition-colors focus-within:border-[#E8480C] focus-within:ring-4 focus-within:ring-[#FFEDE4] lg:w-38 lg:px-5 lg:py-4"
+            >
+              <span
+                id="adults-label"
+                className="text-[13px] leading-4 font-semibold text-[#5C5C58]"
+              >
+                Adultos
+              </span>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => field.onChange(field.value - 1)}
+                  disabled={field.value <= MIN_ADULTS}
+                  aria-label="Remover adulto"
+                  className={stepperButtonClass}
+                >
+                  <svg viewBox="0 0 24 24" className="size-3.5" aria-hidden="true">
+                    <path d="M5 12h14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+                <span
+                  aria-live="polite"
+                  className="min-w-5 text-center text-base leading-5 font-semibold text-[#1A1A1A] tabular-nums"
+                >
+                  {field.value}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => field.onChange(field.value + 1)}
+                  disabled={field.value >= MAX_ADULTS}
+                  aria-label="Adicionar adulto"
+                  className={stepperButtonClass}
+                >
+                  <svg viewBox="0 0 24 24" className="size-3.5" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+        />
         {!isSheet && (
           <Button
             type="submit"

@@ -4,7 +4,7 @@ export const searchFlightSchema = z.object({
   origin: z.string().min(1),
   destination: z.string().min(1),
   departureDate: z.date(),
-  adults: z.number().min(1),
+  adults: z.number().int().min(1).max(9),
 });
 
 export const flightCardSchema = z.object({

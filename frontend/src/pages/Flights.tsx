@@ -106,7 +106,11 @@ function Flights() {
   const originName = searchParams.get("originName") || "";
   const destinationName = searchParams.get("destinationName") || "";
   const departureDateParam = searchParams.get("departureDate") || "";
-  const adultsParam = parseInt(searchParams.get("adults") || "1", 10);
+  // Limita a 1–9 para não propagar valores inválidos digitados direto na URL.
+  const adultsParam = Math.min(
+    9,
+    Math.max(1, parseInt(searchParams.get("adults") || "1", 10) || 1),
+  );
 
   const departureDate = departureDateParam
     ? parse(departureDateParam, "yyyy-MM-dd", new Date())
