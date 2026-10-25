@@ -23,3 +23,7 @@ export const registerSchema = z.object({
     .min(6, "A senha deve ter pelo menos 6 caracteres")
     .max(16, "A senha deve ter no máximo 16 caracteres"),
 });
+
+export const googleLoginSchema = z.object({
+  credential: z.string("Credencial do Google é obrigatória").min(1),
+});
