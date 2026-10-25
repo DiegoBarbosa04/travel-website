@@ -2,6 +2,9 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useLocation } from "react-router";
 import { toast } from "sonner";
 import SearchFlightCard from "@/components/SearchFlightForm";
+import Reveal from "@/components/Reveal";
+import { useCountUp } from "@/hooks/useCountUp";
+import { animationDelay } from "@/lib/utils";
 import { getReviews, type PublicReview } from "@/services/review.service";
 import heroPlane from "@/assets/home/hero-plane.webp";
 import melbourne from "@/assets/home/melbourne.webp";
@@ -78,17 +81,28 @@ function SectionHeader({
   titleClassName: string;
 }) {
   return (
-    <div className="flex flex-col gap-3.5 border-t border-[#1A1A1A] pt-[18px] lg:flex-row lg:items-start lg:gap-12 lg:pt-6">
+    <Reveal
+      variant="fade"
+      className="reveal-rule flex flex-col gap-3.5 pt-[18px] lg:flex-row lg:items-start lg:gap-12 lg:pt-6"
+    >
       <div className="flex items-center justify-between lg:w-50 lg:shrink-0 lg:pt-2">
         <span className={eyebrowClassName}>{eyebrow}</span>
         {action && <div className="lg:hidden">{action}</div>}
       </div>
-      <div className={`flex-1 font-extrabold text-[#1A1A1A] ${titleClassName}`}>
+      <Reveal
+        delay={150}
+        className={`flex-1 font-extrabold text-[#1A1A1A] ${titleClassName}`}
+      >
         {title}
-      </div>
+      </Reveal>
       {action && <div className="hidden shrink-0 pt-4 lg:block">{action}</div>}
-    </div>
+    </Reveal>
   );
+}
+
+function CountUp({ target, format }: { target: number; format: (value: number) => string }) {
+  const value = useCountUp(target, 1800, 900);
+  return <>{format(value)}</>;
 }
 
 function Stars({ className }: { className: string }) {
@@ -126,26 +140,49 @@ function Home() {
   };
 
   const stats = [
-    { value: "300+", label: "companhias aéreas", mobileLabel: "companhias" },
-    { value: `${formatRating(average)} ★`, label: "nota dos viajantes", mobileLabel: "nota média" },
-    { value: "R$ 0", label: "de taxa de busca", mobileLabel: "taxa de busca" },
+    {
+      target: 300,
+      format: (value: number) => `${Math.round(value)}+`,
+      label: "companhias aéreas",
+      mobileLabel: "companhias",
+    },
+    {
+      target: average,
+      format: (value: number) => `${formatRating(value)} ★`,
+      label: "nota dos viajantes",
+      mobileLabel: "nota média",
+    },
+    {
+      target: 0,
+      format: (value: number) => `R$ ${Math.round(value)}`,
+      label: "de taxa de busca",
+      mobileLabel: "taxa de busca",
+    },
   ];
 
   return (
     <main className="text-[#1A1A1A]">
       <section className="flex flex-col gap-5 px-5 pt-5 lg:px-16 xl:flex-row xl:gap-12 xl:pt-10">
-        <div className="order-last mt-3 flex h-100 shrink-0 items-end overflow-hidden rounded-[28px] bg-cover bg-center p-3.5 md:h-140 xl:mt-0 xl:h-180 xl:flex-1 xl:rounded-[32px] xl:p-7"
-          style={{ backgroundImage: `url(${heroPlane})` }}
+        <div
+          className="animate-clip-up relative order-last mt-3 flex h-100 shrink-0 items-end overflow-hidden rounded-[28px] p-3.5 md:h-140 xl:mt-0 xl:h-180 xl:flex-1 xl:rounded-[32px] xl:p-7"
+          style={animationDelay(150)}
           role="img"
           aria-label="Avião pousando em uma pista com prédios ao fundo"
         >
-          <div className="flex flex-1 justify-between gap-3 rounded-[20px] bg-white px-[18px] py-3.5 md:flex-none md:justify-start md:gap-7 md:rounded-3xl md:px-7 md:py-5">
+          <div
+            className="animate-zoom-out absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${heroPlane})`, ...animationDelay(150) }}
+          />
+          <div
+            className="animate-rise relative flex flex-1 justify-between gap-3 rounded-[20px] bg-white px-[18px] py-3.5 md:flex-none md:justify-start md:gap-7 md:rounded-3xl md:px-7 md:py-5"
+            style={animationDelay(800)}
+          >
             {stats.map((stat, index) => (
               <div key={stat.label} className="flex gap-3 md:gap-7">
                 {index > 0 && <span className="w-px shrink-0 bg-[#EAEAE6]" />}
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-xl leading-[26px] font-extrabold tracking-[-0.03em] md:text-2xl md:leading-[30px]">
-                    {stat.value}
+                  <span className="text-xl leading-[26px] font-extrabold tracking-[-0.03em] tabular-nums md:text-2xl md:leading-[30px]">
+                    <CountUp target={stat.target} format={stat.format} />
                   </span>
                   <span className="text-xs leading-[15px] text-[#5C5C58] md:text-[13px] md:leading-4">
                     <span className="md:hidden">{stat.mobileLabel}</span>
@@ -160,32 +197,44 @@ function Home() {
         <div className="flex flex-col gap-5 xl:w-155 xl:shrink-0 xl:justify-between xl:gap-0 xl:pt-6 xl:pb-2">
           <div className="flex flex-col gap-5 xl:gap-8">
             <h1 className="flex flex-col gap-0.5 text-[54px] leading-[54px] font-extrabold tracking-[-0.055em] md:text-[80px] md:leading-[80px] xl:gap-1 xl:text-8xl xl:leading-[94px]">
-              <span className="flex items-center gap-2.5 xl:gap-[18px]">
+              <span className="animate-rise flex items-center gap-2.5 xl:gap-[18px]">
                 Voe
                 <img
                   src={planeWing}
                   alt=""
-                  className="h-11 w-26 shrink-0 rounded-full object-cover md:h-16 md:w-38 xl:h-19 xl:w-45"
+                  className="animate-pop h-11 w-26 shrink-0 rounded-full object-cover transition-transform duration-500 hover:-rotate-3 hover:scale-105 md:h-16 md:w-38 xl:h-19 xl:w-45"
+                  style={animationDelay(450)}
                 />
                 mais
               </span>
-              <span>longe, pague</span>
-              <span className="flex items-center gap-2.5 text-[#E8480C] xl:gap-[18px]">
+              <span className="animate-rise" style={animationDelay(120)}>
+                longe, pague
+              </span>
+              <span
+                className="animate-rise flex items-center gap-2.5 text-[#E8480C] xl:gap-[18px]"
+                style={animationDelay(240)}
+              >
                 menos.
                 <img
                   src={parisRooftops}
                   alt=""
-                  className="h-11 w-22 shrink-0 rounded-full object-cover md:h-16 md:w-32 xl:h-19 xl:w-37.5"
+                  className="animate-pop h-11 w-22 shrink-0 rounded-full object-cover transition-transform duration-500 hover:rotate-3 hover:scale-105 md:h-16 md:w-32 xl:h-19 xl:w-37.5"
+                  style={animationDelay(650)}
                 />
               </span>
             </h1>
-            <p className="text-base leading-[25px] text-[#5C5C58] md:max-w-115 xl:text-lg xl:leading-[29px]">
+            <p
+              className="animate-rise text-base leading-[25px] text-[#5C5C58] md:max-w-115 xl:text-lg xl:leading-[29px]"
+              style={animationDelay(360)}
+            >
               Compare preços de companhias aéreas em um só lugar e compre com
               segurança, tudo em reais, sem surpresa no final.
             </p>
           </div>
 
-          <SearchFlightCard variant="hero" />
+          <div className="animate-rise" style={animationDelay(480)}>
+            <SearchFlightCard variant="hero" />
+          </div>
         </div>
       </section>
 
@@ -201,10 +250,14 @@ function Home() {
             action={
               <a
                 href="#destinos"
-                className="flex items-center gap-1.5 text-sm leading-[18px] font-bold text-[#E8480C] lg:gap-2 lg:text-[15px]"
+                className="group/link flex items-center gap-1.5 text-sm leading-[18px] font-bold text-[#E8480C] lg:gap-2 lg:text-[15px]"
               >
                 Ver todos
-                <svg viewBox="0 0 24 24" className="size-3.5 lg:size-4" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="size-3.5 transition-transform duration-300 group-hover/link:translate-x-1 lg:size-4"
+                  aria-hidden="true"
+                >
                   <path
                     d="M5 12h14M13 6l6 6-6 6"
                     fill="none"
@@ -221,15 +274,19 @@ function Home() {
 
         <div className="flex snap-x snap-mandatory scroll-px-5 gap-3.5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] lg:grid lg:snap-none lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
           {destinations.map((destination, index) => (
-            <article
+            <Reveal
+              as="article"
               key={destination.city}
-              className={`flex w-62.5 shrink-0 snap-start flex-col gap-4 lg:w-auto lg:gap-5 ${index % 2 === 1 ? "lg:pt-18" : ""}`}
+              delay={index * 120}
+              className={`group flex w-62.5 shrink-0 snap-start flex-col gap-4 lg:w-auto lg:gap-5 ${index % 2 === 1 ? "lg:pt-18" : ""}`}
             >
-              <img
-                src={destination.image}
-                alt={destination.city}
-                className="h-80 w-full rounded-3xl object-cover lg:h-110 lg:rounded-[32px]"
-              />
+              <div className="overflow-hidden rounded-3xl lg:rounded-[32px]">
+                <img
+                  src={destination.image}
+                  alt={destination.city}
+                  className="h-80 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 lg:h-110"
+                />
+              </div>
               <div className="flex flex-col gap-2.5 border-t border-[#1A1A1A] pt-1">
                 <div className="flex justify-between pt-3 text-xs leading-4 font-semibold tracking-[0.18em]">
                   <span>Nº {String(index + 1).padStart(2, "0")}</span>
@@ -241,11 +298,17 @@ function Home() {
                 <p className="text-[15px] leading-[22px] text-[#5C5C58]">
                   {destination.description}
                 </p>
-                <p className="text-base leading-5 font-bold text-[#E8480C]">
+                <p className="flex items-center gap-1.5 text-base leading-5 font-bold text-[#E8480C]">
                   a partir de R$ {destination.price}
+                  <span
+                    aria-hidden="true"
+                    className="-translate-x-1 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                  >
+                    →
+                  </span>
                 </p>
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -259,8 +322,8 @@ function Home() {
           />
         </div>
 
-        <div className="relative flex overflow-hidden border-y border-[#EAEAE6]">
-          <div className="flex animate-scroll">
+        <Reveal variant="fade" className="relative flex overflow-hidden border-y border-[#EAEAE6]">
+          <div className="flex animate-scroll hover:[animation-play-state:paused]">
             {[0, 1].map((track) => (
               <div
                 key={track}
@@ -272,7 +335,7 @@ function Home() {
                     key={partner.name}
                     src={partner.logo}
                     alt={track === 0 ? partner.name : ""}
-                    className={`shrink-0 object-contain opacity-60 grayscale ${partner.className}`}
+                    className={`shrink-0 object-contain opacity-60 grayscale transition duration-300 hover:scale-110 hover:opacity-100 hover:grayscale-0 ${partner.className}`}
                   />
                 ))}
               </div>
@@ -280,7 +343,7 @@ function Home() {
           </div>
           <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-60 bg-linear-to-r from-white to-transparent lg:block" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-linear-to-l from-white to-transparent lg:w-60" />
-        </div>
+        </Reveal>
       </section>
 
       <section
@@ -312,7 +375,7 @@ function Home() {
         />
 
         <div className="flex flex-col gap-8 lg:flex-row lg:gap-12 xl:gap-16 xl:pl-62">
-          <figure className="flex flex-col gap-[18px] lg:flex-1 lg:gap-7">
+          <Reveal as="figure" className="flex flex-col gap-[18px] lg:flex-1 lg:gap-7">
             <span
               aria-hidden="true"
               className="h-10 text-8xl leading-16 font-extrabold text-[#E8480C] lg:h-14 lg:text-[120px] lg:leading-20"
@@ -336,13 +399,15 @@ function Home() {
                 </span>
               </span>
             </figcaption>
-          </figure>
+          </Reveal>
 
           {others.length > 0 && (
             <div className="flex flex-col border-t border-[#D6D6D1] lg:w-80 lg:shrink-0 lg:border-t-0 xl:w-100">
               {others.slice(0, 2).map((review, index) => (
-                <figure
+                <Reveal
+                  as="figure"
                   key={review.id}
+                  delay={200 + index * 150}
                   className={`flex flex-col gap-2.5 py-5 lg:gap-5 lg:border-l lg:border-[#D6D6D1] lg:py-0 lg:pl-8 ${
                     index === 0
                       ? "border-b border-[#D6D6D1] lg:border-b-0 lg:pb-8"
@@ -356,7 +421,7 @@ function Home() {
                     {review.user.firstName} {review.user.lastName} · ★{" "}
                     {formatRating(review.rating)}
                   </figcaption>
-                </figure>
+                </Reveal>
               ))}
             </div>
           )}
@@ -364,7 +429,10 @@ function Home() {
       </section>
 
       <section id="ofertas" className="flex scroll-mt-6 px-5 pt-14 lg:px-16 lg:pt-40">
-        <div className="flex flex-1 flex-col gap-5 rounded-[28px] bg-[#FFEDE4] px-5.5 py-7 lg:gap-8 lg:rounded-[32px] lg:p-14 xl:flex-row xl:items-center xl:justify-between xl:gap-12">
+        <Reveal
+          variant="zoom"
+          className="flex flex-1 flex-col gap-5 rounded-[28px] bg-[#FFEDE4] px-5.5 py-7 lg:gap-8 lg:rounded-[32px] lg:p-14 xl:flex-row xl:items-center xl:justify-between xl:gap-12"
+        >
           <div className="flex flex-col gap-2.5 lg:max-w-130 lg:gap-3">
             <h2 className="text-[28px] leading-8 font-extrabold tracking-[-0.035em] lg:text-[40px] lg:leading-[46px]">
               Se inscreva na nossa newsletter
@@ -388,7 +456,7 @@ function Home() {
               />
               <button
                 type="submit"
-                className="h-13 cursor-pointer rounded-[14px] bg-[#E8480C] px-7 text-base leading-5 font-bold text-white transition-colors hover:bg-[#B8360A] lg:h-14"
+                className="h-13 cursor-pointer rounded-[14px] bg-[#E8480C] px-7 text-base leading-5 font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#B8360A] hover:shadow-[0_10px_24px_-10px_#B8360A] active:translate-y-0 lg:h-14"
               >
                 Inscrever-se
               </button>
@@ -397,7 +465,7 @@ function Home() {
               Sem spam. Cancele quando quiser.
             </p>
           </form>
-        </div>
+        </Reveal>
       </section>
 
     </main>
