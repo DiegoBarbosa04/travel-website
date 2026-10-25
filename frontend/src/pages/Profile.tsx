@@ -8,6 +8,7 @@ import SearchHistoryTab from "@/components/SearchHistoryTab";
 import { UserContext } from "@/contexts/User.context";
 import { getMyreviews } from "@/services/review.service";
 import type { Review } from "@/services/review.service";
+import { animationDelay } from "@/lib/utils";
 
 const tabs = [
   { id: "conta", label: "Conta", mobileLabel: "Conta" },
@@ -87,17 +88,20 @@ function Profile() {
     <main className="text-[#1A1A1A]">
       <section className="flex flex-col px-5 pt-2 lg:px-16 lg:pt-6">
         <div
-          className="relative h-[150px] shrink-0 rounded-3xl bg-cover bg-[50%_62%] lg:h-70 lg:rounded-[32px]"
+          className="animate-fade relative h-[150px] shrink-0 rounded-3xl bg-cover bg-[50%_62%] lg:h-70 lg:rounded-[32px]"
           style={{ backgroundImage: `url(${heroPlane})` }}
         >
-          <span className="absolute -bottom-10 left-6 flex size-[88px] items-center justify-center rounded-full border-[5px] border-white bg-[#E8480C] text-[34px] leading-10 font-extrabold tracking-[-0.04em] text-white lg:-bottom-16 lg:left-12 lg:size-36 lg:border-[6px] lg:text-[52px] lg:leading-14">
+          <span
+            className="animate-pop absolute -bottom-10 left-6 flex size-[88px] items-center justify-center rounded-full border-[5px] border-white bg-[#E8480C] text-[34px] leading-10 font-extrabold tracking-[-0.04em] text-white lg:-bottom-16 lg:left-12 lg:size-36 lg:border-[6px] lg:text-[52px] lg:leading-14"
+            style={animationDelay(350)}
+          >
             {user.firstName[0]}
             {user.lastName[0]}
           </span>
         </div>
 
         <div className="flex flex-col gap-5 pt-14 lg:flex-row lg:items-end lg:justify-between lg:pt-22 lg:pl-12">
-          <div className="flex flex-col gap-3 lg:gap-3.5">
+          <div className="animate-rise flex flex-col gap-3 lg:gap-3.5" style={animationDelay(200)}>
             <p className="flex items-center gap-2 lg:gap-2.5">
               <span className="size-[7px] shrink-0 rounded-full bg-[#E8480C] lg:size-2" />
               <span className="text-[11px] leading-4 font-semibold tracking-[0.18em] uppercase lg:text-xs">
@@ -108,7 +112,7 @@ function Profile() {
               {user.firstName} {user.lastName}.
             </h1>
           </div>
-          <div className="flex gap-5 lg:gap-7 lg:pb-2">
+          <div className="animate-rise flex gap-5 lg:gap-7 lg:pb-2" style={animationDelay(300)}>
             <Stat value={reviews.length} label={reviews.length === 1 ? "avaliação" : "avaliações"} />
             <span className="w-px shrink-0 bg-[#EAEAE6]" />
             <Stat
@@ -138,7 +142,7 @@ function Profile() {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setSearchParams({ tab: tab.id }, { replace: true })}
-                className={`flex-1 cursor-pointer rounded-full px-3 py-2.5 text-[15px] leading-[18px] whitespace-nowrap transition-colors lg:flex-none lg:px-5.5 ${
+                className={`flex-1 cursor-pointer rounded-full px-3 py-2.5 text-[15px] leading-[18px] whitespace-nowrap transition-colors duration-300 lg:flex-none lg:px-5.5 ${
                   active
                     ? "bg-[#1A1A1A] font-semibold text-white"
                     : "font-medium text-[#5C5C58] hover:text-[#1A1A1A]"
@@ -152,7 +156,10 @@ function Profile() {
         </div>
       </div>
 
-      <section className="flex flex-col gap-6 px-5 pt-10 lg:gap-10 lg:px-16 lg:pt-12">
+      <section
+        key={activeTab}
+        className="animate-rise flex flex-col gap-6 px-5 pt-10 lg:gap-10 lg:px-16 lg:pt-12"
+      >
         <div className="flex flex-col gap-3.5 border-t border-[#1A1A1A] pt-[18px] lg:flex-row lg:items-start lg:gap-12 lg:pt-6">
           <span className="text-[11px] leading-4 font-semibold tracking-[0.18em] uppercase lg:w-50 lg:shrink-0 lg:pt-3 lg:text-xs">
             {content.eyebrow}

@@ -1,3 +1,5 @@
+import { animationDelay } from "@/lib/utils";
+
 export type Polaroid = {
   image: string;
   caption: string;
@@ -60,15 +62,16 @@ function AuthCollage({ polaroids, boardingPass, size = "lg" }: AuthCollageProps)
 
   return (
     <div aria-hidden="true" className="relative size-full">
-      {polaroids.map((polaroid) => (
+      {polaroids.map((polaroid, index) => (
         <figure
           key={polaroid.caption}
-          className={`absolute flex origin-top-left flex-col bg-white ${large ? "rounded-md px-3 pt-3 shadow-[0_22px_40px_-14px_#1A1A1A59,0_2px_6px_#1A1A1A1F]" : "rounded px-[7px] pt-[7px] shadow-[0_16px_30px_-12px_#1A1A1A59,0_2px_6px_#1A1A1A1F]"}`}
+          className={`animate-drop absolute flex origin-top-left flex-col bg-white ${large ? "rounded-md px-3 pt-3 shadow-[0_22px_40px_-14px_#1A1A1A59,0_2px_6px_#1A1A1A1F]" : "rounded px-[7px] pt-[7px] shadow-[0_16px_30px_-12px_#1A1A1A59,0_2px_6px_#1A1A1A1F]"}`}
           style={{
             left: polaroid.left,
             top: polaroid.top,
             width: polaroid.width,
             rotate: `${polaroid.rotate}deg`,
+            ...animationDelay(200 + index * 150),
           }}
         >
           <img
@@ -95,11 +98,12 @@ function AuthCollage({ polaroids, boardingPass, size = "lg" }: AuthCollageProps)
       ))}
 
       <div
-        className={`absolute flex origin-top-left bg-[#E8480C] ${large ? "w-[360px] rounded-[14px] shadow-[0_24px_44px_-14px_#B8360A73,0_2px_6px_#1A1A1A26]" : "w-[220px] rounded-xl shadow-[0_18px_32px_-12px_#B8360A73,0_2px_6px_#1A1A1A26]"}`}
+        className={`animate-drop-float absolute flex origin-top-left bg-[#E8480C] ${large ? "w-[360px] rounded-[14px] shadow-[0_24px_44px_-14px_#B8360A73,0_2px_6px_#1A1A1A26]" : "w-[220px] rounded-xl shadow-[0_18px_32px_-12px_#B8360A73,0_2px_6px_#1A1A1A26]"}`}
         style={{
           left: boardingPass.left,
           top: boardingPass.top,
           rotate: `${boardingPass.rotate}deg`,
+          ...animationDelay(200 + polaroids.length * 150),
         }}
       >
         <div

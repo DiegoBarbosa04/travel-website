@@ -19,6 +19,7 @@ import {
 } from "@/utils/filterFlights";
 import { formatShortDate } from "@/utils/formatTime";
 import { saveFlights } from "@/utils/flightCache";
+import { animationDelay } from "@/lib/utils";
 
 const PAGE_SIZE = 10;
 const EDIT_FORM_ID = "edit-search-form";
@@ -223,9 +224,9 @@ function Flights() {
     <main className="text-[#1A1A1A]">
       <section className="flex flex-col gap-[18px] px-5 pt-5 lg:gap-8 lg:px-16 lg:pt-10">
         <div className="flex flex-col gap-[18px] lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-          <div className="flex flex-col gap-[18px] lg:gap-5">
+          <div className="animate-rise flex flex-col gap-[18px] lg:gap-5">
             <p className="flex items-center gap-2 lg:gap-2.5">
-              <span className="size-[7px] shrink-0 rounded-full bg-[#E8480C] lg:size-2" />
+              <span className="size-[7px] shrink-0 animate-pulse rounded-full bg-[#E8480C] lg:size-2" />
               <span className={eyebrowClassName}>Resultados da busca · Só ida</span>
             </p>
             <h1 className="flex flex-wrap items-center gap-x-3 text-[46px] leading-12 font-extrabold tracking-[-0.055em] lg:gap-x-5 lg:text-[80px] lg:leading-20">
@@ -353,13 +354,18 @@ function Flights() {
             {!isLoading &&
               visibleFlights
                 .slice(0, visibleCount)
-                .map((flight) => (
-                  <CardFlight
+                .map((flight, index) => (
+                  <div
                     key={flight.id}
-                    flight={flight}
-                    cheapest={flight.id === cheapestId}
-                    detailsState={{ flight, search, adults: adultsParam }}
-                  />
+                    className="animate-rise"
+                    style={animationDelay(Math.min(index % PAGE_SIZE, 6) * 80)}
+                  >
+                    <CardFlight
+                      flight={flight}
+                      cheapest={flight.id === cheapestId}
+                      detailsState={{ flight, search, adults: adultsParam }}
+                    />
+                  </div>
                 ))}
           </div>
 

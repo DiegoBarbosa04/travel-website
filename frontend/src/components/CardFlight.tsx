@@ -60,7 +60,7 @@ function CardFlight({ flight, cheapest = false, detailsState }: CardFlightProps)
 
   return (
     <article
-      className={`flex flex-col rounded-3xl bg-white lg:flex-row ${
+      className={`group flex flex-col rounded-3xl bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_#1A1A1A40] lg:flex-row ${
         cheapest ? "border-[1.5px] border-[#1A1A1A]" : "border border-[#E2E2DD] lg:border-[#D6D6D1]"
       }`}
     >
@@ -97,7 +97,7 @@ function CardFlight({ flight, cheapest = false, detailsState }: CardFlightProps)
             <span className="flex w-full items-center gap-1 lg:gap-1.5">
               <span className="size-[7px] shrink-0 rounded-full border-[1.5px] border-[#1A1A1A]" />
               <span className="h-px flex-1 bg-[#1A1A1A]" />
-              <PlaneIcon className="size-4 shrink-0 lg:size-[18px]" />
+              <PlaneIcon className="size-4 shrink-0 transition-transform duration-500 group-hover:translate-x-1 lg:size-[18px]" />
             </span>
             <span className="text-xs leading-[15px] font-semibold text-[#1A1A1A] lg:text-[13px] lg:leading-4">
               {stopsLabel(flight.stops)}

@@ -4,6 +4,7 @@ import { ArrowRight, ChevronDown, Clock, Star, User, X } from "lucide-react";
 import { UserContext } from "@/contexts/User.context";
 import { logoutUser } from "@/services/auth.service";
 import Logo from "@/components/Logo";
+import { animationDelay } from "@/lib/utils";
 import paris from "@/assets/auth/paris.webp";
 
 const navItems = [
@@ -163,7 +164,7 @@ function Header() {
             {isAccountOpen && (
               <div
                 role="menu"
-                className="absolute top-[calc(100%+12px)] right-0 w-80 overflow-hidden rounded-3xl border border-[#EAEAE6] bg-white shadow-[0_24px_48px_-16px_#1A1A1A2E,0_2px_8px_#1A1A1A14]"
+                className="absolute top-[calc(100%+12px)] right-0 w-80 origin-top-right animate-in duration-200 fade-in zoom-in-95 slide-in-from-top-2overflow-hidden rounded-3xl border border-[#EAEAE6] bg-white shadow-[0_24px_48px_-16px_#1A1A1A2E,0_2px_8px_#1A1A1A14]"
               >
                 <div className="flex items-center gap-3.5 px-5 pt-5 pb-[18px]">
                   <Avatar
@@ -218,7 +219,7 @@ function Header() {
             </Link>
             <Link
               to="/register"
-              className="rounded-full bg-[#1A1A1A] px-5 py-2.5 text-[15px] leading-[18px] font-semibold text-white transition-colors hover:bg-[#E8480C]"
+              className="rounded-full bg-[#1A1A1A] px-5 py-2.5 text-[15px] leading-[18px] font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-[#E8480C]"
             >
               Criar conta
             </Link>
@@ -294,7 +295,8 @@ function Header() {
                   key={item.label}
                   to={item.to}
                   onClick={closeMenus}
-                  className={`flex items-center justify-between border-t py-[18px] ${
+                  style={animationDelay(120 + index * 70)}
+                  className={`animate-rise flex items-center justify-between border-t py-[18px] ${
                     index === 0 ? "border-[#1A1A1A]" : "border-[#EAEAE6]"
                   } ${index === navItems.length - 1 ? "border-b border-b-[#EAEAE6]" : ""}`}
                 >
@@ -398,7 +400,7 @@ function MobileMenu({ onClose, children }: { onClose: () => void; children: Reac
       role="dialog"
       aria-modal="true"
       aria-label="Menu"
-      className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-white lg:hidden"
+      className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-white animate-in duration-300 fade-in slide-in-from-top-4 lg:hidden"
     >
       <div className="flex items-center justify-between px-5 pt-4 pb-3">
         <Link to="/" onClick={onClose} aria-label="Decolando — página inicial">

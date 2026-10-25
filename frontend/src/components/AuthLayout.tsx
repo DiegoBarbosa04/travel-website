@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 import AuthCollage, { type BoardingPass, type Polaroid } from "@/components/AuthCollage";
 import Logo from "@/components/Logo";
+import { animationDelay } from "@/lib/utils";
 
 type Collage = {
   polaroids: Polaroid[];
@@ -61,7 +62,7 @@ function AuthLayout({
           className={`flex flex-col gap-7 px-6 pt-7 lg:w-full lg:max-w-[420px] lg:p-0 ${compact ? "lg:gap-6 lg:short:gap-4 lg:shorter:gap-3" : "lg:gap-9 lg:short:gap-5 lg:shorter:gap-4"}`}
         >
           <div
-            className={`flex flex-col gap-2.5 ${compact ? "lg:gap-3" : "lg:gap-3.5"} lg:short:gap-2`}
+            className={`animate-rise flex flex-col gap-2.5 ${compact ? "lg:gap-3" : "lg:gap-3.5"} lg:short:gap-2`}
           >
             <p className="text-xs leading-4 font-bold tracking-[0.14em] text-[#E8480C] uppercase lg:shorter:hidden">
               {eyebrow}
@@ -76,7 +77,9 @@ function AuthLayout({
             </p>
           </div>
 
-          {children}
+          <div className="animate-rise" style={animationDelay(150)}>
+            {children}
+          </div>
         </div>
 
         <p className="flex items-center justify-center gap-1.5 px-6 pt-7 pb-8 text-sm leading-5 text-[#5C5C58] lg:justify-start lg:p-0">

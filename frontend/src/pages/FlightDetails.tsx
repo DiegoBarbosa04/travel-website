@@ -7,6 +7,7 @@ import { findFlight } from "@/utils/flightCache";
 import { flightSubtitle } from "@/utils/flightLabels";
 import { dayOffset, formatDuration, formatShortDate, formatTime } from "@/utils/formatTime";
 import { formatoBrlInteiro } from "@/utils/formatCurrency";
+import { animationDelay } from "@/lib/utils";
 
 type DetailsState = {
   flight?: FlightCardForm;
@@ -293,7 +294,7 @@ function FlightDetails() {
         </div>
 
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-          <div className="flex flex-col gap-[18px] lg:gap-5">
+          <div className="animate-rise flex flex-col gap-[18px] lg:gap-5">
             <p className="flex items-center gap-2 lg:gap-2.5">
               <span className="size-[7px] shrink-0 rounded-full bg-[#E8480C] lg:size-2" />
               <span className={eyebrowClassName}>
@@ -310,7 +311,7 @@ function FlightDetails() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-3.5 rounded-[20px] bg-[#F4F4F2] py-3.5 pr-5 pl-3.5 lg:mb-1 lg:rounded-3xl">
+          <div className="animate-rise flex items-center gap-3.5 rounded-[20px] bg-[#F4F4F2] py-3.5 pr-5 pl-3.5 lg:mb-1 lg:rounded-3xl" style={animationDelay(150)}>
             <AirlineBadge
               code={flight.carrierCode}
               className="size-10 border-0 bg-white text-[13px] leading-4 lg:size-12 lg:text-sm"
@@ -327,7 +328,7 @@ function FlightDetails() {
       </section>
 
       <section className="flex flex-col gap-9 px-5 pt-9 lg:flex-row lg:items-start lg:gap-16 lg:px-16 lg:pt-16 lg:pb-30">
-        <div className="flex flex-1 flex-col gap-9 lg:gap-18">
+        <div className="animate-rise flex flex-1 flex-col gap-9 lg:gap-18" style={animationDelay(250)}>
           <div className="flex flex-col gap-6 border-t border-[#1A1A1A] pt-[18px] lg:gap-9 lg:pt-6">
             <SectionTitle aside={`${duration} no total`}>01 — Itinerário</SectionTitle>
 
@@ -474,12 +475,12 @@ function FlightDetails() {
           </div>
         </div>
 
-        <aside className="hidden w-105 shrink-0 flex-col rounded-3xl border-[1.5px] border-[#1A1A1A] bg-white lg:flex">
+        <aside className="animate-rise hidden w-105 shrink-0 flex-col rounded-3xl border-[1.5px] border-[#1A1A1A] bg-white lg:flex" style={animationDelay(350)}>
           {priceSummary}
         </aside>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-4 border-t border-[#EAEAE6] bg-white px-5 pt-4 pb-6 lg:hidden">
+      <div className="animate-in duration-500 slide-in-from-bottom fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-4 border-t border-[#EAEAE6] bg-white px-5 pt-4 pb-6 lg:hidden">
         <span className="flex flex-col gap-0.5">
           <span className="text-xs leading-4 text-[#5C5C58]">Total · {adultsLabel}</span>
           <span className="text-2xl leading-7 font-extrabold tracking-[-0.04em]">
