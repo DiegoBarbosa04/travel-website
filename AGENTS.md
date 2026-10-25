@@ -18,7 +18,7 @@ Projeto full-stack de busca de voos (pt-BR). Dois pacotes independentes (`backen
 
 ## Gotchas de ambiente (`.env`)
 
-- O `.env` real fica só na **raiz** do repo (gitignored); `.env.example` documenta as variáveis: `DATABASE_URL`, `DUFFEL_API_KEY`, `JWT_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
+- O `.env` real fica só na **raiz** do repo (gitignored); `.env.example` documenta as variáveis: `DATABASE_URL`, `DUFFEL_API_KEY`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
 - `backend/prisma.config.ts` e `backend/src/lib/prisma.ts` usam `dotenv/config`, que lê `.env` do **cwd**. `npm start` e comandos `prisma` rodam a partir de `backend/`, então NÃO enxergam o `.env` da raiz — exporte as variáveis no shell ou crie `backend/.env` se precisar rodá-los localmente.
 - `npm run dev` (backend) é a exceção: o `--env-file=../.env` do tsx injeta as variáveis da raiz.
 - CORS no `server.ts` é fixo em `http://localhost:5173` e `baseURL` do axios no frontend é fixo em `http://localhost:3000`. Mudar porta/URL de qualquer lado quebra a comunicação.
@@ -27,7 +27,7 @@ Projeto full-stack de busca de voos (pt-BR). Dois pacotes independentes (`backen
 
 - ESM puro (`"type": "module"`) com `NodeNext` → imports relativos **exigem extensão `.js`** (ex.: `../routes/routes.js`).
 - Camadas: `routes/` → `controllers/` → `services/` → `providers/` (chamadas a APIs externas). Esquemas Zod em `schemas/`; validação via `middlewares/validate.middleware.ts`.
-- Auth: JWT em cookie chamado `user` (5h), bcrypt p/ senha. `middlewares/auth.middleware.ts` anexa `req.user`.
+- Auth: JWT em cookie chamado `user` (5h), bcrypt p/ senha. Login com Google via `POST /auth/google`: o frontend envia o ID token do botão GIS (`@react-oauth/google`) e o backend valida com `google-auth-library` (`providers/google.provider.ts`); usuários Google têm `password` nulo e `googleId`. O Vite lê `VITE_*` do `.env` da raiz (`envDir: ".."`). `middlewares/auth.middleware.ts` anexa `req.user`.
 - Prisma: generator `prisma-client` com output em `backend/generated/prisma` (**gitignored**) + adapter `@prisma/adapter-pg`. O schema **não tem `url`** — a connection string vem do runtime/`prisma.config.ts`. Após mexer no schema: `npx prisma generate` + migration. Deploy usa `npx prisma migrate deploy`.
 - APIs externas: **Duffel** (`@duffel/api`, token `DUFFEL_API_KEY`, modo teste gera dados sandbox) para voos e autocomplete de localidades; **Frankfurter.dev** (`GET /v2/rate/USD/BRL`) para câmbio — preço final = `total_amount` × taxa, em BRL (`services/flight.service.ts`).
 - `history.controller.ts` e `history.service.ts` são **stubs vazios** — a feature Histórico de pesquisas não está implementada (model `SearchHistory` existe; frontend usa dados mock na aba do perfil).
