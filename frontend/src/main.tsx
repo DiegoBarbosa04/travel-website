@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
@@ -53,8 +54,13 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <UserProvider>
-    <RouterProvider router={router} />
-    <Toaster />
-  </UserProvider>,
+  <GoogleOAuthProvider
+    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ""}
+    locale="pt-BR"
+  >
+    <UserProvider>
+      <RouterProvider router={router} />
+      <Toaster />
+    </UserProvider>
+  </GoogleOAuthProvider>,
 );

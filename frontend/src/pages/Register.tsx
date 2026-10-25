@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router";
 import { UserContext } from "@/contexts/User.context";
 import { ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
+import GoogleAuthButton from "@/components/GoogleAuthButton";
 import { AuthInput, PasswordInput } from "@/components/AuthInput";
 import aboveClouds from "@/assets/auth/above-clouds.webp";
 import sugarloaf from "@/assets/auth/sugarloaf.webp";
@@ -236,6 +237,16 @@ function Register() {
               </>
             )}
           </Button>
+
+          <div className="flex items-center gap-3.5">
+            <span className="h-px flex-1 bg-[#D6D6D1]" />
+            <span className="text-xs leading-4 font-semibold tracking-[0.08em] text-[#8F8F8A]">
+              OU
+            </span>
+            <span className="h-px flex-1 bg-[#D6D6D1]" />
+          </div>
+
+          <GoogleAuthButton text="signup_with" />
         </div>
       </form>
     </AuthLayout>
