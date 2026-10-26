@@ -20,7 +20,7 @@ type TabId = (typeof tabs)[number]["id"];
 
 const tabContent: Record<TabId, { eyebrow: string; title: string; description: string }> = {
   conta: {
-    eyebrow: "01 — Dados da conta",
+    eyebrow: "01 · Dados da conta",
     title: "Suas informações",
     description: "Mantenha seus dados atualizados para receber confirmações e ofertas.",
   },
@@ -30,7 +30,7 @@ const tabContent: Record<TabId, { eyebrow: string; title: string; description: s
     description: "Conte como foi sua viagem e ajude outros viajantes a escolher melhor.",
   },
   historico: {
-    eyebrow: "03 — Histórico",
+    eyebrow: "03 · Histórico",
     title: "Pesquisas recentes",
     description: "Retome uma busca de onde parou. Os preços são atualizados na hora.",
   },
