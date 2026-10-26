@@ -151,8 +151,12 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
               {review.text}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-[13px] leading-4 tracking-widest text-[#FFC400] lg:w-22 lg:shrink-0 lg:text-[15px] lg:leading-5">
-                {"★".repeat(review.rating)}
+              <span
+                aria-label={`Nota ${review.rating} de 5`}
+                className="text-[13px] leading-4 tracking-widest lg:w-22 lg:shrink-0 lg:text-[15px] lg:leading-5"
+              >
+                <span className="text-[#FFC400]">{"★".repeat(review.rating)}</span>
+                <span className="text-[#D6D6D1]">{"★".repeat(5 - review.rating)}</span>
               </span>
               <span className="text-[13px] leading-4 text-[#5C5C58] lg:text-sm lg:leading-[18px]">
                 {formatRating(review.rating)} · {formatReviewDate(review.createdAt)}
@@ -174,8 +178,8 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
           </DialogHeader>
 
           <form onSubmit={handleSubmit(handleEditReview)} className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-[13px] font-semibold text-[#5C5C58]">Sua nota</span>
+            <div className="flex flex-col gap-2">
+              <span className="text-[15px] font-bold text-[#1A1A1A]">Sua nota</span>
               <Controller
                 name="rating"
                 control={control}
@@ -187,6 +191,7 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
             <textarea
               {...register("text")}
               aria-label="Comentário"
+              maxLength={500}
               className="h-32 w-full resize-none rounded-[14px] border border-[#D6D6D1] px-4 py-3 text-base leading-6 text-[#1A1A1A] outline-none focus:border-[#E8480C] focus:ring-4 focus:ring-[#FFEDE4]"
             />
             {formState.errors.text?.message && (
