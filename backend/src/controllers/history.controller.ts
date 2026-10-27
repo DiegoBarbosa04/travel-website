@@ -5,11 +5,13 @@ import {
 } from "../services/history.service.js";
 
 export const addToHistory = async (req: Request, res: Response) => {
-  const { user } = req;
-  const { searchQuery } = req.body;
   try {
-    await addToHistoryService({ user, searchQuery });
-    res.status(201).json({ message: "Histórico adicionado com sucesso" });
+    const { user } = req;
+    const entry = await addToHistoryService({
+      userId: user!.id,
+      searchQuery: req.body,
+    });
+    res.status(201).json(entry);
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });
   }
@@ -18,8 +20,8 @@ export const addToHistory = async (req: Request, res: Response) => {
 export const getHistory = async (req: Request, res: Response) => {
   try {
     const { user } = req;
-    await getHistoryService(user);
-    res.status(200).json({ message: "Histórico recuperado com sucesso" });
+    const history = await getHistoryService(user!.id);
+    res.status(200).json(history);
   } catch (error) {
     res.status(500).json({ message: "Erro no servidor" });
   }

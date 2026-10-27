@@ -43,6 +43,8 @@ model SearchHistory {
 
   origin          String
   destination     String
+  originName      String?
+  destinationName String?
   departureDate   DateTime
   adults          Int
 

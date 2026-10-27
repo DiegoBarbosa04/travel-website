@@ -5,7 +5,9 @@ import SearchFlightCard from "@/components/SearchFlightForm";
 import BottomSheet from "@/components/BottomSheet";
 import type { FlightCardForm } from "@/schemas/flight.schema";
 import { api } from "@/services/api";
-import { useEffect, useMemo, useState } from "react";
+import { addToHistory } from "@/services/history.service";
+import { UserContext } from "@/contexts/User.context";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router";
 import { parse } from "date-fns";
 import {
@@ -92,6 +94,7 @@ function SortTabs({
 function Flights() {
   const [searchParams] = useSearchParams();
   const { search } = useLocation();
+  const { user } = useContext(UserContext);
   const [results, setResults] = useState<FlightCardForm[]>([]);
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
   const [sortBy, setSortBy] = useState<SortOption>("menor-preco");
@@ -160,6 +163,22 @@ function Flights() {
       isMounted = false;
     };
   }, [origin, destination, departureDateParam, adultsParam]);
+
+  // Salva a busca no histórico do usuário logado; o backend mantém só as 10 mais recentes.
+  useEffect(() => {
+    if (!user || !origin || !destination || !departureDateParam) {
+      return;
+    }
+
+    addToHistory({
+      origin,
+      destination,
+      departureDate: departureDateParam,
+      adults: adultsParam,
+      ...(originName && { originName }),
+      ...(destinationName && { destinationName }),
+    }).catch((error) => console.error("Erro ao salvar histórico:", error));
+  }, [user, origin, destination, departureDateParam, adultsParam, originName, destinationName]);
 
   const airlineCounts = useMemo(() => {
     const counts = new Map<string, number>();
