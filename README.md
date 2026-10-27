@@ -9,6 +9,7 @@ Plataforma de busca de voos em português (pt-BR) com precificação convertida 
 - **Filtros e ordenação** — filtro por faixa de preço, companhias aéreas e horário, além de ordenação por preço e duração
 - **Autenticação** — cadastro e login com senha criptografada (bcrypt) ou com conta Google, e sessão via JWT em cookie
 - **Avaliações** — usuários autenticados podem criar, editar e excluir avaliações
+- **Histórico de pesquisas** — buscas de usuários autenticados são salvas e exibidas no perfil
 - **Perfil do usuário** — área protegida com dados da conta, avaliações e histórico de pesquisas
 - **Detalhes do voo** — itinerário completo com escalas, bagagem e composição da tarifa
 - **Layout responsivo** — navegação com menu mobile, dark mode, animações de transição e interface em português
@@ -99,6 +100,12 @@ Resumo das rotas disponíveis. Parâmetros, corpos e respostas detalhados estão
 | `PUT` | `/reviews/:id` | Atualiza avaliação própria |
 | `DELETE` | `/reviews/:id` | Exclui avaliação própria |
 
+### Histórico de pesquisas
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `GET` | `/history/` | Lista as pesquisas recentes do usuário autenticado |
+| `POST` | `/history/` | Salva uma pesquisa de voo (autenticado) |
+
 ## Como rodar
 
 ### Pré-requisitos
@@ -185,7 +192,6 @@ O projeto começou integrando a **API do Amadeus**, mas ela deixou de oferecer s
 
 ## Roadmap
 
-- [ ] Finalizar o histórico de pesquisas (persistência e integração com a API)
 - [ ] Adicionar testes automatizados (backend e frontend)
 - [ ] Configurar CI/CD com GitHub Actions
 - [ ] Deploy do projeto em ambiente público
