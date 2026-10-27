@@ -24,13 +24,13 @@ Plataforma de busca de voos em português (pt-BR) com precificação convertida 
 | --- | --- |
 | ![Detalhes do voo](docs/screenshots/flight-details.png) | ![Perfil](docs/screenshots/profile.png) |
 
-| Login | Mobile |
+| Login | Swagger UI |
 | --- | --- |
-| ![Login](docs/screenshots/login.png) | ![Mobile](docs/screenshots/mobile.png) |
+| ![Login](docs/screenshots/login.png) | ![Swagger UI](docs/screenshots/swagger.png) |
 
-| Swagger UI |
-| --- |
-| ![Swagger UI](docs/screenshots/swagger.png) |
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="Resultados da busca no mobile" width="300">
+</p>
 
 ## Stack
 
