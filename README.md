@@ -29,10 +29,6 @@ Plataforma de busca de voos em português (pt-BR) com precificação convertida 
 | --- | --- |
 | ![Login](docs/screenshots/login.png) | ![Swagger UI](docs/screenshots/swagger.png) |
 
-<p align="center">
-  <img src="docs/screenshots/mobile.png" alt="Resultados da busca no mobile" width="300">
-</p>
-
 ## Stack
 
 | Camada | Tecnologias |
