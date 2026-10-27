@@ -7,23 +7,39 @@ Plataforma de busca de voos em português (pt-BR) com precificação convertida 
 - **Busca de voos** — pesquisa de trechos de ida com autocomplete de aeroportos/cidades, seleção de data e quantidade de passageiros
 - **Conversão de moeda** — preços retornados em USD pela API de voos são convertidos para BRL em tempo real
 - **Filtros e ordenação** — filtro por faixa de preço, companhias aéreas e horário, além de ordenação por preço e duração
-- **Autenticação** — cadastro e login com senha criptografada (bcrypt) e sessão via JWT em cookie
+- **Autenticação** — cadastro e login com senha criptografada (bcrypt) ou com conta Google, e sessão via JWT em cookie
 - **Avaliações** — usuários autenticados podem criar, editar e excluir avaliações
 - **Perfil do usuário** — área protegida com dados da conta, avaliações e histórico de pesquisas
-- **Layout responsivo** — navegação com menu mobile, dark mode e interface em português
+- **Detalhes do voo** — itinerário completo com escalas, bagagem e composição da tarifa
+- **Layout responsivo** — navegação com menu mobile, dark mode, animações de transição e interface em português
+- **Documentação da API** — especificação OpenAPI 3.1 com interface Swagger UI
 
 ## Screenshots
 
-_Adicionar screenshots da aplicação aqui._
+| Home | Resultados da busca |
+| --- | --- |
+| ![Home](docs/screenshots/home.png) | ![Resultados da busca](docs/screenshots/flights.png) |
+
+| Detalhes do voo | Perfil |
+| --- | --- |
+| ![Detalhes do voo](docs/screenshots/flight-details.png) | ![Perfil](docs/screenshots/profile.png) |
+
+| Login | Mobile |
+| --- | --- |
+| ![Login](docs/screenshots/login.png) | ![Mobile](docs/screenshots/mobile.png) |
+
+| Swagger UI |
+| --- |
+| ![Swagger UI](docs/screenshots/swagger.png) |
 
 ## Stack
 
 | Camada | Tecnologias |
 | --- | --- |
 | Frontend | React 19, Vite 8, TypeScript, Tailwind CSS 4, shadcn/ui, React Router 7, React Hook Form + Zod |
-| Backend | Node.js, Express 5, TypeScript, Prisma 7, Zod, JSON Web Token, bcrypt |
+| Backend | Node.js, Express 5, TypeScript, Prisma 7, Zod, JSON Web Token, bcrypt, Swagger UI (OpenAPI 3.1) |
 | Banco de dados | PostgreSQL |
-| APIs externas | Duffel API (voos e localidades), Frankfurter.dev (taxa de câmbio USD → BRL) |
+| APIs externas | Duffel API (voos e localidades), Frankfurter.dev (taxa de câmbio USD → BRL), Google Identity Services (login) |
 | Infraestrutura | Docker, Docker Compose, Nginx |
 
 ## Arquitetura
@@ -42,13 +58,25 @@ _Adicionar screenshots da aplicação aqui._
                                └──────────────┘
 ```
 
+## Documentação da API
+
+A API é documentada com **OpenAPI 3.1** e servida pelo próprio backend via Swagger UI:
+
+- Swagger UI: http://localhost:3000/docs
+- Especificação JSON: http://localhost:3000/docs/openapi.json
+
+Os corpos de requisição são gerados a partir dos schemas Zod, então a documentação acompanha a validação real da API. Rotas autenticadas usam o cookie `user`: faça login por `POST /auth/login` na própria Swagger UI para testá-las.
+
 ## Endpoints da API
+
+Resumo das rotas disponíveis. Parâmetros, corpos e respostas detalhados estão no [Swagger](#documentação-da-api).
 
 ### Autenticação
 | Método | Rota | Descrição |
 | --- | --- | --- |
 | `POST` | `/auth/register` | Cria um novo usuário |
 | `POST` | `/auth/login` | Autentica e cria sessão (cookie JWT) |
+| `POST` | `/auth/google` | Autentica com o ID token do Google |
 | `GET` | `/auth/me` | Retorna o usuário autenticado |
 | `POST` | `/auth/logout` | Encerra a sessão |
 
@@ -78,6 +106,7 @@ _Adicionar screenshots da aplicação aqui._
 - Node.js 22+
 - Docker e Docker Compose (para o modo com containers)
 - Chave de API da [Duffel](https://duffel.com) (ambiente de teste)
+- Client ID OAuth do [Google Cloud](https://console.cloud.google.com/apis/credentials) (opcional, para o login com Google)
 
 ### Variáveis de ambiente
 
@@ -87,6 +116,8 @@ Copie `.env.example` para `.env` e preencha os valores:
 DATABASE_URL=postgresql://user:password@localhost:5432/travel_website
 DUFFEL_API_KEY=sua_chave_duffel
 JWT_SECRET=seu_segredo_jwt
+GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
+VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=travel_website
@@ -100,6 +131,7 @@ docker compose up --build
 
 - Frontend: http://localhost:5173
 - Backend: http://localhost:3000
+- Swagger UI: http://localhost:3000/docs
 
 ### Modo de desenvolvimento
 
@@ -129,6 +161,7 @@ Acesse http://localhost:5173.
 │   ├── prisma/           # Schema e migrations
 │   └── src/
 │       ├── controllers/  # Handlers das rotas
+│       ├── docs/         # Especificação OpenAPI (Swagger)
 │       ├── middlewares/  # Auth e validação
 │       ├── providers/    # Integrações com APIs externas
 │       ├── routes/       # Definição de rotas
@@ -141,6 +174,7 @@ Acesse http://localhost:5173.
 │       ├── pages/        # Páginas da aplicação
 │       ├── schemas/      # Validação com Zod
 │       └── services/     # Cliente HTTP
+├── docs/screenshots/     # Prints usados no README
 ├── docker-compose.yml
 └── .env.example
 ```
