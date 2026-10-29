@@ -14,7 +14,7 @@ import GoogleAuthButton from "@/components/GoogleAuthButton";
 import { AuthInput, PasswordInput } from "@/components/AuthInput";
 import aboveClouds from "@/assets/auth/above-clouds.webp";
 import sugarloaf from "@/assets/auth/sugarloaf.webp";
-import planeWing from "@/assets/auth/plane-wing.webp";
+import planeWing from "@/assets/photos/plane-wing.webp";
 import landing from "@/assets/auth/landing.webp";
 
 const collage = {

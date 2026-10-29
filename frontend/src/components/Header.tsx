@@ -5,7 +5,7 @@ import { UserContext } from "@/contexts/User.context";
 import { logoutUser } from "@/services/auth.service";
 import Logo from "@/components/Logo";
 import { animationDelay } from "@/lib/utils";
-import paris from "@/assets/auth/paris.webp";
+import paris from "@/assets/photos/paris.webp";
 
 const navItems = [
   { label: "Voos", to: "/" },

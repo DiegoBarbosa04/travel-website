@@ -12,10 +12,10 @@ import { ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
 import { AuthInput, PasswordInput } from "@/components/AuthInput";
-import paris from "@/assets/auth/paris.webp";
+import paris from "@/assets/photos/paris.webp";
 import planeWindow from "@/assets/auth/plane-window.webp";
-import parisRooftops from "@/assets/auth/paris-rooftops.webp";
-import planeWing from "@/assets/auth/plane-wing.webp";
+import parisRooftops from "@/assets/photos/paris-rooftops.webp";
+import planeWing from "@/assets/photos/plane-wing.webp";
 
 const collage = {
   desktop: {
