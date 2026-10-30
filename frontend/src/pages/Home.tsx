@@ -36,6 +36,10 @@ const partners = [
   { name: "TAP Portugal", logo: TapPortugalLogo, className: "h-8 w-27.5" },
 ];
 
+// Cada trilha do marquee repete os logos para ficar mais larga que a tela; senão,
+// no fim do ciclo (-50%) sobra um espaço em branco à direita em telas largas.
+const partnerTrack = [0, 1, 2].flatMap((repeat) => partners.map((partner) => ({ ...partner, repeat })));
+
 const fallbackReviews: PublicReview[] = [
   {
     id: "fallback-1",
@@ -330,11 +334,11 @@ function Home() {
                 aria-hidden={track === 1}
                 className="flex h-22 shrink-0 items-center gap-12 pr-12 lg:h-32 lg:gap-26 lg:pr-26"
               >
-                {partners.map((partner) => (
+                {partnerTrack.map((partner) => (
                   <img
-                    key={partner.name}
+                    key={`${partner.name}-${partner.repeat}`}
                     src={partner.logo}
-                    alt={track === 0 ? partner.name : ""}
+                    alt={track === 0 && partner.repeat === 0 ? partner.name : ""}
                     className={`shrink-0 object-contain opacity-60 grayscale transition duration-300 hover:scale-110 hover:opacity-100 hover:grayscale-0 ${partner.className}`}
                   />
                 ))}
