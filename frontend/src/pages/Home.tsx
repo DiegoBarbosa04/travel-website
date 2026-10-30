@@ -9,7 +9,7 @@ import { getReviews, type PublicReview } from "@/services/review.service";
 import heroSunset from "@/assets/home/hero-sunset.webp";
 import melbourne from "@/assets/home/melbourne.webp";
 import london from "@/assets/home/london.webp";
-import columbia from "@/assets/home/columbia.webp";
+import orlando from "@/assets/home/orlando.webp";
 import paris from "@/assets/photos/paris.webp";
 import planeWing from "@/assets/photos/plane-wing.webp";
 import parisRooftops from "@/assets/photos/paris-rooftops.webp";
@@ -24,7 +24,7 @@ const destinations = [
   { city: "Paris", country: "França", description: "Uma aventura em Paris", price: 600, image: paris },
   { city: "Melbourne", country: "Austrália", description: "Uma jornada espetacular", price: 800, image: melbourne },
   { city: "Londres", country: "Inglaterra", description: "Uma viagem inesquecível", price: 800, image: london },
-  { city: "Columbia", country: "Colômbia", description: "Ruas espetaculares", price: 900, image: columbia },
+  { city: "Orlando", country: "Estados Unidos", description: "Diversão o ano inteiro", price: 900, image: orlando },
 ];
 
 const partners = [
