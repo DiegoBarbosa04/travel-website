@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
-import heroPlane from "@/assets/home/hero-plane.webp";
+import profileBanner from "@/assets/profile/banner.webp";
 import AccountTab from "@/components/AccountTab";
 import ReviewsTab from "@/components/ReviewsTab";
 import MyReviewsTab from "@/components/MyReviewsTab";
@@ -88,8 +88,8 @@ function Profile() {
     <main className="text-[#1A1A1A]">
       <section className="flex flex-col px-5 pt-2 lg:px-16 lg:pt-6">
         <div
-          className="animate-fade relative h-[150px] shrink-0 rounded-3xl bg-cover bg-[50%_62%] lg:h-70 lg:rounded-[32px]"
-          style={{ backgroundImage: `url(${heroPlane})` }}
+          className="animate-fade relative h-[150px] shrink-0 rounded-3xl bg-cover bg-[64%_50%] lg:h-70 lg:bg-[50%_4%] lg:rounded-[32px]"
+          style={{ backgroundImage: `url(${profileBanner})` }}
         >
           <span
             className="animate-pop absolute -bottom-10 left-6 flex size-[88px] items-center justify-center rounded-full border-[5px] border-white bg-[#E8480C] text-[34px] leading-10 font-extrabold tracking-[-0.04em] text-white lg:-bottom-16 lg:left-12 lg:size-36 lg:border-[6px] lg:text-[52px] lg:leading-14"

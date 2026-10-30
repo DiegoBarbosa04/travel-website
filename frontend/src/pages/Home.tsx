@@ -6,7 +6,7 @@ import Reveal from "@/components/Reveal";
 import { useCountUp } from "@/hooks/useCountUp";
 import { animationDelay } from "@/lib/utils";
 import { getReviews, type PublicReview } from "@/services/review.service";
-import heroPlane from "@/assets/home/hero-plane.webp";
+import heroSunset from "@/assets/home/hero-sunset.webp";
 import melbourne from "@/assets/home/melbourne.webp";
 import london from "@/assets/home/london.webp";
 import columbia from "@/assets/home/columbia.webp";
@@ -167,11 +167,11 @@ function Home() {
           className="animate-clip-up relative order-last mt-3 flex h-100 shrink-0 items-end overflow-hidden rounded-[28px] p-3.5 md:h-140 xl:mt-0 xl:h-180 xl:flex-1 xl:rounded-[32px] xl:p-7"
           style={animationDelay(150)}
           role="img"
-          aria-label="Avião pousando em uma pista com prédios ao fundo"
+          aria-label="Avião decolando ao pôr do sol com prédios ao fundo"
         >
           <div
             className="animate-zoom-out absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroPlane})`, ...animationDelay(150) }}
+            style={{ backgroundImage: `url(${heroSunset})`, ...animationDelay(150) }}
           />
           <div
             className="animate-rise relative flex flex-1 justify-between gap-3 rounded-[20px] bg-white px-[18px] py-3.5 md:flex-none md:justify-start md:gap-7 md:rounded-3xl md:px-7 md:py-5"
