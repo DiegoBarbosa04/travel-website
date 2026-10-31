@@ -14,6 +14,12 @@ export const registerSchema = z
     confirmPassword: z
       .string()
       .min(6, "A senha deve ter no mínimo 6 caracteres"),
+    acceptedTerms: z
+      .boolean()
+      .refine(
+        (value) => value,
+        "Você precisa aceitar os termos para continuar",
+      ),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",

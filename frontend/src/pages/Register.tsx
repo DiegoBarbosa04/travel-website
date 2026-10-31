@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { registerSchema, type RegisterSchemaType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { loginUser, registerUser } from "@/services/auth.service";
@@ -41,10 +41,12 @@ const labelClassName = "text-sm leading-5 font-semibold text-[#1A1A1A]";
 function Register() {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
+    defaultValues: { acceptedTerms: false },
   });
 
   const { setUser } = useContext(UserContext);
@@ -52,15 +54,8 @@ function Register() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [termsError, setTermsError] = useState(false);
 
   const handleRegister = async (data: RegisterSchemaType) => {
-    if (!acceptedTerms) {
-      setTermsError(true);
-      return;
-    }
-
     try {
       setIsLoading(true);
       await registerUser(data);
@@ -205,20 +200,26 @@ function Register() {
         <div className="flex flex-col gap-5 lg:short:gap-3.5">
           <div className="flex flex-col gap-1.5 lg:short:gap-1">
             <label className="flex cursor-pointer items-start gap-2.5 text-sm leading-5 text-[#5C5C58]">
-              <Checkbox
-                checked={acceptedTerms}
-                onCheckedChange={(checked) => {
-                  setAcceptedTerms(checked === true);
-                  setTermsError(false);
-                }}
-                aria-invalid={termsError}
-                className="mt-px size-[18px] rounded-[5px] border-[#D6D6D1] bg-white data-[state=checked]:border-[#1A1A1A] data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white [&_svg]:size-3"
+              <Controller
+                name="acceptedTerms"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                    onBlur={field.onBlur}
+                    aria-invalid={Boolean(errors.acceptedTerms)}
+                    className="mt-px size-[18px] rounded-[5px] border-[#D6D6D1] bg-white data-[state=checked]:border-[#1A1A1A] data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white [&_svg]:size-3"
+                  />
+                )}
               />
               Aceito os Termos de Uso e a Política de Privacidade.
             </label>
-            {termsError && (
+            {errors.acceptedTerms?.message && (
               <p className="text-sm text-red-600" role="alert">
-                Você precisa aceitar os termos para continuar
+                {errors.acceptedTerms.message}
               </p>
             )}
           </div>
