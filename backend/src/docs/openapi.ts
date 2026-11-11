@@ -215,7 +215,7 @@ export const openApiDocument = {
             in: "query",
             required: false,
             description: "Quantidade de passageiros adultos",
-            schema: { type: "integer", minimum: 1, default: 1 },
+            schema: { type: "integer", minimum: 1, maximum: 9, default: 1 },
           },
         ],
         responses: {
