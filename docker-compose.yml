@@ -11,6 +11,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       DUFFEL_API_KEY: ${DUFFEL_API_KEY}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      TRUST_PROXY: ${TRUST_PROXY:-0}
     depends_on:
       db:
         condition: service_healthy

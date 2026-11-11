@@ -18,7 +18,7 @@ Projeto full-stack de busca de voos (pt-BR). Dois pacotes independentes (`backen
 
 ## Gotchas de ambiente (`.env`)
 
-- O `.env` real fica só na **raiz** do repo (gitignored); `.env.example` documenta as variáveis: `DATABASE_URL`, `DUFFEL_API_KEY`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `VITE_GOOGLE_CLIENT_ID`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
+- O `.env` real fica só na **raiz** do repo (gitignored); `.env.example` documenta as variáveis: `DATABASE_URL`, `DUFFEL_API_KEY`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `TRUST_PROXY`, `VITE_GOOGLE_CLIENT_ID`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
 - `backend/prisma.config.ts` e `backend/src/lib/prisma.ts` usam `dotenv/config`, que lê `.env` do **cwd**. `npm start` e comandos `prisma` rodam a partir de `backend/`, então NÃO enxergam o `.env` da raiz — exporte as variáveis no shell ou crie `backend/.env` se precisar rodá-los localmente.
 - `npm run dev` (backend) é a exceção: o `--env-file=../.env` do tsx injeta as variáveis da raiz.
 - CORS no `server.ts` é fixo em `http://localhost:5173` e `baseURL` do axios no frontend é fixo em `http://localhost:3000`. Mudar porta/URL de qualquer lado quebra a comunicação.
@@ -31,6 +31,7 @@ Projeto full-stack de busca de voos (pt-BR). Dois pacotes independentes (`backen
 - Prisma: generator `prisma-client` com output em `backend/generated/prisma` (**gitignored**) + adapter `@prisma/adapter-pg`. O schema **não tem `url`** — a connection string vem do runtime/`prisma.config.ts`. Após mexer no schema: `npx prisma generate` + migration. Deploy usa `npx prisma migrate deploy`.
 - APIs externas: **Duffel** (`@duffel/api`, token `DUFFEL_API_KEY`, modo teste gera dados sandbox) para voos e autocomplete de localidades; **Frankfurter.dev** (`GET /v2/rate/USD/BRL`) para câmbio — preço final = `total_amount` × taxa, em BRL (`services/flight.service.ts`).
 - Histórico de pesquisas: `GET/POST /history` (autenticado). `pages/Flights.tsx` envia cada busca do usuário logado; o backend guarda no máximo **10** por usuário (`HISTORY_LIMIT` em `services/history.service.ts`), descartando as mais antigas, e repetir uma busca idêntica só a move para o topo. A aba Histórico do perfil lista da mais recente para a mais antiga e linka de volta para `/flights` com os mesmos parâmetros.
+- Rate limit: `express-rate-limit` em `middlewares/rate-limit.middleware.ts` — limite global por IP em `server.ts` (registrado **depois** do CORS, para o front ler os 429) + limites próprios em login/Google (só falhas), cadastro, busca de voos/localidades e escrita de reviews/histórico (estes por usuário). Store em memória: zera ao reiniciar e não é compartilhado entre instâncias. Atrás de proxy reverso, defina `TRUST_PROXY` (nº de proxies), senão todos os clientes contam como o IP do proxy. Rota nova que chama API externa ou grava no banco deve ganhar um limitador.
 - Swagger: spec OpenAPI 3.1 em `src/docs/openapi.ts`, servida via `swagger-ui-express` em `GET /docs` (UI) e `GET /docs/openapi.json`. Corpos de requisição vêm dos schemas Zod (`z.toJSONSchema`); respostas e query params são escritos à mão — **ao criar/alterar rota, atualize a spec**.
 
 ## Frontend (React 19 + Vite 8 + Tailwind v4)

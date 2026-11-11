@@ -12,6 +12,7 @@ import {
   createReviewSchema,
   updateReviewSchema,
 } from "../schemas/review.schema.js";
+import { reviewWriteLimiter } from "../middlewares/rate-limit.middleware.js";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.get("/me", authMiddleware, getMyReviews);
 router.post(
   "/",
   authMiddleware,
+  reviewWriteLimiter,
   validateSchema(createReviewSchema),
   createReview,
 );
@@ -28,10 +30,11 @@ router.post(
 router.put(
   "/:id",
   authMiddleware,
+  reviewWriteLimiter,
   validateSchema(updateReviewSchema),
   updateReview,
 );
 
-router.delete("/:id", authMiddleware, deleteReview);
+router.delete("/:id", authMiddleware, reviewWriteLimiter, deleteReview);
 
 export default router;
