@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { isRateLimitError } from "@/services/api";
 import { loginUser } from "@/services/auth.service";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
@@ -59,6 +60,10 @@ function Login() {
       setUser(user);
       navigate("/");
     } catch (error) {
+      // O interceptor da API já mostra o aviso de limite de tentativas.
+      if (isRateLimitError(error)) {
+        return;
+      }
       const message = (error as { response?: { data?: { message?: string } } })
         ?.response?.data?.message;
       setLoginError(message || "Usuário ou senha inválido");

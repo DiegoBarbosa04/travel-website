@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reviewSchema, type ReviewForm } from "@/schemas/review.schema";
+import { isRateLimitError } from "@/services/api";
 import { createReview, type Review } from "@/services/review.service";
 import { toast } from "sonner";
 import { Spinner } from "./ui/spinner";
@@ -41,8 +42,10 @@ function ReviewsTab({ onReviewCreated }: ReviewsTabProps) {
       form.reset();
       onReviewCreated(createdReview);
       toast.success("Avaliação criada com sucesso");
-    } catch {
-      toast.error("Erro ao criar avaliação");
+    } catch (error) {
+      if (!isRateLimitError(error)) {
+        toast.error("Erro ao criar avaliação");
+      }
     }
   };
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/contexts/User.context";
+import { isRateLimitError } from "@/services/api";
 import { googleLogin } from "@/services/auth.service";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -32,6 +33,10 @@ function GoogleAuthButton({ text }: GoogleAuthButtonProps) {
   }, []);
 
   const handleError = (error?: unknown) => {
+    // O interceptor da API já mostra o aviso de limite de tentativas.
+    if (isRateLimitError(error)) {
+      return;
+    }
     const message = (error as { response?: { data?: { message?: string } } })
       ?.response?.data?.message;
     toast.error(message || "Não foi possível entrar com o Google");

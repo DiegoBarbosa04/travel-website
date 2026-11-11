@@ -10,7 +10,7 @@ import { useState, type Dispatch, type SetStateAction } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reviewSchema, type ReviewForm } from "@/schemas/review.schema";
-import { api } from "@/services/api";
+import { api, isRateLimitError } from "@/services/api";
 import { toast } from "sonner";
 import StarRatingInput from "./StarRatingInput";
 
@@ -93,8 +93,10 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
       );
       setEditingId(null);
       toast.success("Avaliação alterada com sucesso");
-    } catch {
-      toast.error("Erro ao alterar avaliação");
+    } catch (error) {
+      if (!isRateLimitError(error)) {
+        toast.error("Erro ao alterar avaliação");
+      }
     }
   };
 
@@ -105,8 +107,10 @@ function MyReviewsTab({ reviews, setReviews }: MyReviewsTabProps) {
       await api.delete(`/reviews/${id}`);
       setReviews((prev) => prev.filter((review) => review.id !== id));
       toast.success("Avaliação removida com sucesso");
-    } catch {
-      toast.error("Erro ao apagar avaliação");
+    } catch (error) {
+      if (!isRateLimitError(error)) {
+        toast.error("Erro ao apagar avaliação");
+      }
     }
   };
 
